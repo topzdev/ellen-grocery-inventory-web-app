@@ -1,0 +1,23 @@
+{
+  "name": "ellen-grocess-inventory-web-app",
+  "version": "1.0.0",
+  "description": "&#39;Practice node-typescript and nuxt-typescript with postgresql&#39;",
+  "author": "Christopher Lugod",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "generate": "nuxt-ts generate",
+    "start": "nuxt-ts start"
+  },
+  "dependencies": {
+    "@nuxt/typescript-runtime": "^0.3.8",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/dotenv": "^1.4.0",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^0.5.6",
+    "@nuxtjs/vuetify": "^1.0.0"
+  }
+}
