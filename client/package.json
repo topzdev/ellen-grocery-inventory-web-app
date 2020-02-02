@@ -14,10 +14,21 @@
     "@nuxt/typescript-runtime": "^0.3.8",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-class-component": "^7.2.2",
+    "vue-property-decorator": "^8.3.0"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.5.6",
-    "@nuxtjs/vuetify": "^1.0.0"
+    "@nuxtjs/eslint-config-typescript": "^1.0.0",
+    "@nuxtjs/vuetify": "^1.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-vue": "^6.1.2",
+    "prettier": "^1.19.1",
+    "vuex-module-decorators": "^0.11.0"
   }
 }
