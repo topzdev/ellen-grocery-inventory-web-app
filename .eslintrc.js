@@ -7,5 +7,9 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended'
-	]
+	],
+	rules: {
+		camelcase: 'off',
+		'@typescript-eslint/camelcase': ['error', { properties: 'never' }]
+	}
 };

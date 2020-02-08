@@ -6,11 +6,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "lib": [
-      "esnext",
-      "esnext.asynciterable",
-      "dom"
-    ],
+    "lib": ["esnext", "esnext.asynciterable", "dom"],
     "esModuleInterop": true,
     "allowJs": true,
     "sourceMap": true,
@@ -18,22 +14,11 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "components/*": [
-        "src/components/*"
-      ],
-      "~/*": [
-        "./*"
-      ],
-      "@/*": [
-        "./*"
-      ]
+      "components/*": ["src/components/*"],
+      "~/*": ["./*"],
+      "@/*": ["./*"]
     },
-    "types": [
-      "@types/node",
-      "@nuxt/types"
-    ]
+    "types": ["@types/node", "@nuxt/types"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

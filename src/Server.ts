@@ -1,4 +1,5 @@
 import express, { Request, Response, Express } from 'express';
+import { productAPI } from './api/index';
 
 class Server {
 	public express: Express;
@@ -15,6 +16,8 @@ class Server {
 				message: 'Hello, World'
 			});
 		});
+
+		router.use('/api', productAPI);
 
 		this.express.use('/', router);
 	}

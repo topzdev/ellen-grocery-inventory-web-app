@@ -12,6 +12,6 @@ export default interface ProductInterface {
     brand: string,
     supplierName: string,
     category: string,
-    image: Array<any>,
+    image: string,
     rules: RulesInterface
 } 
