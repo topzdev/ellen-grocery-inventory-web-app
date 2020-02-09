@@ -40,6 +40,7 @@
 <script lang="ts">
 import { Component } from "vue-property-decorator";
 import EssentialsMixins from "@/mixins/AppEssentials";
+
 @Component
 export default class Sidebar extends EssentialsMixins {
   drawer: boolean = true;

@@ -8,8 +8,9 @@ module.exports = {
 		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended'
 	],
+
 	rules: {
-		camelcase: 'off',
+		camelcase: ['error', { properties: 'never' }],
 		'@typescript-eslint/camelcase': ['error', { properties: 'never' }]
 	}
 };

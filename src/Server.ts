@@ -1,16 +1,19 @@
 import express, { Request, Response, Express } from 'express';
+import bodyParser from 'body-parser';
 import { productAPI } from './api/index';
 
 class Server {
-	public express: Express;
+	public app: Express;
 
 	constructor() {
-		this.express = express();
+		this.app = express();
+		this.mountMiddleware();
 		this.mountRoutes();
 	}
 
 	private mountRoutes(): void {
 		const router = express.Router();
+
 		router.get('/', (req: Request, res: Response) => {
 			res.json({
 				message: 'Hello, World'
@@ -19,8 +22,14 @@ class Server {
 
 		router.use('/api', productAPI);
 
-		this.express.use('/', router);
+		this.app.use('/', router);
+	}
+
+	private mountMiddleware(): void {
+		// body parser
+		this.app.use(bodyParser.urlencoded({ extended: false }));
+		this.app.use(bodyParser.json());
 	}
 }
 
-export default new Server().express;
+export default new Server().app;
