@@ -58,22 +58,28 @@
               />
             </v-col>
             <v-col cols="12">
-              <v-textarea :auto-grow="true" label="Description" :value="product.description" />
+              <v-textarea
+                :auto-grow="true"
+                label="Description"
+                :value="product.description"
+              />
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="4" class="d-flex flex-column align-center justify-start">
           <p>Upload Product Image</p>
           <v-avatar class="mb-2" color="grey" size="250">
-            <!-- <img src alt="John" draggable="false" /> -->
+            <img :src="product.image" alt="John" draggable="false" />
           </v-avatar>
-          <v-file-input
+          <v-text-field v-model="product.image" label="Image" required />
+
+          <!-- <v-file-input
             accept="image/png, image/jpeg, image/bmp"
             placeholder="Upload Image"
             prepend-icon="mdi-camera"
             label="Product image"
             width="100%"
-          />
+          /> -->
         </v-col>
         <v-col cols="12">
           <v-divider />
@@ -86,7 +92,8 @@
                 class="mr-4 d-flex ml-auto"
                 @click="validate"
                 large
-              >Add Product</v-btn>
+                >Add Product</v-btn
+              >
             </v-col>
           </v-row>
         </v-col>

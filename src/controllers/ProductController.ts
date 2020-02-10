@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import QueryExtend from './extends/QueryExtend';
+import QueryExtend from '../extends/QueryExtend';
 import { ProductInterface } from '../interfaces';
 import { QueryConfig } from 'pg';
 
@@ -9,9 +9,6 @@ class ProductController extends QueryExtend {
 		console.log('Product Controller');
 	}
 
-	//@route    GET api/product
-	//@desc     fetch single product
-	//@access   public
 	public async getSingleProduct(req: Request, res: Response): Promise<any> {
 		const barcode = req.params.barcode;
 
@@ -32,9 +29,6 @@ class ProductController extends QueryExtend {
 		}
 	}
 
-	//@route    GET api/product
-	//@desc     fetch all products
-	//@access   public
 	public async getProducts(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.productTable}"`
@@ -51,9 +45,6 @@ class ProductController extends QueryExtend {
 		}
 	}
 
-	//@route    POST api/product
-	//@desc     add products
-	//@access   private
 	public async addProduct(req: Request, res: Response): Promise<any> {
 		const {
 			barcode,
@@ -68,8 +59,8 @@ class ProductController extends QueryExtend {
 		}: ProductInterface = req.body;
 
 		const query: QueryConfig = {
-			text: `INSERT INTO "${this.productTable}" (
-				barcode, product_name, quantity, price, description, brand, supplier_name, category, image)
+			text: `INSERT INTO "${this.productTable}" 
+			(barcode, product_name, quantity, price, description, brand, supplier_name, category, image)
 				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
 			values: [
 				barcode,
@@ -96,9 +87,6 @@ class ProductController extends QueryExtend {
 		}
 	}
 
-	//@route    PUT api/product
-	//@desc     update products
-	//@access   private
 	public async updateProduct(req: Request, res: Response): Promise<any> {
 		const {
 			barcode,
@@ -143,17 +131,6 @@ class ProductController extends QueryExtend {
 		}
 	}
 
-
-	public checkNoValue(){
-
-		if()
-
-	}
-
-	//@route    DELETE api/product
-	//@desc     delete products
-	//@access   private
-	//@params	id
 	public async deleteProduct(req: Request, res: Response): Promise<any> {
 		const barcode = req.params.barcode;
 

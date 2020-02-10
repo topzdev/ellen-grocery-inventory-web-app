@@ -1,66 +1,51 @@
-import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators"
+import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
+import { $axios } from "~/utils/axios";
+import config from "~/configs/axiosConfig";
 
 @Module({
-    name: 'product',
-    namespaced: true,
+  name: "product",
+  namespaced: true
 })
 export default class Product extends VuexModule {
-    // states
-    private products: Array<Object> = [{
-        productName: "Bear Brand 80g Chocolate",
-        barcode: "5646541231231487",
-        price: 13.5,
-        quantity: 50,
-        supplierName: "Bear Brand Corp."
-    },
-    {
-        productName: "Hansel Chocolate",
-        barcode: "7895541231231487",
-        price: 5.35,
-        quantity: 100,
-        supplierName: "Rebisco Corp."
-    },
-    {
-        productName: "Fudge Bar Chocolate",
-        barcode: "15845541231231487",
-        price: 6,
-        quantity: 120,
-        supplierName: "Rebisco Corp."
-    },
-    {
-        productName: "Joy Diswashing Liquid 25ml",
-        barcode: "58845541231231487",
-        price: 12,
-        quantity: 100,
-        supplierName: "Joy Corp."
-    }]
+  // states
+  private products: Array<Object> = [];
 
-    private addonItems: Object = {
-        brand: ["nestle", "rebisco", "febisco", "palmovile"],
-        supplier: ["Beth Corp", "Nestle Corp"],
-        category: ["Biscuit", "Dishwasing", "Etc."]
-    };
+  private addonItems: Object = {
+    brand: ["nestle", "rebisco", "febisco", "palmovile", "M.Y San"],
+    supplier: ["Beth Corp", "Nestle Corp"],
+    category: ["Biscuit", "Dishwasing", "Crackers", "Etc."]
+  };
 
+  //getters
+  get getProduct() {
+    return this.products;
+  }
 
-    //getters
-    get getProduct() {
-        return this.products
-    }
+  get getAddonItems() {
+    return this.addonItems;
+  }
 
-    get getAddonItems() {
-        return this.addonItems
-    }
+  @Mutation
+  public ADD_NEW_PRODUCT(product: Object): void {
+    this.products.unshift(product);
+  }
 
-    @Mutation
-    public ADD_NEW_PRODUCT(product: Object): void {
-        this.products.unshift(product);
-    }
+  @Mutation
+  public SET_PRODUCTS(products: Array<Object>): void {
+    this.products = products;
+  }
 
-    //
-    @Action
-    public addProduct(product: Object): void {
-        this.context.commit("ADD_NEW_PRODUCT", product);
-    }
+  //action
+  @Action({ rawError: true })
+  public async addProduct(product: Object): Promise<void> {
+    const result = await $axios.$post("/api/product", product, config);
+    // this.context.commit("ADD_NEW_PRODUCT", product);
+  }
 
+  @Action({ rawError: true })
+  public async fetchProducts(): Promise<void> {
+    const result = await $axios.$get("/api/product", config);
+    console.log(result);
+    this.context.commit("SET_PRODUCTS", result.data);
+  }
 }
-

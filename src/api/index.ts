@@ -1,3 +1,4 @@
 import productAPI from './productAPI';
+import supplierAPI from './supplierAPI';
 
-export { productAPI };
+export { productAPI, supplierAPI };

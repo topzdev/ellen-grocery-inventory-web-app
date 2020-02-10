@@ -25,7 +25,8 @@
             firstIcon: 'mdi-arrow-collapse-left',
             lastIcon: 'mdi-arrow-collapse-right',
             prevIcon: 'mdi-minus',
-            nextIcon: 'mdi-plus'}"
+            nextIcon: 'mdi-plus'
+          }"
         />
       </v-card>
     </v-col>
@@ -39,15 +40,19 @@ import { productStore } from "@/store";
 export default class ProductTable extends Vue {
   search: string = "";
   headers: Array<Object> = [
-    { text: "Product Name", align: "left", value: "productName" },
+    { text: "Product Name", align: "left", value: "product_name" },
     { text: "Barcode", value: "barcode" },
     { text: "Price", value: "price" },
     { text: "Quantity", value: "quantity" },
-    { text: "Supplier", value: "supplier" }
+    { text: "Supplier", value: "supplier_name" }
   ];
 
   get products() {
     return productStore.getProduct;
+  }
+
+  public created() {
+    productStore.fetchProducts();
   }
 }
 </script>

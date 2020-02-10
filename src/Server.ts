@@ -1,6 +1,7 @@
 import express, { Request, Response, Express } from 'express';
 import bodyParser from 'body-parser';
-import { productAPI } from './api/index';
+import cors from 'cors';
+import { productAPI, supplierAPI } from './api/index';
 
 class Server {
 	public app: Express;
@@ -20,7 +21,8 @@ class Server {
 			});
 		});
 
-		router.use('/api', productAPI);
+		router.use('/api/product', productAPI);
+		router.use('/api/supplier', supplierAPI);
 
 		this.app.use('/', router);
 	}
@@ -29,6 +31,8 @@ class Server {
 		// body parser
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
+		// cors
+		this.app.use(cors());
 	}
 }
 
