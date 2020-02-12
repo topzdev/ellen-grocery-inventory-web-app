@@ -1,15 +1,8 @@
 <template>
-  <v-card class="px-5 py-5 mt-4">
+  <div>
     <v-row>
       <v-col cols="3" v-for="link in actionLink" :key="link.title">
-        <v-card
-          height="100%"
-          :color="link.color"
-          dark
-          elevation="4"
-          :to="link.to"
-          :link="true"
-        >
+        <v-card height="100%" :color="link.color" dark elevation="4" :to="link.to" :link="true">
           <v-card-title class="headline" v-text="link.title" />
           <v-card-subtitle v-text="link.subtitle" />
         </v-card>
@@ -17,12 +10,12 @@
     </v-row>
 
     <product-table />
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import ProductTable from "@/components/product/ProductTable.vue";
+import ProductTable from "@/components/tables/ProductTable.vue";
 @Component({
   components: {
     ProductTable

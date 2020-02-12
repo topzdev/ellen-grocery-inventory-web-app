@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-card>
+      <v-card flat="true">
         <v-card-title>
           Product Table
           <v-spacer />

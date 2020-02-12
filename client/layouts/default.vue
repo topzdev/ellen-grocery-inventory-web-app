@@ -1,24 +1,24 @@
 <template>
   <v-app>
-    <navbar/>
-      <v-container>
+    <sidebar />
+    <navbar />
+    <v-content>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-content>
   </v-app>
 </template>
-
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import Navbar from "./Navbar";
-import {Vue, Component} from 'vue-property-decorator'
+import Sidebar from "./Sidebar";
 
 @Component({
   components: {
-    Navbar
+    Navbar,
+    Sidebar
   }
 })
-export default class Default extends Vue {
-  
-}
-
+export default class Default extends Vue {}
 </script>

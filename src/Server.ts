@@ -1,5 +1,6 @@
 import express, { Request, Response, Express } from 'express';
 import bodyParser from 'body-parser';
+import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import { productAPI, supplierAPI } from './api/index';
 
@@ -31,8 +32,12 @@ class Server {
 		// body parser
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
+
 		// cors
 		this.app.use(cors());
+
+		// file-uploader
+		this.app.use(fileUpload({ useTempFiles: true }));
 	}
 }
 

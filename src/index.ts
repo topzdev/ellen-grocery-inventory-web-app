@@ -1,5 +1,9 @@
 import Database from './configs/database';
+import cloudinaryConfig from './configs/cloudinary';
+import cloudinary from 'cloudinary';
 import Server from './Server';
+
+cloudinary.v2.config(cloudinaryConfig);
 
 Database.connect((err: Error) =>
 	err

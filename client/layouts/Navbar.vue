@@ -1,9 +1,7 @@
 <template>
   <div>
-    <sidebar />
-    <v-app-bar :color="color" :src="background" dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
+    <v-app-bar color="primary" dark app>
+      <v-app-bar-nav-icon />
       <v-toolbar-title>{{title}}</v-toolbar-title>
     </v-app-bar>
   </div>
@@ -11,12 +9,9 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import Sidebar from "./Sidebar.vue";
 import EssentialMixins from "@/mixins/AppEssentials";
 @Component({
-  components: {
-    Sidebar
-  }
+  components: {}
 })
 export default class Navbar extends EssentialMixins {
   clipped: boolean = false;
