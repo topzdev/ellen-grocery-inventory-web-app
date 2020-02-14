@@ -38,8 +38,11 @@ export default class Product extends VuexModule {
   //action
   @Action({ rawError: true })
   public async addProduct(product: Object): Promise<void> {
-    const result = await $axios.$post("/api/product", product, config);
-    // this.context.commit("ADD_NEW_PRODUCT", product);
+    try {
+      const result = await $axios.$post("/api/product", product, config);
+    } catch (error) {
+      console.error(error.response.data);
+    }
   }
 
   @Action({ rawError: true })

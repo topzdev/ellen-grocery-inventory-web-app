@@ -22,9 +22,6 @@ const productRules = () => {
 			.isEmpty(),
 		body('category', 'Category must be not empty')
 			.not()
-			.isEmpty(),
-		body('image', 'Category must be not empty')
-			.not()
 			.isEmpty()
 	];
 };

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-card flat="true">
+      <v-card :flat="true">
         <v-card-title>
           Supplier Table
           <v-spacer />
@@ -15,8 +15,8 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="products"
           :items-per-page="5"
+          :items="suppliersData"
           :search="search"
           item-key="name"
           class="elevation-1"
@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { supplierStore } from "@/store";
 @Component
 export default class SupplierTable extends Vue {
   search: string = "";
@@ -44,5 +45,9 @@ export default class SupplierTable extends Vue {
     { text: "Email Address", value: "email" },
     { text: "Contact", value: "contact" }
   ];
+
+  get suppliersData() {
+    return supplierStore.supplierData;
+  }
 }
 </script>

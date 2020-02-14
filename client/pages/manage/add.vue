@@ -16,8 +16,16 @@
         <v-row>
           <v-col cols="6" class="pb-0">
             <v-text-field
-              v-model="product.productName"
-              :rules="rules.productName"
+              v-model="product.barcode"
+              :rules="rules.barcode"
+              label="Barcode"
+              required
+            />
+          </v-col>
+          <v-col cols="6" class="pb-0">
+            <v-text-field
+              v-model="product.product_name"
+              :rules="rules.product_name"
               label="Product Name"
               required
             />
@@ -50,8 +58,8 @@
           </v-col>
           <v-col cols="6" class="pb-0">
             <v-select
-              v-model="product.supplierName"
-              :rules="rules.supplierName"
+              v-model="product.supplier_name"
+              :rules="rules.supplier_name"
               :items="items.supplier"
               label="Supplier Name"
             />
@@ -65,7 +73,12 @@
             />
           </v-col>
           <v-col cols="12">
-            <v-textarea :auto-grow="true" label="Description" :value="product.description" />
+            <v-textarea
+              :auto-grow="true"
+              label="Description"
+              v-model="product.description"
+              :value="product.description"
+            />
           </v-col>
         </v-row>
       </v-col>

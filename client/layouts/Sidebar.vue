@@ -1,14 +1,13 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
-    :mini-variant.sync="mini"
+    :mini-variant.sync="sidebarState"
     :right="right"
-    :expand-on-hover="true"
     color="primary"
     dark
     app
   >
-    <v-list-item class="px-2">
+    <v-list-item class="px-2 pt-2">
       <v-list-item-avatar>
         <img src="https://randomuser.me/api/portraits/men/81.jpg" />
       </v-list-item-avatar>
@@ -33,11 +32,11 @@
 <script lang="ts">
 import { Component } from "vue-property-decorator";
 import EssentialsMixins from "@/mixins/AppEssentials";
+import { frontendStore } from "@/store";
 
 @Component
 export default class Sidebar extends EssentialsMixins {
   drawer: boolean = true;
-  mini: boolean = true;
   right: boolean = false;
   expandOnHover: boolean = true;
   items: Array<Object> = [
@@ -56,5 +55,9 @@ export default class Sidebar extends EssentialsMixins {
     },
     { title: "Account", icon: "mdi-account-group-outline", to: "/account" }
   ];
+
+  get sidebarState() {
+    return frontendStore.sidebarState;
+  }
 }
 </script>

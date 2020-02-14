@@ -18,6 +18,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 	errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
 
 	return res.status(422).json({
+		message: 'Error, some fields are empty or incorrect format',
 		errors: extractedErrors
 	});
 };

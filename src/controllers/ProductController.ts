@@ -21,6 +21,7 @@ class ProductController extends QueryExtend {
 			const result = await this.client.query(query);
 
 			return res.json({
+				success: true,
 				message: 'Successfly Single Product Fetch',
 				data: result.rows
 			});
@@ -37,6 +38,7 @@ class ProductController extends QueryExtend {
 		try {
 			const result = await this.client.query(query);
 			return res.json({
+				success: true,
 				message: 'Successfully fetched',
 				data: result.rows
 			});
@@ -74,15 +76,17 @@ class ProductController extends QueryExtend {
 				image
 			]
 		};
-
+		console.log(req.body);
 		try {
 			const result = await this.client.query(query);
 
 			return res.json({
+				success: true,
 				message: 'Product Successfully Added',
 				data: result.rows
 			});
 		} catch (err) {
+			console.log(req.body);
 			console.log('Database error', err.stack);
 		}
 	}
@@ -121,8 +125,9 @@ class ProductController extends QueryExtend {
 
 		try {
 			const result = await this.client.query(query);
-
+			console.log('Process');
 			res.json({
+				success: true,
 				message: 'Product Successfuly Updated',
 				data: result
 			});

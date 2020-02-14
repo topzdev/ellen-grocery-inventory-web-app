@@ -4,13 +4,13 @@ import ProductInterface from "@/interfaces/productInfoInterface";
 @Component
 export default class ProductInformation extends Vue {
   product: ProductInterface = {
-    productName: "",
+    product_name: "",
     barcode: "",
     quantity: 0,
     price: 0.0,
     description: "",
     brand: "",
-    supplierName: "",
+    supplier_name: "",
     category: "",
     image: "",
     rules: {
@@ -20,7 +20,7 @@ export default class ProductInformation extends Vue {
   };
 
   rules: Object = {
-    productName: [(v: any) => !!v || "Product Name is required"],
+    product_name: [(v: any) => !!v || "Product Name is required"],
     barcode: [(v: any) => !!v || "Barcode is required"],
     quantity: [
       (v: any) => !!v || "Quantity is required",
@@ -28,7 +28,7 @@ export default class ProductInformation extends Vue {
     ],
     price: [(v: any) => !!v || "Price is required"],
     brand: [(v: any) => !!v || "Brand is required"],
-    supplierName: [(v: any) => !!v || "Supplier Name is required"],
+    supplier_name: [(v: any) => !!v || "Supplier Name is required"],
     category: [(v: any) => !!v || "Category is required"]
   };
 }

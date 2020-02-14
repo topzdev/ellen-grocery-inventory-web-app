@@ -12,6 +12,6 @@ export default interface ProductInterface {
 	brand: string;
 	supplier_name: string;
 	category: string;
-	image: string;
+	image?: string | undefined;
 	created_at: string;
 }
