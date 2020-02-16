@@ -4,15 +4,15 @@ import ProductInterface from "@/interfaces/productInfoInterface";
 @Component
 export default class ProductInformation extends Vue {
   product: ProductInterface = {
-    product_name: "",
-    barcode: "",
-    quantity: 0,
-    price: 0.0,
-    description: "",
-    brand: "",
-    supplier_name: "",
-    category: "",
-    image: "",
+    product_name: "31",
+    barcode: "31",
+    quantity: 51,
+    price: 51,
+    description: "313",
+    brand: "nestle",
+    supplier_name: "Beth Corp",
+    category: "31",
+    image: "313",
     rules: {
       minQuantity: 0,
       maxQuantity: 0

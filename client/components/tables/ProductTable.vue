@@ -27,7 +27,12 @@
             prevIcon: 'mdi-minus',
             nextIcon: 'mdi-plus'
           }"
-        />
+        >
+          <template v-slot:item.action="{ item }">
+            <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
+          </template>
+        </v-data-table>
       </v-card>
     </v-col>
   </v-row>
@@ -35,7 +40,8 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { productStore } from "@/store";
+import { productStore, frontendStore, processStore } from "@/store";
+import IProductInfo from "@/interfaces/productInfoInterface";
 @Component
 export default class ProductTable extends Vue {
   search: string = "";
@@ -44,7 +50,8 @@ export default class ProductTable extends Vue {
     { text: "Barcode", value: "barcode" },
     { text: "Price", value: "price" },
     { text: "Quantity", value: "quantity" },
-    { text: "Supplier", value: "supplier_name" }
+    { text: "Supplier", value: "supplier_name" },
+    { text: "Actions", value: "action", sortable: false }
   ];
 
   get products() {
@@ -53,6 +60,19 @@ export default class ProductTable extends Vue {
 
   public created() {
     productStore.fetchProducts();
+  }
+
+  public deleteItem(item: IProductInfo) {
+    console.log(item.barcode);
+
+    // showing the dialog
+    frontendStore.setDeleteModal({ show: true, name: item.product_name });
+
+    // Assigning what delete function to be process
+    processStore.setCurrentToDelete({
+      deleteFunction: productStore.deleteProduct,
+      id: item.barcode
+    });
   }
 }
 </script>

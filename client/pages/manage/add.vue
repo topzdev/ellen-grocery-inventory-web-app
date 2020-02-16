@@ -2,7 +2,7 @@
   <v-form ref="addForm" v-model="valid" :lazy-validation="true">
     <!-- <barcode-dialog v-model="dialog" /> -->
     <v-toolbar :flat="true">
-      <v-toolbar-title class="display-1 font-weight-bold">Supplier</v-toolbar-title>
+      <v-toolbar-title class="display-1 font-weight-bold">Add Product</v-toolbar-title>
       <v-spacer />
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
