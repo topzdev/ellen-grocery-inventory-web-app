@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "target": "es2018",
     "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
     "noEmitHelpers": true,
+    "plugins": [{ "name": "ts-vue-plugin" }],
     "lib": ["esnext", "esnext.asynciterable", "dom"],
     "esModuleInterop": true,
     "allowJs": true,

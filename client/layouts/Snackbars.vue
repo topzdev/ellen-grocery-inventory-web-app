@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import ProductSnackbars from "@/components/snackbars/ProductSnackbars";
+import ProductSnackbars from "@/components/snackbars/ProductSnackbars.vue";
 @Component({
   components: {
     ProductSnackbars

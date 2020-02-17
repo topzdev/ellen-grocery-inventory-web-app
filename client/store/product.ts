@@ -2,22 +2,22 @@ import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import { frontendStore } from "@/store";
+import IProduct from "@/interfaces/productInfoInterface";
 @Module({
   name: "product",
   namespaced: true
 })
 export default class Product extends VuexModule {
   // states
-  private products: Array<Object> = [];
-
+  private products: Array<IProduct> = [];
+  private search: Array<IProduct> = [];
   public addonItems: Object = {
-    brand: ["nestle", "rebisco", "febisco", "palmovile", "M.Y San"],
+    brand: ["Nestle", "Rebisco", "Febisco", "Palmovile", "M.Y San"],
     supplier: ["Beth Corp", "Nestle Corp"],
     category: ["Biscuit", "Dishwasing", "Crackers", "Etc."]
   };
 
-  //getters
-  get getProduct() {
+  get getProducts() {
     return this.products;
   }
 
@@ -25,13 +25,17 @@ export default class Product extends VuexModule {
     return this.addonItems;
   }
 
+  get getSearchProducts() {
+    return this.search;
+  }
+
   @Mutation
-  public ADD_NEW_PRODUCT(product: Object): void {
+  public ADD_NEW_PRODUCT(product: IProduct): void {
     this.products.unshift(product);
   }
 
   @Mutation
-  public SET_PRODUCTS(products: Array<Object>): void {
+  public SET_PRODUCTS(products: Array<IProduct>): void {
     this.products = products;
   }
 
@@ -40,7 +44,13 @@ export default class Product extends VuexModule {
     this.products = this.products.filter(prod => prod.barcode != barcode);
   }
 
+  @Mutation
+  public SET_SEARCH(searched: Array<IProduct>): void {
+    this.search = searched;
+  }
+
   //action
+
   @Action({ rawError: true })
   public async addProduct(product: Object): Promise<void> {
     try {
@@ -48,7 +58,8 @@ export default class Product extends VuexModule {
       frontendStore.setSnackbar({
         message: result.message,
         success: result.success,
-        show: true
+        show: true,
+        redirect: "/products"
       });
       console.log(result);
     } catch (error) {
@@ -64,6 +75,23 @@ export default class Product extends VuexModule {
   }
 
   @Action({ rawError: true })
+  public async updateProduct(product: IProduct): Promise<void> {
+    try {
+      const result = await $axios.$put("/api/product", product, config);
+
+      console.log(result);
+      frontendStore.setSnackbar({
+        message: result.message,
+        success: result.success,
+        show: true,
+        redirect: "/products"
+      });
+    } catch (error) {
+      console.error(error.stack);
+    }
+  }
+
+  @Action({ rawError: true })
   public async deleteProduct(barcode: string): Promise<void> {
     try {
       const result = await $axios.$delete(`/api/product/${barcode}`, config);
@@ -73,8 +101,24 @@ export default class Product extends VuexModule {
       frontendStore.setSnackbar({
         message: result.message,
         success: result.success,
-        show: true
+        show: true,
+        redirect: "/products"
       });
+    } catch (error) {
+      console.error(error.stack);
+    }
+  }
+
+  @Action({ rawError: true })
+  public async searchProduct(searchString: string): Promise<void> {
+    try {
+      const result = await $axios.$post(
+        `/api/product/search/`,
+        { searchString },
+        config
+      );
+      console.log(result);
+      this.context.commit("SET_SEARCH", result.data);
     } catch (error) {
       console.error(error.stack);
     }

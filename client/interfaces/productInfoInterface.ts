@@ -3,7 +3,7 @@ interface RulesInterface {
   maxQuantity: number;
 }
 
-export default interface ProductInterface {
+export default interface IProduct {
   product_name: string;
   barcode: string;
   quantity: number;

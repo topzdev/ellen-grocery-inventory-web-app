@@ -29,7 +29,7 @@
           }"
         >
           <template v-slot:item.action="{ item }">
-            <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
             <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
@@ -55,14 +55,19 @@ export default class ProductTable extends Vue {
   ];
 
   get products() {
-    return productStore.getProduct;
+    return productStore.getProducts;
   }
 
-  public created() {
+  created() {
     productStore.fetchProducts();
   }
 
-  public deleteItem(item: IProductInfo) {
+  manageItem(item: IProductInfo) {
+    processStore.setCurrentProduct(item);
+    this.$router.push("products/manage");
+  }
+
+  deleteItem(item: IProductInfo) {
     console.log(item.barcode);
 
     // showing the dialog

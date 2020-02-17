@@ -1,20 +1,20 @@
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import ProductModule from "~/store/product";
-import FrontendModule from "~/store/frontend";
-import SupplierModule from "~/store/supplier";
-import ProcessModule from "~/store/process";
+import IProductModule from "~/store/product";
+import IFrontendModule from "~/store/frontend";
+import ISupplierModule from "~/store/supplier";
+import IProcessModule from "~/store/process";
 
-let productStore: ProductModule;
-let frontendStore: FrontendModule;
-let supplierStore: SupplierModule;
-let processStore: ProcessModule;
+let productStore: IProductModule;
+let frontendStore: IFrontendModule;
+let supplierStore: ISupplierModule;
+let processStore: IProcessModule;
 
 function initialiseStores(store: Store<any>): void {
-  productStore = getModule(ProductModule, store);
-  frontendStore = getModule(FrontendModule, store);
-  supplierStore = getModule(SupplierModule, store);
-  processStore = getModule(ProcessModule, store);
+  productStore = getModule(IProductModule, store);
+  frontendStore = getModule(IFrontendModule, store);
+  supplierStore = getModule(ISupplierModule, store);
+  processStore = getModule(IProcessModule, store);
 }
 
 export {
@@ -22,5 +22,9 @@ export {
   productStore,
   frontendStore,
   supplierStore,
-  processStore
+  processStore,
+  IProductModule,
+  IFrontendModule,
+  ISupplierModule,
+  IProcessModule
 };

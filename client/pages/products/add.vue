@@ -2,14 +2,9 @@
   <v-form ref="addForm" v-model="valid" :lazy-validation="true">
     <!-- <barcode-dialog v-model="dialog" /> -->
     <v-toolbar :flat="true">
-      <v-toolbar-title class="display-1 font-weight-bold">Add Product</v-toolbar-title>
-      <v-spacer />
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-toolbar-title class="display-1 font-weight-bold"
+        >Add Product</v-toolbar-title
+      >
     </v-toolbar>
     <v-row class="px-3">
       <v-col cols="8">
@@ -108,7 +103,8 @@
               class="mr-4 d-flex ml-auto"
               @click="validate"
               large
-            >Add Product</v-btn>
+              >Add Product</v-btn
+            >
           </v-col>
         </v-row>
       </v-col>
@@ -120,7 +116,6 @@
 import { Component } from "vue-property-decorator";
 import ProductInfoMixins from "@/mixins/ProductInformation";
 import BarcodeDialog from "@/components/dialog/BarcodeDialog.vue";
-import { productStore } from "@/store";
 @Component({
   components: {
     BarcodeDialog
@@ -130,20 +125,15 @@ export default class add extends ProductInfoMixins {
   valid: boolean = false;
   dialog: boolean = true;
 
-  get items() {
-    return productStore.getAddonItems;
-  }
-
-  public validate(): void {
+  validate(): void {
     // @ts-ignore
     if (this.$refs.addForm.validate()) {
       this.insertProduct();
     }
   }
 
-  private insertProduct(): void {
-    console.log(this.product);
-    productStore.addProduct(this.product);
+  public insertProduct(): void {
+    this.productStore.addProduct(this.product);
   }
 }
 </script>

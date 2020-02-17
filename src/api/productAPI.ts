@@ -6,6 +6,15 @@ const router = express.Router();
 const controller = new ProductController();
 const { productRules } = rules;
 
+//@route    GET api/product/search
+//@desc     search products
+//@access   private
+//@params	id
+
+router.post('/search/', (req: Request, res: Response) => {
+	controller.productSearch(req, res);
+});
+
 //@route    GET api/product
 //@desc     fetch all products
 //@access   public

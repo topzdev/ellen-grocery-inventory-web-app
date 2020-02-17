@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
 import { ProductInterface } from '../interfaces';
 import { QueryConfig } from 'pg';
+import { ResultFactory } from 'express-validator';
 
 class ProductController extends QueryExtend {
 	constructor() {
@@ -149,6 +150,26 @@ class ProductController extends QueryExtend {
 			console.log(result);
 			return res.json({
 				message: 'Successfully Deleted',
+				data: result.rows
+			});
+		} catch (err) {
+			console.log('Database error', err.stack);
+		}
+	}
+
+	public async productSearch(req: Request, res: Response): Promise<any> {
+		const search = req.body.searchString;
+
+		const query: QueryConfig = {
+			text: `SELECT * FROM "${this.productTable}" WHERE barcode LIKE $1`,
+			values: ['%' + search + '%']
+		};
+
+		try {
+			const result = await this.client.query(query);
+
+			return res.json({
+				message: 'Product Successfully Searched',
 				data: result.rows
 			});
 		} catch (err) {

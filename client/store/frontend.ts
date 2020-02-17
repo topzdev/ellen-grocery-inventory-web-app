@@ -1,4 +1,8 @@
-import { ISnackbar, IDeleteModal } from "@/interfaces/FrontEndStoreInterface";
+import {
+  ISnackbar,
+  IDeleteModal,
+  ISearchModal
+} from "@/interfaces/FrontEndStoreInterface";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 @Module({
@@ -9,6 +13,7 @@ export default class Frontend extends VuexModule {
   private openSidebar: boolean = true;
   private showSnackbar: ISnackbar = { show: false };
   private showDeleteModal: IDeleteModal = { show: false };
+  private showSearchModal: ISearchModal = { show: false };
 
   get sidebarState(): boolean {
     return this.openSidebar;
@@ -20,6 +25,10 @@ export default class Frontend extends VuexModule {
 
   get deleteModalState(): IDeleteModal {
     return this.showDeleteModal;
+  }
+
+  get searchModalState(): ISearchModal {
+    return this.showSearchModal;
   }
 
   @Mutation
@@ -34,6 +43,10 @@ export default class Frontend extends VuexModule {
   private SET_SHOW_DELETE_MODAL(show: IDeleteModal) {
     this.showDeleteModal = show;
   }
+  @Mutation
+  private SET_SHOW_SEARCH_MODAL(searchModalConfig: ISearchModal) {
+    this.showSearchModal = searchModalConfig;
+  }
 
   @Action
   public toggleSidebar(): void {
@@ -41,11 +54,22 @@ export default class Frontend extends VuexModule {
   }
 
   @Action
+  public redirect(redirect: string | undefined): void {
+    if (redirect !== undefined) $nuxt.$router.push(redirect);
+  }
+
+  @Action
   public setSnackbar(snackbarConfig: ISnackbar) {
+    this.redirect(snackbarConfig.redirect);
     this.context.commit("SET_SHOW_SNACKBAR", snackbarConfig);
   }
   @Action
-  public setDeleteModal(show: IDeleteModal) {
-    this.context.commit("SET_SHOW_DELETE_MODAL", show);
+  public setDeleteModal(modalConfig: IDeleteModal) {
+    this.redirect(modalConfig.redirect);
+    this.context.commit("SET_SHOW_DELETE_MODAL", modalConfig);
+  }
+  @Action
+  public setSearchModal(modalConfig: ISearchModal) {
+    this.context.commit("SET_SHOW_SEARCH_MODAL", modalConfig);
   }
 }
