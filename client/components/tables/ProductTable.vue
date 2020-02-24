@@ -71,7 +71,11 @@ export default class ProductTable extends Vue {
     console.log(item.barcode);
 
     // showing the dialog
-    frontendStore.setDeleteModal({ show: true, name: item.product_name });
+    frontendStore.setDeleteModal({
+      show: true,
+      name: item.product_name,
+      title: "Product"
+    });
 
     // Assigning what delete function to be process
     processStore.setCurrentToDelete({

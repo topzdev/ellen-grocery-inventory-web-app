@@ -1,14 +1,25 @@
 import { Vue, Component } from "vue-property-decorator";
-import IProduct from "@/interfaces/productInfoInterface";
-import { productStore, IProductModule } from "@/store";
+import IProduct from "~/interfaces/IProductInfo";
+import {
+  productStore,
+  IProductModule,
+  frontendStore,
+  IFrontendModule,
+  processStore,
+  IProcessModule
+} from "@/store";
 
 @Component
 export default class ProductInformation extends Vue {
   public productStore: IProductModule;
+  public frontendStore: IFrontendModule;
+  public processStore: IProcessModule;
 
   constructor() {
     super();
     this.productStore = productStore;
+    this.frontendStore = frontendStore;
+    this.processStore = processStore;
   }
 
   // product state

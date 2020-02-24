@@ -27,27 +27,38 @@
             prevIcon: 'mdi-minus',
             nextIcon: 'mdi-plus'
           }"
-        />
+        >
+          <template v-slot:item.action="{ item }">
+            <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
+            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
+          </template>
+        </v-data-table>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { supplierStore } from "@/store";
+import { Component } from "vue-property-decorator";
+import SupplierInfoMixins from "@/mixins/SupplierInfoMixin";
+
 @Component
-export default class SupplierTable extends Vue {
+export default class SupplierTable extends SupplierInfoMixins {
   search: string = "";
   headers: Array<Object> = [
     { text: "Supplier Name", align: "left", value: "supplier_name" },
     { text: "Address", value: "address" },
     { text: "Email Address", value: "email" },
-    { text: "Contact", value: "contact" }
+    { text: "Contact", value: "cp_no" },
+    { text: "Actions", value: "action", sortable: false }
   ];
 
+  created() {
+    this.supplierStore.fetchSuppliers();
+  }
+
   get suppliersData() {
-    return supplierStore.supplierData;
+    return this.supplierStore.supplierData;
   }
 }
 </script>

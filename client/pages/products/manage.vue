@@ -3,6 +3,13 @@
     <!-- <barcode-dialog v-model="dialog" /> -->
     <v-toolbar :flat="true">
       <v-toolbar-title class="display-1 font-weight-bold">Manage Product</v-toolbar-title>
+      <v-btn
+        :disabled="!valid"
+        color="primary"
+        class="mr-4 d-flex ml-auto"
+        text
+        @click="showSearchModal(true)"
+      >Search Product</v-btn>
     </v-toolbar>
     <v-row class="px-3">
       <v-col cols="8">
@@ -95,15 +102,15 @@
               :disabled="!valid"
               color="error"
               class="mr-4 d-flex ml-auto"
-              @click="showDelete"
               large
+              @click="showDelete"
             >Delete</v-btn>
             <v-btn
               :disabled="!valid"
               color="success"
               class="mr-4 d-flex ml-auto"
-              @click="validate"
               large
+              @click="validate"
             >Update Product</v-btn>
           </v-col>
         </v-row>
@@ -114,10 +121,10 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import ProductInfoMixins from "@/mixins/ProductInformation";
-import { frontendStore, processStore, productStore } from "@/store";
+import ProductInfoMixin from "@/mixins/ProductInfoMixin";
+
 @Component
-export default class Manage extends ProductInfoMixins {
+export default class Manage extends ProductInfoMixin {
   valid: boolean = false;
   dialog: boolean = true;
 
@@ -133,26 +140,43 @@ export default class Manage extends ProductInfoMixins {
   }
 
   showDelete(): void {
-    frontendStore.setDeleteModal({
+    this.frontendStore.setDeleteModal({
       show: true,
       name: this.product.product_name
     });
-    processStore.setCurrentToDelete({
-      deleteFunction: productStore.deleteProduct,
+    this.processStore.setCurrentToDelete({
+      deleteFunction: this.productStore.deleteProduct,
       id: this.product.barcode
     });
   }
 
+  // Showing the product search modal when this view is mounted to views
   mounted() {
-    if (processStore.toManageProduct !== undefined) {
-      this.product = JSON.parse(JSON.stringify(processStore.toManageProduct));
+    let show: boolean;
+    if (this.processStore.toManageProduct !== undefined) {
+      show = false;
+      this.product = JSON.parse(
+        JSON.stringify(this.processStore.toManageProduct)
+      );
     } else {
-      frontendStore.setSearchModal({ show: true });
+      show = true;
     }
+    this.showSearchModal(show);
   }
 
-  destroy() {
-    frontendStore.setSearchModal({ show: false });
+  // When the view of this page is not rendered in dom it will destroy the modal and current product value
+  destroyed() {
+    this.processStore.setCurrentProduct(undefined);
+    console.log(
+      this.product,
+      this.processStore.toManageProduct,
+      " Destroyed!..."
+    );
+    this.showSearchModal(false);
+  }
+
+  showSearchModal(show: boolean) {
+    this.frontendStore.setSearchModal({ show });
   }
 }
 </script>

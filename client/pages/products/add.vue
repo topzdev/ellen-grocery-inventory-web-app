@@ -1,10 +1,7 @@
 <template>
-  <v-form ref="addForm" v-model="valid" :lazy-validation="true">
-    <!-- <barcode-dialog v-model="dialog" /> -->
+  <v-form ref="productForm" v-model="valid">
     <v-toolbar :flat="true">
-      <v-toolbar-title class="display-1 font-weight-bold"
-        >Add Product</v-toolbar-title
-      >
+      <v-toolbar-title class="display-1 font-weight-bold">Add Product</v-toolbar-title>
     </v-toolbar>
     <v-row class="px-3">
       <v-col cols="8">
@@ -71,8 +68,8 @@
             <v-textarea
               :auto-grow="true"
               label="Description"
-              v-model="product.description"
               :value="product.description"
+              v-model="product.description"
             />
           </v-col>
         </v-row>
@@ -101,10 +98,9 @@
               :disabled="!valid"
               color="success"
               class="mr-4 d-flex ml-auto"
-              @click="validate"
               large
-              >Add Product</v-btn
-            >
+              @click="validate"
+            >Add Product</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -114,26 +110,30 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import ProductInfoMixins from "@/mixins/ProductInformation";
-import BarcodeDialog from "@/components/dialog/BarcodeDialog.vue";
-@Component({
-  components: {
-    BarcodeDialog
-  }
-})
-export default class add extends ProductInfoMixins {
+import ProductInfoMixin from "@/mixins/ProductInfoMixin";
+
+@Component
+export default class add extends ProductInfoMixin {
   valid: boolean = false;
   dialog: boolean = true;
 
   validate(): void {
     // @ts-ignore
-    if (this.$refs.addForm.validate()) {
+    if (this.$refs.productForm.validate()) {
       this.insertProduct();
     }
   }
 
-  public insertProduct(): void {
+  insertProduct(): void {
     this.productStore.addProduct(this.product);
+  }
+
+  mounted() {
+    this.frontendStore.setBarcodeModal(true);
+  }
+
+  destroyed() {
+    this.frontendStore.setBarcodeModal(false);
   }
 }
 </script>

@@ -15,9 +15,9 @@
         <b>({{searched.length}})</b>
       </v-card-text>
       <v-card-text style="max-height: 200px;">
-        <v-list dense>
+        <v-list-item-group v-model="selected" dense>
           <template v-for="item in searched.items">
-            <v-list-item :key="item.barcode" @click>
+            <v-list-item :key="item.barcode" @click="getSelectedItem(item)">
               <v-list-item-avatar color="grey lighten-3">
                 <v-img :src="item.image" />
               </v-list-item-avatar>
@@ -28,7 +28,7 @@
               </v-list-item-content>
             </v-list-item>
           </template>
-        </v-list>
+        </v-list-item-group>
       </v-card-text>
 
       <v-card-actions>
@@ -42,12 +42,14 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { productStore, frontendStore, ISearchModal } from "@/store";
+import IProduct from "../../interfaces/productInfoInterface";
+import { productStore, frontendStore, processStore } from "@/store";
 
 @Component
 export default class SearchProductModal extends Vue {
   dialog: boolean = true;
   searchString: string = "";
+  selected: number = 0;
 
   get searched() {
     return {
@@ -71,6 +73,11 @@ export default class SearchProductModal extends Vue {
   backPage() {
     frontendStore.setSearchModal({ show: false });
     this.$router.push("/products");
+  }
+
+  getSelectedItem(item: IProduct) {
+    console.log("Selected item", item);
+    processStore.setCurrentProduct(item);
   }
 
   @Watch("searchString")

@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar :value="snackbar.show" color="success">{{ snackbar.message }}</v-snackbar>
+  <v-snackbar :value="snackbar.show" :color="snackbarColor">{{ snackbar.message }}</v-snackbar>
 </template>
 
 <script lang="ts">

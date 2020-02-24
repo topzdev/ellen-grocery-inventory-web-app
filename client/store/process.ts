@@ -1,6 +1,13 @@
-import { VuexModule, Action, Mutation, Module } from "vuex-module-decorators";
-import { ICurrentDelete } from "@/interfaces/ProcessInterface";
-import IProduct from "@/interfaces/productInfoInterface";
+import {
+  VuexModule,
+  Action,
+  MutationAction,
+  Mutation,
+  Module
+} from "vuex-module-decorators";
+import { ICurrentDelete } from "~/interfaces/IProcess";
+import IProductInfo from "~/interfaces/IProductInfo";
+import ISupplierInfo from "~/interfaces/ISupplier";
 
 @Module({
   name: "process",
@@ -9,14 +16,19 @@ import IProduct from "@/interfaces/productInfoInterface";
 })
 export default class Process extends VuexModule {
   private currentDelete: ICurrentDelete = {};
-  private currentProduct: IProduct | undefined = undefined;
+  private currentProduct: IProductInfo | undefined = undefined;
+  private currentSupplier: ISupplierInfo | undefined = undefined;
 
   get toDeleteItem(): ICurrentDelete {
     return this.currentDelete;
   }
 
-  get toManageProduct(): IProduct | undefined {
+  get toManageProduct(): IProductInfo | undefined {
     return this.currentProduct;
+  }
+
+  get toManageSupplier(): ISupplierInfo | undefined {
+    return this.currentSupplier;
   }
 
   @Mutation
@@ -25,8 +37,13 @@ export default class Process extends VuexModule {
   }
 
   @Mutation
-  private SET_CURRENT_PRODUCT(product: IProduct) {
+  private SET_CURRENT_PRODUCT(product: IProductInfo) {
     this.currentProduct = product;
+  }
+
+  @Mutation
+  private SET_CURRENT_SUPPLIER(supplier: ISupplierInfo) {
+    this.currentSupplier = supplier;
   }
 
   @Action
@@ -35,7 +52,12 @@ export default class Process extends VuexModule {
   }
 
   @Action
-  setCurrentProduct(product: IProduct | undefined) {
+  setCurrentProduct(product: IProductInfo | undefined) {
     this.context.commit("SET_CURRENT_PRODUCT", product);
+  }
+
+  @Action
+  setCurrentSupplier(supplier: ISupplierInfo | undefined) {
+    this.context.commit("SET_CURRENT_SUPPLIER", supplier);
   }
 }

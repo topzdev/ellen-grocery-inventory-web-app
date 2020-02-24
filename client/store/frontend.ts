@@ -2,7 +2,7 @@ import {
   ISnackbar,
   IDeleteModal,
   ISearchModal
-} from "@/interfaces/FrontEndStoreInterface";
+} from "~/interfaces/IFrontEndStore";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 @Module({
@@ -14,6 +14,7 @@ export default class Frontend extends VuexModule {
   private showSnackbar: ISnackbar = { show: false };
   private showDeleteModal: IDeleteModal = { show: false };
   private showSearchModal: ISearchModal = { show: false };
+  private showBarcodeModal: boolean = false;
 
   get sidebarState(): boolean {
     return this.openSidebar;
@@ -31,6 +32,10 @@ export default class Frontend extends VuexModule {
     return this.showSearchModal;
   }
 
+  get barcodeModalState(): boolean {
+    return this.showBarcodeModal;
+  }
+
   @Mutation
   private SET_OPEN_SIDEBAR(): void {
     this.openSidebar = !this.openSidebar;
@@ -46,6 +51,10 @@ export default class Frontend extends VuexModule {
   @Mutation
   private SET_SHOW_SEARCH_MODAL(searchModalConfig: ISearchModal) {
     this.showSearchModal = searchModalConfig;
+  }
+  @Mutation
+  private SET_SHOW_BARCODE_MODAL(barcodeModalConfig: boolean) {
+    this.showBarcodeModal = barcodeModalConfig;
   }
 
   @Action
@@ -71,5 +80,9 @@ export default class Frontend extends VuexModule {
   @Action
   public setSearchModal(modalConfig: ISearchModal) {
     this.context.commit("SET_SHOW_SEARCH_MODAL", modalConfig);
+  }
+  @Action
+  public setBarcodeModal(show: boolean) {
+    this.context.commit("SET_SHOW_BARCODE_MODAL", show);
   }
 }

@@ -19,6 +19,7 @@ class SupplierController extends QueryExtend {
 
 			return res.json({
 				message: 'Supplier Successfuly Fetched',
+				success: true,
 				data: result.rows
 			});
 		} catch (error) {
@@ -39,6 +40,7 @@ class SupplierController extends QueryExtend {
 
 			return res.json({
 				message: 'Supplier Successfully fetched',
+				success: true,
 				data: result.rows
 			});
 		} catch (error) {
@@ -52,14 +54,26 @@ class SupplierController extends QueryExtend {
 			email,
 			address,
 			cp_no,
-			tel_no
+			tel_no,
+			description,
+			fax,
+			website
 		}: SupplierInterface = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.supplierTable}"
-			(supplier_name, email, address, cp_no, tel_no) 
-			VALUES ($1, $2, $3, $4, $5)`,
-			values: [supplier_name, email, address, cp_no, tel_no]
+			(supplier_name, email, address, cp_no, tel_no, fax, website, description) 
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+			values: [
+				supplier_name,
+				email,
+				address,
+				cp_no,
+				tel_no,
+				fax,
+				website,
+				description
+			]
 		};
 
 		try {
@@ -67,7 +81,8 @@ class SupplierController extends QueryExtend {
 
 			return res.json({
 				message: 'Supplier Successfully Added',
-				data: result.rows
+				data: result.rows,
+				success: true
 			});
 		} catch (error) {
 			console.error(error.stack);
@@ -81,14 +96,26 @@ class SupplierController extends QueryExtend {
 			address,
 			cp_no,
 			tel_no,
+			fax,
+			website,
+			description,
 			id
 		}: SupplierInterface = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.supplierTable}" 
-			SET supplier_name=$1, email=$2, address=$3, cp_no=$4, tel_no=$5 
-			WHERE id = $6`,
-			values: [supplier_name, email, address, cp_no, tel_no, id]
+			SET supplier_name=$1, email=$2, address=$3, cp_no = $4, tel_no = $5, fax = $6, website = $7, description = $8 WHERE id = $9`,
+			values: [
+				supplier_name,
+				email,
+				address,
+				cp_no,
+				tel_no,
+				fax,
+				website,
+				description,
+				id
+			]
 		};
 
 		try {
@@ -96,6 +123,7 @@ class SupplierController extends QueryExtend {
 			console.log(req.body);
 			return res.json({
 				message: 'Supplier Successfully Updated ',
+				success: true,
 				data: result.rows
 			});
 		} catch (error) {
@@ -118,6 +146,7 @@ class SupplierController extends QueryExtend {
 
 			return res.json({
 				message: 'Supplier Successfully Deleted',
+				success: true,
 				data: result.rows
 			});
 		} catch (error) {

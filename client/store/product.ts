@@ -1,8 +1,9 @@
 import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import { frontendStore } from "@/store";
-import IProduct from "@/interfaces/productInfoInterface";
+import IProduct from "~/interfaces/IProductInfo";
+import { setNotification } from "~/utils/setNotification";
+
 @Module({
   name: "product",
   namespaced: true
@@ -16,6 +17,8 @@ export default class Product extends VuexModule {
     supplier: ["Beth Corp", "Nestle Corp"],
     category: ["Biscuit", "Dishwasing", "Crackers", "Etc."]
   };
+  private singleProduct: object = {};
+  public path = "/products";
 
   get getProducts() {
     return this.products;
@@ -29,9 +32,19 @@ export default class Product extends VuexModule {
     return this.search;
   }
 
+  get tangina() {
+    console.log("Passing the way");
+    return this.singleProduct;
+  }
+
   @Mutation
   public ADD_NEW_PRODUCT(product: IProduct): void {
     this.products.unshift(product);
+  }
+
+  @Mutation
+  public LOW(product: IProduct): void {
+    this.singleProduct = product;
   }
 
   @Mutation
@@ -55,13 +68,20 @@ export default class Product extends VuexModule {
   public async addProduct(product: Object): Promise<void> {
     try {
       const result = await $axios.$post("/api/product", product, config);
-      frontendStore.setSnackbar({
-        message: result.message,
-        success: result.success,
-        show: true,
-        redirect: "/products"
-      });
-      console.log(result);
+
+      setNotification(result.message, result.success, this.path);
+    } catch (error) {
+      console.error(error.stack);
+    }
+  }
+
+  @Action({ rawError: true })
+  public async fetchSingleProduct(barcode: string): Promise<void> {
+    try {
+      console.log(barcode);
+      const result = await $axios.$get(`/api/product/${barcode}`);
+
+      this.context.commit("LOW", result.data != undefined ? result.data : null);
     } catch (error) {
       console.error(error.stack);
     }
@@ -69,9 +89,13 @@ export default class Product extends VuexModule {
 
   @Action({ rawError: true })
   public async fetchProducts(): Promise<void> {
-    const result = await $axios.$get("/api/product", config);
-    console.log(result);
-    this.context.commit("SET_PRODUCTS", result.data);
+    try {
+      const result = await $axios.$get("/api/product", config);
+      console.log(result);
+      this.context.commit("SET_PRODUCTS", result.data);
+    } catch (error) {
+      console.error(error.stack);
+    }
   }
 
   @Action({ rawError: true })
@@ -79,13 +103,7 @@ export default class Product extends VuexModule {
     try {
       const result = await $axios.$put("/api/product", product, config);
 
-      console.log(result);
-      frontendStore.setSnackbar({
-        message: result.message,
-        success: result.success,
-        show: true,
-        redirect: "/products"
-      });
+      setNotification(result.message, result.success, this.path);
     } catch (error) {
       console.error(error.stack);
     }
@@ -98,12 +116,7 @@ export default class Product extends VuexModule {
 
       this.context.commit("DELETE_PRODUCT", barcode);
 
-      frontendStore.setSnackbar({
-        message: result.message,
-        success: result.success,
-        show: true,
-        redirect: "/products"
-      });
+      setNotification(result.message, result.success, this.path);
     } catch (error) {
       console.error(error.stack);
     }

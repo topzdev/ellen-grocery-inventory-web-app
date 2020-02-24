@@ -1,5 +1,5 @@
 interface ICurrentDelete {
-  id?: string | undefined;
+  id?: any;
   deleteFunction?: Function | undefined;
 }
 

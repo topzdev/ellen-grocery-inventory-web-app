@@ -24,7 +24,7 @@ class ProductController extends QueryExtend {
 			return res.json({
 				success: true,
 				message: 'Successfly Single Product Fetch',
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (err) {
 			console.log('Database error', err.stack);
@@ -149,6 +149,7 @@ class ProductController extends QueryExtend {
 			const result = await this.client.query(query);
 			console.log(result);
 			return res.json({
+				success: true,
 				message: 'Successfully Deleted',
 				data: result.rows
 			});

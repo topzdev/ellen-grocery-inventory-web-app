@@ -16,18 +16,18 @@ router.post('/search/', (req: Request, res: Response) => {
 });
 
 //@route    GET api/product
-//@desc     fetch all products
-//@access   public
-router.get('/', (req: Request, res: Response) => {
-	controller.getProducts(req, res);
-});
-
-//@route    GET api/product
 //@desc     fetch single product
 //@access   public
 //@params	id
 router.get('/:barcode', (req: Request, res: Response) => {
 	controller.getSingleProduct(req, res);
+});
+
+//@route    GET api/product
+//@desc     fetch all products
+//@access   public
+router.get('/', (req: Request, res: Response) => {
+	controller.getProducts(req, res);
 });
 
 //@route    POST api/product

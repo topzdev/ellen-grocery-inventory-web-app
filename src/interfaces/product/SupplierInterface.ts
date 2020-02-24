@@ -5,6 +5,9 @@ interface SupplierInterface {
 	cp_no: string;
 	tel_no: string;
 	id: number;
+	fax: string;
+	website: string;
+	description: string;
 }
 
 export default SupplierInterface;

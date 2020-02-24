@@ -9,6 +9,7 @@ interface ISnackbar extends IRedirect {
 }
 
 interface IDeleteModal extends IRedirect {
+  title?: string;
   message?: string;
   show: boolean;
   name?: string;
