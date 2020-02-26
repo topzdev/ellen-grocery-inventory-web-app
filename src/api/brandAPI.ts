@@ -16,10 +16,11 @@ router.get('/', (req: Request, res: Response) => {
 
 /**
  * @route           GET api/brand
- * @description     fetch single brand
- * @access          private
+ * @description     fetch singsle brand
+ * @access          public
+ * @param			id
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/id', (req: Request, res: Response) => {
 	controller.getSingleBrand(req, res);
 });
 
@@ -49,3 +50,5 @@ router.put('/', (req: Request, res: Response) => {
 router.delete('/', (req: Request, res: Response) => {
 	controller.updateBrand(req, res);
 });
+
+export default router;

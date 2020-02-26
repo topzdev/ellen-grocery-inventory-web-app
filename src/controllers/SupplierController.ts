@@ -8,7 +8,7 @@ class SupplierController extends QueryExtend {
 		super();
 		console.log('Supplier Controller');
 	}
-
+	
 	public async getSuppliers(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.supplierTable}"`
