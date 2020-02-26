@@ -6,51 +6,61 @@ const router = express.Router();
 const controller = new ProductController();
 const { productRules } = rules;
 
-//@route    GET api/product/search
-//@desc     search products
-//@access   private
-//@params	id
+/**
+ * @route           POST api/product
+ * @description     add brand
+ * @access          private
+ */
 
 router.post('/search/', (req: Request, res: Response) => {
 	controller.productSearch(req, res);
 });
 
-//@route    GET api/product
-//@desc     fetch single product
-//@access   public
-//@params	id
+/**
+ * @route           GET api/product
+ * @description     Search single product via barcode
+ * @access          private
+ * @param			{String} barcode
+ */
 router.get('/:barcode', (req: Request, res: Response) => {
 	controller.getSingleProduct(req, res);
 });
 
-//@route    GET api/product
-//@desc     fetch all products
-//@access   public
+/**
+ * @route           GET api/product
+ * @description     fetch all products
+ * @access          public
+ * @param			{String} barcode
+ */
 router.get('/', (req: Request, res: Response) => {
 	controller.getProducts(req, res);
 });
 
-//@route    POST api/product
-//@desc     add products
-//@access   private
-
+/**
+ * @route           POST api/product
+ * @description     add products
+ * @access          private
+ * @param			{String} barcode
+ */
 router.post('/', productRules(), validate, (req: Request, res: Response) => {
 	controller.addProduct(req, res);
 });
 
-//@route    PUT api/product
-//@desc     update products
-//@access   private
-
+/**
+ * @route           PUT api/product
+ * @description     update products
+ * @access          private
+ */
 router.put('/', (req: Request, res: Response) => {
 	controller.updateProduct(req, res);
 });
 
-//@route    DELETE api/product
-//@desc     delete products
-//@access   private
-//@params	id
-
+/**
+ * @route           DELETE api/product
+ * @description     delete products
+ * @access          private
+ * @param 			{String} id
+ */
 router.delete('/:barcode', (req: Request, res: Response) => {
 	controller.deleteProduct(req, res);
 });

@@ -16,30 +16,23 @@ export default class index extends Vue {
   readonly parentPath: string = "others";
   readonly actionLink: Array<Object> = [
     {
-      title: "Manage Suppliers",
-      subtitle: "Add and modify suppliers information",
-      color: "blue darken-1",
-      to: `/${this.parentPath}/supplier`,
-      icon: "truck-delivery"
-    },
-    {
-      title: "Manage Promos",
-      subtitle: "Add Promos",
-      color: "purple darken-1",
-      to: `/${this.parentPath}/stock`,
-      icon: "ticket-percent"
-    },
-    {
       title: "Manage Brands",
-      subtitle: "Add and Modify Brands",
+      subtitle: "Branding your product",
       color: "orange darken-1",
       to: `/${this.parentPath}/brands`,
       icon: "ticket-percent"
     },
     {
       title: "Manage Categories",
-      subtitle: "Add and Modify Categories",
-      color: "orange darken-1",
+      subtitle: "Categories your prodocut",
+      color: "primary",
+      to: `/${this.parentPath}/category`,
+      icon: "ticket-percent"
+    },
+    {
+      title: "Promos and ADs",
+      subtitle: "Create promos for products",
+      color: "purple darken-1",
       to: `/${this.parentPath}/category`,
       icon: "ticket-percent"
     }

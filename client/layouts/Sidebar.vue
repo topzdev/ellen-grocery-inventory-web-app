@@ -17,12 +17,7 @@
       </v-list-item-content>
     </v-list-item>
     <v-list :nav="true" shaped>
-      <v-list-item
-        v-for="item in items"
-        :key="item.title"
-        :nuxt="true"
-        :to="item.to"
-      >
+      <v-list-item v-for="item in items" :key="item.title" :nuxt="true" :to="item.to">
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item-icon>
@@ -48,16 +43,9 @@ export default class Sidebar extends EssentialsMixins {
     { title: "Home", icon: "mdi-storefront", to: "d" },
     { title: "Products", icon: "mdi-shopping-search", to: "/product" },
     { title: "Manage Product", icon: "mdi-basket-fill", to: "/products" },
-    {
-      title: "Suppliers",
-      icon: "mdi-truck",
-      to: "/suppliers"
-    },
-    {
-      title: "Customers",
-      icon: "mdi-account",
-      to: "/customers"
-    },
+    { title: "Suppliers", icon: "mdi-truck", to: "/suppliers" },
+    { title: "Addons", icon: "mdi-decagram", to: "/others" },
+    { title: "Customers", icon: "mdi-account", to: "/customers" },
     { title: "Account", icon: "mdi-account-group-outline", to: "/account" }
   ];
 
