@@ -7,6 +7,10 @@ class QueryExtend {
 	protected readonly brandTable: string = 'brand_table';
 	protected readonly supplierTable: string = 'supplier_table';
 	protected readonly categoryTable: string = 'category_table';
+	protected readonly customerTable: string = 'customer_table';
+	protected readonly staffTable: string = 'staff_table';
+	protected readonly roleTable: string = 'role_table';
+
 	protected client: Pool;
 
 	constructor() {

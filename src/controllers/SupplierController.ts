@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+1import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
 import { SupplierInterface } from '../interfaces';
 import { QueryConfig } from 'pg';
@@ -31,7 +31,7 @@ class SupplierController extends QueryExtend {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.supplierTable}" WHERE id = $1`,
+			text: `SELECT * FROM "${this.supplierTable}" WHERE supplier_id = $1`,
 			values: [id]
 		};
 
@@ -51,8 +51,8 @@ class SupplierController extends QueryExtend {
 	public async addSupplier(req: Request, res: Response): Promise<any> {
 		const {
 			supplier_name,
-			email,
-			address,
+			email_address,
+			company_address,
 			cp_no,
 			tel_no,
 			description,
@@ -62,12 +62,12 @@ class SupplierController extends QueryExtend {
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.supplierTable}"
-			(supplier_name, email, address, cp_no, tel_no, fax, website, description) 
+			(supplier_name, email_address, company_address, cp_no, tel_no, fax, website, description) 
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
 			values: [
 				supplier_name,
-				email,
-				address,
+				email_address,
+				company_address,
 				cp_no,
 				tel_no,
 				fax,
@@ -92,8 +92,8 @@ class SupplierController extends QueryExtend {
 	public async updateSupplier(req: Request, res: Response): Promise<any> {
 		const {
 			supplier_name,
-			email,
-			address,
+			email_address,
+			company_address,
 			cp_no,
 			tel_no,
 			fax,
@@ -104,11 +104,11 @@ class SupplierController extends QueryExtend {
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.supplierTable}" 
-			SET supplier_name=$1, email=$2, address=$3, cp_no = $4, tel_no = $5, fax = $6, website = $7, description = $8 WHERE id = $9`,
+			SET supplier_name=$1, email_address=$2, company_address=$3, cp_no = $4, tel_no = $5, fax = $6, website = $7, description = $8 WHERE supplier_id = $9`,
 			values: [
 				supplier_name,
-				email,
-				address,
+				email_address,
+				company_address,
 				cp_no,
 				tel_no,
 				fax,
@@ -137,7 +137,7 @@ class SupplierController extends QueryExtend {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `DELETE FROM "${this.supplierTable}" WHERE id = $1`,
+			text: `DELETE FROM "${this.supplierTable}" WHERE supplier_id = $1`,
 			values: [id]
 		};
 

@@ -32,10 +32,10 @@ class BrandController extends QueryExtend {
 
 
     public async getSingleBrand(req: Request, res: Response): Promise<any>{
-        const id = req.body.id;
+        const id = req.params.id;
 
         const query: QueryConfig = {
-            text: `SELECT * FROM "${this.brandTable} WHERE id = $1 FETCH FIRST 1 ROW ONLY"`,
+            text: `SELECT * FROM "${this.brandTable}" WHERE brand_id = $1 FETCH FIRST 1 ROW ONLY`,
             values: [id]
         }
 
@@ -44,7 +44,7 @@ class BrandController extends QueryExtend {
            const result = await this.client.query(query); 
 
            return res.json({
-                message: 'Single Brand Successfully ',
+                message: 'Fetched Single Brand Successfully ',
                 success: true,
                 data: result.rows
             });
@@ -82,7 +82,7 @@ class BrandController extends QueryExtend {
         const {brand_name, id}: BrandInterface = req.body
 
         const query: QueryConfig = {
-            text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE id = $2`,
+            text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE brand_id = $2`,
             values: [brand_name, id]
         }
 
@@ -100,10 +100,10 @@ class BrandController extends QueryExtend {
     }
 
     public async deleteBrand(req: Request, res: Response): Promise<any> {
-        const id = req.body.id;
+        const id = req.params.id;
 
         const query: QueryConfig = {
-            text: `DELETE FROM "${this.brandTable}" WHERE id = $1`,
+            text: `DELETE FROM "${this.brandTable}" WHERE brand_id = $1`,
             values: [id]
         }
 

@@ -53,27 +53,31 @@ class ProductController extends QueryExtend {
 			barcode,
 			product_name,
 			quantity,
+			quantity_max,
+			quantity_min,
 			price,
 			description,
-			brand,
-			supplier_name,
-			category,
+			brand_id,
+			supplier_id,
+			category_id,
 			image
 		}: ProductInterface = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.productTable}" 
-			(barcode, product_name, quantity, price, description, brand, supplier_name, category, image)
+			(barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image)
 				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
 			values: [
 				barcode,
 				product_name,
 				quantity,
+				quantity_max,
+				quantity_min,
 				price,
 				description,
-				brand,
-				supplier_name,
-				category,
+				brand_id,
+				supplier_id,
+				category_id,
 				image
 			]
 		};
@@ -97,30 +101,33 @@ class ProductController extends QueryExtend {
 			barcode,
 			product_name,
 			quantity,
+			quantity_max,
+			quantity_min,
 			price,
 			description,
-			brand,
-			supplier_name,
-			category,
-			image
+			brand_id,
+			supplier_id,
+			category_id,
+			image,
+			product_id
 		}: ProductInterface = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.productTable}" SET 
-			barcode=$1, product_name=$2, 
-			quantity=$3, price=$4, description=$5, 
-			brand=$6, supplier_name=$7, category=$8, image=$9 
-			WHERE barcode = $1`,
+			barcode=$1, product_name=$2, quantity=$3, quantity_max=%4, quantity_min=$5, price=$5, description=$6, brand_id=$7, supplier_id=$8, category_id=$9, image=$10 WHERE product_id=$11`,
 			values: [
 				barcode,
 				product_name,
 				quantity,
+				quantity_max,
+				quantity_min,
 				price,
 				description,
-				brand,
-				supplier_name,
-				category,
-				image
+				brand_id,
+				supplier_id,
+				category_id,
+				image,
+				product_id
 			]
 		};
 
@@ -138,11 +145,11 @@ class ProductController extends QueryExtend {
 	}
 
 	public async deleteProduct(req: Request, res: Response): Promise<any> {
-		const barcode = req.params.barcode;
+		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `DELETE FROM "${this.productTable}" WHERE barcode = $1`,
-			values: [barcode]
+			text: `DELETE FROM "${this.productTable}" WHERE product_id = $1`,
+			values: [id]
 		};
 
 		try {

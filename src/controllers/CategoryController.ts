@@ -18,7 +18,7 @@ class CategoryController extends QueryExtend {
 			const result = await this.client.query(query);
 
 			return res.json({
-				message: 'Categories Successfully Updated ',
+				message: 'Categories Fetched Successfully ',
 				success: true,
 				data: result.rows
 			});
@@ -28,10 +28,11 @@ class CategoryController extends QueryExtend {
 	}
 
 	public async getSingleCategory(req: Request, res: Response): Promise<any> {
-		const id = req.body.id;
+		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.categoryTable}" WHERE id = $1 FETCH FIRST 1 ROW ONLY`
+			text: `SELECT * FROM "${this.categoryTable}" WHERE category_id = $1 FETCH FIRST 1 ROW ONLY`,
+			values: [id]
 		};
 
 		try {
@@ -71,7 +72,7 @@ class CategoryController extends QueryExtend {
 		const { category_name, description, id }: CategoryInterface = req.body;
 
 		const query: QueryConfig = {
-			text: `UPDATE "${this.categoryTable} SET category_name = $1, description = $2 WHERE id = $3"`,
+			text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 WHERE category_id = $3`,
 			values: [category_name, description, id]
 		};
 
@@ -92,7 +93,7 @@ class CategoryController extends QueryExtend {
 		const id = req.body.id;
 
 		const query: QueryConfig = {
-			text: `DELETE FROM "${this.categoryTable}" WHERE id = $1`,
+			text: `DELETE FROM "${this.categoryTable}" WHERE category_id = $1`,
 			values: [id]
 		};
 

@@ -12,7 +12,7 @@
       />
       <v-card-text class="pb-0">
         Products
-        <b>({{searched.length}})</b>
+        <b>({{ searched.length }})</b>
       </v-card-text>
       <v-card-text style="max-height: 200px;">
         <v-list-item-group v-model="selected" dense>
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import IProduct from "../../interfaces/productInfoInterface";
+import IProduct from "@/interfaces/productInfoInterface";
 import { productStore, frontendStore, processStore } from "@/store";
 
 @Component

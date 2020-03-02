@@ -61,7 +61,7 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  * @param 			{String} id
  */
-router.delete('/:barcode', (req: Request, res: Response) => {
+router.delete('/:id', (req: Request, res: Response) => {
 	controller.deleteProduct(req, res);
 });
 
