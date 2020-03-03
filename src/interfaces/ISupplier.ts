@@ -1,4 +1,4 @@
-interface SupplierInterface {
+interface ISupplier {
 	supplier_name: string;
 	email_address: string;
 	company_address: string;
@@ -10,4 +10,4 @@ interface SupplierInterface {
 	description: string;
 }
 
-export default SupplierInterface;
+export default ISupplier;

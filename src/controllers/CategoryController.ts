@@ -1,7 +1,7 @@
 import QueryExtend from '../extends/QueryExtend';
 import { Request, Response } from 'express';
 import { QueryConfig } from 'pg';
-import { CategoryInterface } from '../interfaces';
+import ICategory from '../interfaces/ICategory';
 
 class CategoryController extends QueryExtend {
 	constructor() {
@@ -48,7 +48,7 @@ class CategoryController extends QueryExtend {
 	}
 
 	public async addCategory(req: Request, res: Response): Promise<any> {
-		const { category_name, description }: CategoryInterface = req.body;
+		const { category_name, description }: ICategory = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.categoryTable}" (category_name, description) VALUES ($1, $2)`,
@@ -69,7 +69,7 @@ class CategoryController extends QueryExtend {
 	}
 
 	public async updateCategory(req: Request, res: Response): Promise<any> {
-		const { category_name, description, id }: CategoryInterface = req.body;
+		const { category_name, description, id }: ICategory = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 WHERE category_id = $3`,

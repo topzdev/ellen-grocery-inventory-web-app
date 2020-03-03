@@ -26,17 +26,15 @@ export default class ProductInformation extends Vue {
   product: IProduct = {
     product_name: "",
     barcode: "",
-    quantity: 0,
+    quantity_min: 1,
+    quantity_max: 1,
+    quantity: 1,
     price: 0,
     description: "",
-    brand: "",
-    supplier_name: "",
-    category: "",
-    image: "",
-    rules: {
-      minQuantity: 0,
-      maxQuantity: 0
-    }
+    brand_id: "",
+    supplier_id: "",
+    category_id: "",
+    image: ""
   };
 
   // computed property
@@ -50,7 +48,17 @@ export default class ProductInformation extends Vue {
     barcode: [(v: any) => !!v || "Barcode is required"],
     quantity: [
       (v: any) => !!v || "Quantity is required",
-      (v: any) => v > 1 || "Quantity must be greater than 1"
+      (v: any) => v > 1 || "Quantity must be greater than 1",
+      (v: any) => v < this.product.quantity_max || "Quantity should be less than the maximum quantity",
+      (v: any) => v > this.product.quantity_min || "Quantity should be more than the minimum quantity"
+    ],
+    quantity_min: [
+      (v: any) => !!v || "Quantity Minimum is required",
+      (v: any) => v >= 1 || "Quantity Minimum must be greater than 1"
+    ],
+    quantity_max: [
+      (v: any) => !!v || "Quantity Maximum is required",
+      (v: any) => v >= 1 || "Quantity Maximum must be greater than 1"
     ],
     price: [(v: any) => !!v || "Price is required"],
     brand: [(v: any) => !!v || "Brand is required"],

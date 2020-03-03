@@ -1,7 +1,7 @@
 import QueryExtend from '../extends/QueryExtend'
 import { QueryConfig } from 'pg'
 import { Request, Response } from 'express';
-import { BrandInterface } from '../interfaces';
+import IBrand from '../interfaces/IBrand';
 
 class BrandController extends QueryExtend {
 
@@ -56,7 +56,7 @@ class BrandController extends QueryExtend {
 
 
     public async addBrand(req: Request, res: Response): Promise<any>{
-        const {brand_name}: BrandInterface = req.body
+        const {brand_name}: IBrand = req.body
 
         const query: QueryConfig = {
             text: `INSERT INTO "${this.brandTable}" (brand_name) VALUES ($1)`,
@@ -79,7 +79,7 @@ class BrandController extends QueryExtend {
 
 
     public async updateBrand(req: Request, res: Response): Promise<any> {
-        const {brand_name, id}: BrandInterface = req.body
+        const {brand_name, id}: IBrand = req.body
 
         const query: QueryConfig = {
             text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE brand_id = $2`,

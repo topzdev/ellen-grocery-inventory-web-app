@@ -1,4 +1,4 @@
-interface CustomerInterface {
+interface ICustomer{
     customer_id?: number,
     firstname: string, 
     lastname: string, 
@@ -9,3 +9,5 @@ interface CustomerInterface {
     points: number, 
     fax?: string
 }
+
+export default ICustomer;

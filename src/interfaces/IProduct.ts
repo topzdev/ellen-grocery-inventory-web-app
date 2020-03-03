@@ -1,9 +1,4 @@
-interface RulesInterface {
-	minQuantity: number;
-	maxQuantity: number;
-}
-
-export default interface ProductInterface {
+interface IProduct {
 	product_id?: number;
 	product_name: string;
 	barcode: string;
@@ -18,3 +13,5 @@ export default interface ProductInterface {
 	image?: string | undefined;
 	created_at?: string;
 }
+
+export default IProduct;

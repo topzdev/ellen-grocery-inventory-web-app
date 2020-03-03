@@ -1,6 +1,6 @@
-1import { Response, Request } from 'express';
+import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
-import { SupplierInterface } from '../interfaces';
+import ISupplier from '../interfaces/ISupplier';
 import { QueryConfig } from 'pg';
 
 class SupplierController extends QueryExtend {
@@ -58,7 +58,7 @@ class SupplierController extends QueryExtend {
 			description,
 			fax,
 			website
-		}: SupplierInterface = req.body;
+		}: ISupplier = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.supplierTable}"
@@ -100,7 +100,7 @@ class SupplierController extends QueryExtend {
 			website,
 			description,
 			id
-		}: SupplierInterface = req.body;
+		}: ISupplier = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.supplierTable}" 

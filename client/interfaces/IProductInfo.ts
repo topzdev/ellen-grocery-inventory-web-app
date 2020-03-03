@@ -1,17 +1,15 @@
-interface RulesInterface {
-  minQuantity: number;
-  maxQuantity: number;
-}
-
 export default interface IProduct {
-  product_name: string;
-  barcode: string;
-  quantity: number;
-  price: number;
-  description: string;
-  brand: string;
-  supplier_name: string;
-  category: string;
-  image: string;
-  rules: RulesInterface;
+  product_id?: number;
+	product_name: string;
+	barcode: string;
+	quantity: number;
+	quantity_min: number;
+	quantity_max: number;
+	price: number;
+	description: string;
+	brand_id: string;
+	supplier_id: string;
+	category_id: string;
+	image?: string | undefined;
+	created_at?: string;
 }

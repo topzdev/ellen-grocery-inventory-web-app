@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { QueryConfig } from 'pg';
 import QueryExtend from '../extends/QueryExtend';
-import IRole from '../interfaces/RoleInterfaces';
+import IRole from '../interfaces/IRole';
 
 class RoleController extends QueryExtend {
 	constructor() {

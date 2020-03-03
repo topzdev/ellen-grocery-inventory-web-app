@@ -22,7 +22,7 @@
               required
             />
           </v-col>
-          <v-col cols="6" class="pb-0">
+          <v-col cols="3" class="pb-0">
             <v-text-field
               v-model="product.price"
               :rules="rules.price"
@@ -31,7 +31,25 @@
               required
             />
           </v-col>
-          <v-col cols="6" class="pb-0">
+           <v-col cols="3" class="pb-0">
+            <v-text-field
+              v-model="product.quantity_max"
+              :rules="rules.quantity_max"
+              type="number"
+              label="Max Quantity"
+              required
+            />
+          </v-col>
+          <v-col cols="3" class="pb-0">
+            <v-text-field
+              v-model="product.quantity_min"
+              :rules="rules.quantity_min"
+              type="number"
+              label="Min Quantity"
+              required
+            />
+          </v-col>
+          <v-col cols="3" class="pb-0">
             <v-text-field
               v-model="product.quantity"
               :rules="rules.quantity"
@@ -129,7 +147,7 @@ export default class add extends ProductInfoMixin {
   }
 
   mounted() {
-    this.frontendStore.setBarcodeModal(true);
+    this.frontendStore.setBarcodeModal(false);
   }
 
   destroyed() {

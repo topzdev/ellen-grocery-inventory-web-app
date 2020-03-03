@@ -1,6 +1,7 @@
 import QueryExtend from '../extends/QueryExtend';
 import { QueryConfig } from 'pg';
 import { Response, Request } from 'express';
+import ICustomer from '../interfaces/ICustomer';
 
 class CustomerController extends QueryExtend {
 	constructor() {
@@ -26,10 +27,7 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async fetchSingleCustomer(
-		req: Request,
-		res: Response
-	): Promise<any> {
+	public async fetchSingleCustomer( req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
@@ -60,7 +58,7 @@ class CustomerController extends QueryExtend {
 			tel_no,
 			points,
 			fax
-		}: CustomerInterface = req.body;
+		}: ICustomer = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.customerTable}" (firstname, lastname, middlename, 
@@ -101,7 +99,7 @@ class CustomerController extends QueryExtend {
 			tel_no,
 			points,
 			fax
-		}: CustomerInterface = req.body;
+		}: ICustomer = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.customerTable}" SET(firstname = $1, lastname = $2, middlename = $3, 

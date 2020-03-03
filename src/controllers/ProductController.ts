@@ -1,8 +1,7 @@
 import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
-import { ProductInterface } from '../interfaces';
+import IProduct from '../interfaces/IProduct';
 import { QueryConfig } from 'pg';
-import { ResultFactory } from 'express-validator';
 
 class ProductController extends QueryExtend {
 	constructor() {
@@ -61,7 +60,7 @@ class ProductController extends QueryExtend {
 			supplier_id,
 			category_id,
 			image
-		}: ProductInterface = req.body;
+		}: IProduct = req.body;
 
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.productTable}" 
@@ -110,7 +109,7 @@ class ProductController extends QueryExtend {
 			category_id,
 			image,
 			product_id
-		}: ProductInterface = req.body;
+		}: IProduct = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.productTable}" SET 

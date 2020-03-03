@@ -1,7 +1,7 @@
 import { QueryConfig } from 'pg';
 import { Request, Response } from 'express';
 import QueryExtends from '../extends/QueryExtend';
-import IStaff from '../interfaces/StaffInterfaces';
+import IStaff from '../interfaces/IStaff';
 
 class StaffController extends QueryExtends {
 	constructor() {
