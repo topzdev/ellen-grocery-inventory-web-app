@@ -24,34 +24,34 @@
           </v-col>
           <v-col cols="3" class="pb-0">
             <v-text-field
-              v-model="product.price"
+              v-model.number="product.price"
               :rules="rules.price"
               type="number"
               label="Price"
               required
             />
           </v-col>
-           <v-col cols="3" class="pb-0">
+          <v-col cols="3" class="pb-0">
             <v-text-field
-              v-model="product.quantity_max"
-              :rules="rules.quantity_max"
+              v-model.number="product.quantity_max"
               type="number"
+              :rules="rules.quantity_max"
               label="Max Quantity"
               required
             />
           </v-col>
           <v-col cols="3" class="pb-0">
             <v-text-field
-              v-model="product.quantity_min"
-              :rules="rules.quantity_min"
+              v-model.number="product.quantity_min"
               type="number"
+              :rules="rules.quantity_min"
               label="Min Quantity"
               required
             />
           </v-col>
           <v-col cols="3" class="pb-0">
             <v-text-field
-              v-model="product.quantity"
+              v-model.number="product.quantity"
               :rules="rules.quantity"
               type="number"
               label="Quantity"
@@ -59,35 +59,20 @@
             />
           </v-col>
           <v-col cols="6" class="pb-0">
-            <v-select
-              v-model="product.brand"
-              :rules="rules.brand"
-              :items="items.brand"
-              label="Brand"
-            />
+            <brand-select v-model.number="product.brand_id" :rules="rules.brand_id" />
           </v-col>
           <v-col cols="6" class="pb-0">
-            <v-select
-              v-model="product.supplier_name"
-              :rules="rules.supplier_name"
-              :items="items.supplier"
-              label="Supplier Name"
-            />
+            <supplier-select v-model.number="product.supplier_id" :rules="rules.supplier_id" />
           </v-col>
           <v-col cols="6" class="pb-0">
-            <v-select
-              v-model="product.category"
-              :rules="rules.category"
-              :items="items.category"
-              label="Category"
-            />
+            <category-select v-model.number="product.category_id" :rules="rules.category_id" />
           </v-col>
           <v-col cols="12">
             <v-textarea
+              v-model="product.description"
               :auto-grow="true"
               label="Description"
               :value="product.description"
-              v-model="product.description"
             />
           </v-col>
         </v-row>

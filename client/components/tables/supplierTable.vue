@@ -53,12 +53,8 @@ export default class SupplierTable extends SupplierInfoMixins {
     { text: "Actions", value: "action", sortable: false }
   ];
 
-  created() {
-    this.supplierStore.fetchSuppliers();
-  }
-
   get suppliersData() {
-    return this.supplierStore.supplierData;
+    return this.supplierStore.getSupplier;
   }
 }
 </script>

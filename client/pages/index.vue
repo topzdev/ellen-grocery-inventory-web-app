@@ -1,9 +1,9 @@
 <template>
-  <v-layout column justify-center align-center> </v-layout>
+  <div></div>
 </template>
 
-<script>
-export default {
-  components: {}
-};
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+@Component
+export default class Index extends Vue {}
 </script>

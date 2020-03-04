@@ -15,7 +15,12 @@
       <v-col cols="8">
         <v-row>
           <v-col cols="6" class="pb-0">
-            <v-text-field :value="product.barcode" :rules="rules.barcode" label="Barcode" readonly />
+            <v-text-field
+              v-model="product.barcode"
+              :rules="rules.barcode"
+              label="Barcode"
+              required
+            />
           </v-col>
           <v-col cols="6" class="pb-0">
             <v-text-field
@@ -25,7 +30,7 @@
               required
             />
           </v-col>
-          <v-col cols="6" class="pb-0">
+          <v-col cols="3" class="pb-0">
             <v-text-field
               v-model="product.price"
               :rules="rules.price"
@@ -34,7 +39,25 @@
               required
             />
           </v-col>
-          <v-col cols="6" class="pb-0">
+          <v-col cols="3" class="pb-0">
+            <v-text-field
+              v-model="product.quantity_max"
+              :rules="rules.quantity_max"
+              type="number"
+              label="Max Quantity"
+              required
+            />
+          </v-col>
+          <v-col cols="3" class="pb-0">
+            <v-text-field
+              v-model="product.quantity_min"
+              :rules="rules.quantity_min"
+              type="number"
+              label="Min Quantity"
+              required
+            />
+          </v-col>
+          <v-col cols="3" class="pb-0">
             <v-text-field
               v-model="product.quantity"
               :rules="rules.quantity"
@@ -71,8 +94,8 @@
             <v-textarea
               :auto-grow="true"
               label="Description"
-              v-model="product.description"
               :value="product.description"
+              v-model="product.description"
             />
           </v-col>
         </v-row>

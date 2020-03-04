@@ -32,7 +32,24 @@ class ProductController extends QueryExtend {
 
 	public async getProducts(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.productTable}"`
+			text: `SELECT 
+			product.barcode,
+			product.product_name,
+			product.quantity,
+			product.quantity_max,
+			product.quantity_min,
+			product.price,
+			product.description,
+			product.brand_id,
+			product.supplier_id,
+			product.category_id,
+			brand.brand_name,
+			category.category_name,
+			supplier.supplier_name
+			FROM "${this.productTable}" product 
+			INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
+			INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
+			INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id`
 		};
 
 		try {

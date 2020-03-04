@@ -31,9 +31,9 @@ export default class ProductInformation extends Vue {
     quantity: 1,
     price: 0,
     description: "",
-    brand_id: "",
-    supplier_id: "",
-    category_id: "",
+    brand_id: -1,
+    supplier_id: -1,
+    category_id: -1,
     image: ""
   };
 
@@ -49,8 +49,12 @@ export default class ProductInformation extends Vue {
     quantity: [
       (v: any) => !!v || "Quantity is required",
       (v: any) => v > 1 || "Quantity must be greater than 1",
-      (v: any) => v < this.product.quantity_max || "Quantity should be less than the maximum quantity",
-      (v: any) => v > this.product.quantity_min || "Quantity should be more than the minimum quantity"
+      (v: any) =>
+        v <= this.product.quantity_max ||
+        "Quantity should be less than the maximum quantity",
+      (v: any) =>
+        v >= this.product.quantity_min ||
+        "Quantity should be more than the minimum quantity"
     ],
     quantity_min: [
       (v: any) => !!v || "Quantity Minimum is required",
@@ -61,8 +65,8 @@ export default class ProductInformation extends Vue {
       (v: any) => v >= 1 || "Quantity Maximum must be greater than 1"
     ],
     price: [(v: any) => !!v || "Price is required"],
-    brand: [(v: any) => !!v || "Brand is required"],
-    supplier_name: [(v: any) => !!v || "Supplier Name is required"],
-    category: [(v: any) => !!v || "Category is required"]
+    brand_id: [(v: any) => !!v || "Brand is required"],
+    supplier_id: [(v: any) => !!v || "Supplier Name is required"],
+    category_id: [(v: any) => !!v || "Category is required"]
   };
 }

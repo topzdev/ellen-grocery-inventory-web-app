@@ -69,11 +69,11 @@ class CategoryController extends QueryExtend {
 	}
 
 	public async updateCategory(req: Request, res: Response): Promise<any> {
-		const { category_name, description, id }: ICategory = req.body;
+		const { category_name, description, category_id }: ICategory = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 WHERE category_id = $3`,
-			values: [category_name, description, id]
+			values: [category_name, description, category_id]
 		};
 
 		try {
@@ -90,11 +90,11 @@ class CategoryController extends QueryExtend {
 	}
 
 	public async deleteCategory(req: Request, res: Response): Promise<any> {
-		const id = req.body.id;
+		const category_id = req.params.id;
 
 		const query: QueryConfig = {
 			text: `DELETE FROM "${this.categoryTable}" WHERE category_id = $1`,
-			values: [id]
+			values: [category_id]
 		};
 
 		try {

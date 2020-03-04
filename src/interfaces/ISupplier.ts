@@ -1,4 +1,5 @@
 interface ISupplier {
+	supplier_id?: number;
 	supplier_name: string;
 	email_address: string;
 	company_address: string;

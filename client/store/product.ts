@@ -12,11 +12,6 @@ export default class Product extends VuexModule {
   // states
   private products: Array<IProduct> = [];
   private search: Array<IProduct> = [];
-  public addonItems: Object = {
-    brand: ["Nestle", "Rebisco", "Febisco", "Palmovile", "M.Y San"],
-    supplier: ["Beth Corp", "Nestle Corp"],
-    category: ["Biscuit", "Dishwasing", "Crackers", "Etc."]
-  };
   private singleProduct: object = {};
   public path = "/products";
 
@@ -25,7 +20,7 @@ export default class Product extends VuexModule {
   }
 
   get getAddonItems() {
-    return this.addonItems;
+    return [];
   }
 
   get getSearchProducts() {

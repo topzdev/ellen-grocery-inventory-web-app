@@ -1,6 +1,6 @@
 interface IBrand {
-	brand_id?: number;
-	brand_name: string;
+  brand_name: string;
+  brand_id?: number;
 }
 
 export default IBrand;

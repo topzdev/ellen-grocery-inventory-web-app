@@ -9,10 +9,11 @@ import { setNotification } from "~/utils/setNotification";
   namespaced: true
 })
 export default class Supplier extends VuexModule {
+  private url: string = "/api/supplier/";
   private suppliers: Array<ISupplierInfo> = [];
   public path: string = "/suppliers";
 
-  get supplierData() {
+  get getSupplier() {
     return this.suppliers;
   }
 
@@ -35,14 +36,14 @@ export default class Supplier extends VuexModule {
 
   @Action({ rawError: true })
   public async fetchSuppliers() {
-    const result = await $axios.$get("/api/supplier/");
+    const result = await $axios.$get(this.url);
 
     this.context.commit("SET_SUPPLIERS", result.data);
   }
 
   @Action({ rawError: true })
   public async addSupplier(supplier: ISupplierInfo): Promise<void> {
-    const result = await $axios.$post(`/api/supplier`, supplier, config);
+    const result = await $axios.$post(this.url, supplier, config);
 
     this.context.commit("ADD_SUPPLIER", supplier);
 
@@ -52,14 +53,14 @@ export default class Supplier extends VuexModule {
   @Action({ rawError: true })
   public async updateSupplier(supplier: ISupplierInfo): Promise<void> {
     console.log(supplier);
-    const result = await $axios.$put("/api/supplier", supplier, config);
+    const result = await $axios.$put(this.url, supplier, config);
     console.log(result);
     setNotification(result.message, result.success, this.path);
   }
 
   @Action({ rawError: true })
   public async deleteSupplier(id: number): Promise<void> {
-    const result = await $axios.$delete(`/api/supplier/${id}`);
+    const result = await $axios.$delete(`${this.url}${id}`);
 
     this.context.commit("DELETE_SUPPLIER", id);
 

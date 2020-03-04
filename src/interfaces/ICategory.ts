@@ -1,7 +1,7 @@
-interface CategoryInterface {
-    id?: number,
-    category_name: string,
-    description?: string
+interface ICategory {
+	category_id?: number;
+	category_name: string;
+	description?: string;
 }
 
-export default CategoryInterface;
+export default ICategory;
