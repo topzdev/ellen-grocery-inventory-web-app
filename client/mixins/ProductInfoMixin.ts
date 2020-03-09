@@ -24,6 +24,7 @@ export default class ProductInformation extends Vue {
 
   // product state
   product: IProduct = {
+    product_id: undefined,
     product_name: "",
     barcode: "",
     quantity_min: 1,
@@ -50,8 +51,12 @@ export default class ProductInformation extends Vue {
       (v: any) => !!v || "Quantity is required",
       (v: any) => v > 1 || "Quantity must be greater than 1",
       (v: any) =>
-        v <= this.product.quantity_max ||
-        "Quantity should be less than the maximum quantity",
+        {
+
+          console.log(this.product.quantity_max, this.product.quantity )
+          return v < this.product.quantity_max ||
+          "Quantity should be less than the maximum quantity"
+        },
       (v: any) =>
         v >= this.product.quantity_min ||
         "Quantity should be more than the minimum quantity"

@@ -80,7 +80,7 @@
       <v-col cols="4" class="d-flex flex-column align-center justify-start">
         <p>Upload Product Image</p>
         <v-avatar class="mb-2" color="grey" size="250">
-          <img :src="product.image" alt="John" draggable="false" />
+          <!-- <img :src="product.image" alt="John" draggable="false" /> -->
         </v-avatar>
         <v-text-field v-model="product.image" label="Image" required />
 
@@ -123,12 +123,8 @@ export default class add extends ProductInfoMixin {
   validate(): void {
     // @ts-ignore
     if (this.$refs.productForm.validate()) {
-      this.insertProduct();
+      this.productStore.addProduct(this.product);
     }
-  }
-
-  insertProduct(): void {
-    this.productStore.addProduct(this.product);
   }
 
   mounted() {

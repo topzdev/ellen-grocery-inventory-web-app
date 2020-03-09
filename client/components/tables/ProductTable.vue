@@ -80,7 +80,7 @@ export default class ProductTable extends Vue {
     // Assigning what delete function to be process
     processStore.setCurrentToDelete({
       deleteFunction: productStore.deleteProduct,
-      id: item.barcode
+      id: item.product_id
     });
   }
 }

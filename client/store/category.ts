@@ -23,15 +23,20 @@ export default class Category extends VuexModule {
   }
 
   @Mutation
-  private UPDATE_CATEGORY(brand: ICategory): void {
-    /**
-     *    this.brands = this.brands.
-     *  */
+  private ADD_CATEGORY(category: ICategory) {
+    this.categories = [...this.categories, category];
+  }
+
+  @Mutation
+  private UPDATE_CATEGORY(category: ICategory): void {
+    this.categories = this.categories.map(item =>
+      item.category_id === category.category_id ? category : item
+    );
   }
   @Mutation
-  private DELETE_CATEGORY(brand: ICategory): void {
+  private DELETE_CATEGORY(category_id: number): void {
     this.categories = this.categories.filter(
-      item => item.category_id !== brand.category_id
+      item => item.category_id !== category_id
     );
   }
 
@@ -59,10 +64,10 @@ export default class Category extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async deleteCategory({ category_id }: ICategory) {
+  public async deleteCategory(category_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${category_id}`);
 
-    this.context.commit("DELETE_CATEGORY", { category_id });
+    this.context.commit("DELETE_CATEGORY", category_id);
     setNotification(result.message, result.success, this.path);
   }
 }

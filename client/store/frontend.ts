@@ -15,6 +15,8 @@ export default class Frontend extends VuexModule {
   private showDeleteModal: IDeleteModal = { show: false };
   private showSearchModal: ISearchModal = { show: false };
   private showBarcodeModal: boolean = false;
+  private showBrandModal: boolean = false;
+  private showCategoryModal: boolean = false;
 
   get sidebarState(): boolean {
     return this.openSidebar;
@@ -36,6 +38,14 @@ export default class Frontend extends VuexModule {
     return this.showBarcodeModal;
   }
 
+  get brandModalState(): boolean {
+    return this.showBrandModal;
+  }
+
+  get categoryModalState(): boolean {
+    return this.showCategoryModal;
+  }
+
   @Mutation
   private SET_OPEN_SIDEBAR(): void {
     this.openSidebar = !this.openSidebar;
@@ -49,12 +59,20 @@ export default class Frontend extends VuexModule {
     this.showDeleteModal = show;
   }
   @Mutation
-  private SET_SHOW_SEARCH_MODAL(searchModalConfig: ISearchModal) {
-    this.showSearchModal = searchModalConfig;
+  private SET_SHOW_SEARCH_MODAL(state: ISearchModal) {
+    this.showSearchModal = state;
   }
   @Mutation
-  private SET_SHOW_BARCODE_MODAL(barcodeModalConfig: boolean) {
-    this.showBarcodeModal = barcodeModalConfig;
+  private SET_SHOW_BARCODE_MODAL(state: boolean) {
+    this.showBarcodeModal = state;
+  }
+  @Mutation
+  private SET_SHOW_BRAND_MODAL(state: boolean) {
+    this.showBrandModal = state;
+  }
+  @Mutation
+  private SET_SHOW_CATEGORY_MODAL(state: boolean) {
+    this.showCategoryModal = state;
   }
 
   @Action
@@ -64,7 +82,8 @@ export default class Frontend extends VuexModule {
 
   @Action
   public redirect(redirect: string | undefined): void {
-    if (redirect !== undefined) $nuxt.$router.push(redirect);
+    // @ts-ignore
+    if (redirect !== undefined) $nuxt.$router.back();
   }
 
   @Action
@@ -84,5 +103,13 @@ export default class Frontend extends VuexModule {
   @Action
   public setBarcodeModal(show: boolean) {
     this.context.commit("SET_SHOW_BARCODE_MODAL", show);
+  }
+  @Action
+  public setBrandModal(show: boolean) {
+    this.context.commit("SET_SHOW_BRAND_MODAL", show);
+  }
+  @Action
+  public setCategoryModal(show: boolean) {
+    this.context.commit("SET_SHOW_CATEGORY_MODAL", show);
   }
 }

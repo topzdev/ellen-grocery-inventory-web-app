@@ -2,19 +2,19 @@
   <div>
     <v-app-bar color="primary" dark app>
       <v-app-bar-nav-icon @click="openSidebar" />
-      <v-toolbar-title>{{title}}</v-toolbar-title>
+      <v-toolbar-title v-text="title"/>
     </v-app-bar>
   </div>
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import EssentialMixins from "@/mixins/AppEssentials";
+import { Component, Vue} from "vue-property-decorator";
 import { frontendStore } from "@/store";
+
 @Component({
-  components: {}
 })
-export default class Navbar extends EssentialMixins {
+export default class Navbar extends Vue {
+  title: string = "Ellen Inventory System"
   clipped: boolean = false;
   drawer: boolean = false;
   fixed: boolean = false;

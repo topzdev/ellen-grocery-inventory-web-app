@@ -48,8 +48,8 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
-  public DELETE_PRODUCT(barcode: string) {
-    this.products = this.products.filter(prod => prod.barcode != barcode);
+  public DELETE_PRODUCT(product_id: number) {
+    this.products = this.products.filter(prod => prod.product_id != product_id);
   }
 
   @Mutation
@@ -60,8 +60,9 @@ export default class Product extends VuexModule {
   //action
 
   @Action({ rawError: true })
-  public async addProduct(product: Object): Promise<void> {
+  public async addProduct(product: IProduct): Promise<void> {
     try {
+      console.log(product)
       const result = await $axios.$post("/api/product", product, config);
 
       setNotification(result.message, result.success, this.path);
@@ -105,11 +106,11 @@ export default class Product extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async deleteProduct(barcode: string): Promise<void> {
+  public async deleteProduct(product_id: number): Promise<void> {
     try {
-      const result = await $axios.$delete(`/api/product/${barcode}`, config);
+      const result = await $axios.$delete(`/api/product/${product_id}`, config);
 
-      this.context.commit("DELETE_PRODUCT", barcode);
+      this.context.commit("DELETE_PRODUCT", product_id);
 
       setNotification(result.message, result.success, this.path);
     } catch (error) {

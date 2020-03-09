@@ -11,16 +11,22 @@ const productRules = () => {
 		body('quantity', 'Quantity must be not empty')
 			.not()
 			.isEmpty(),
+		body('quantity_max', 'Quantity must be not empty')
+			.not()
+			.isEmpty(),
+		body('quantity_min', 'Quantity must be not empty')
+			.not()
+			.isEmpty(),
 		body('price', 'Brand must be not empty')
 			.not()
 			.isEmpty(),
-		body('brand', 'Brand must be not empty')
+		body('brand_id', 'Brand must be not empty')
 			.not()
 			.isEmpty(),
-		body('supplier_name', 'Supplier must be not empty')
+		body('supplier_id', 'Supplier must be not empty')
 			.not()
 			.isEmpty(),
-		body('category', 'Category must be not empty')
+		body('category_id', 'Category must be not empty')
 			.not()
 			.isEmpty()
 	];

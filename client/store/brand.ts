@@ -12,7 +12,7 @@ import { setNotification } from "~/utils/setNotification";
 @Module({ name: "brand", namespaced: true })
 export default class Brand extends VuexModule {
   private url: string = "/api/brand";
-  private path: string = "/product";
+  private path: string = "/products";
   private brands: Array<IBrand> = [];
 
   get getBrands() {
@@ -29,13 +29,13 @@ export default class Brand extends VuexModule {
   }
   @Mutation
   private UPDATE_BRAND(brand: IBrand): void {
-    /**
-     *    this.brands = this.brands.
-     *  */
+    this.brands = this.brands.map(item =>
+      item.brand_id === brand.brand_id ? brand : item
+    );
   }
   @Mutation
-  private DELETE_BRAND(brand: IBrand): void {
-    this.brands = this.brands.filter(item => item.brand_id !== brand.brand_id);
+  private DELETE_BRAND(brand_id: number): void {
+    this.brands = this.brands.filter(item => item.brand_id !== brand_id);
   }
 
   @Action({ rawError: true })
@@ -69,10 +69,10 @@ export default class Brand extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async deleteBrand({ brand_id }: IBrand) {
+  public async deleteBrand(brand_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${brand_id}`);
 
-    this.context.commit("DELETE_BRAND", { brand_id });
+    this.context.commit("DELETE_BRAND", brand_id);
     setNotification(result.message, result.success, this.path);
   }
 }

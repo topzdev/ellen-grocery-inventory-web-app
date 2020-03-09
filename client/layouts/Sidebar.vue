@@ -30,12 +30,11 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import EssentialsMixins from "@/mixins/AppEssentials";
+import { Component, Vue } from "vue-property-decorator";
 import { frontendStore } from "@/store";
 
 @Component
-export default class Sidebar extends EssentialsMixins {
+export default class Sidebar extends Vue {
   drawer: boolean = true;
   right: boolean = false;
   expandOnHover: boolean = true;

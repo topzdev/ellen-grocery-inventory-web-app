@@ -32,7 +32,8 @@ class ProductController extends QueryExtend {
 
 	public async getProducts(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
-			text: `SELECT 
+			text: `SELECT
+			product.product_id,
 			product.barcode,
 			product.product_name,
 			product.quantity,
@@ -82,7 +83,7 @@ class ProductController extends QueryExtend {
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.productTable}" 
 			(barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image)
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
 			values: [
 				barcode,
 				product_name,
