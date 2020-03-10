@@ -22,23 +22,29 @@ import ProductTable from "@/components/tables/ProductTable.vue";
   }
 })
 export default class Index extends Vue {
-  readonly parentPath: string = "products";
-  readonly actionLink: Array<Object> = [
+  parentPath: string = "products";
+  actionLink: Array<Object> = [
     {
-      title: "Add Product",
-      subtitle: "Add New Product",
+      title: "Add Account",
+      subtitle: "Add New Account",
       color: "blue darken-1",
       to: `/${this.parentPath}/add`
     },
     {
-      title: "Manage Product",
-      subtitle: "Update or Remove Existing Product Information",
+      title: "Update Account",
+      subtitle: "Update or Remove Existing Account Information",
       color: "orange darken-1",
       to: `/${this.parentPath}/manage`
     },
     {
-      title: "Manage Stocks",
-      subtitle: "Renew and replenish out of stock products",
+      title: "Transactions",
+      subtitle: "Renew and replenish out of stock Accounts",
+      color: "purple darken-1",
+      to: `/${this.parentPath}/stock`
+    },
+    {
+      title: "Manage Role",
+      subtitle: "Renew and replenish out of stock Accounts",
       color: "purple darken-1",
       to: `/${this.parentPath}/stock`
     }

@@ -24,7 +24,7 @@ export default class Category extends VuexModule {
 
   @Mutation
   private ADD_CATEGORY(category: ICategory) {
-    this.categories = [...this.categories, category];
+    this.categories = [category, ...this.categories];
   }
 
   @Mutation
@@ -51,7 +51,10 @@ export default class Category extends VuexModule {
   public async addCategory(category: ICategory) {
     const result: IResult = await $axios.$post(this.url, category, config);
 
-    this.context.commit("ADD_CATEGORY", { category });
+    this.context.commit("ADD_CATEGORY", {
+      category_id: result.data.category_id,
+      ...category
+    });
     setNotification(result.message, result.success, this.path);
   }
 

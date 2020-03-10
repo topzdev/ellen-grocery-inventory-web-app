@@ -1,8 +1,8 @@
 export default interface ISupplierInfo {
-  id?: number;
+  supplier_id?: number;
   supplier_name: string;
-  address: string;
-  email: string;
+  company_address: string;
+  email_address: string;
   cp_no?: string;
   tel_no?: string;
   fax?: string;

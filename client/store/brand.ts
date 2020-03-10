@@ -25,7 +25,7 @@ export default class Brand extends VuexModule {
   }
   @Mutation
   private ADD_BRAND(brand: IBrand): void {
-    this.brands = [...this.brands, brand];
+    this.brands = [brand, ...this.brands];
   }
   @Mutation
   private UPDATE_BRAND(brand: IBrand): void {
@@ -46,13 +46,24 @@ export default class Brand extends VuexModule {
   }
 
   @Action({ rawError: true })
+  public async searchBrands(search: string) {
+    const result: IResult = await $axios.$get(`${this.url}/search/${search}`);
+
+    this.context.commit("SET_BRANDS", result.data);
+  }
+
+  @Action({ rawError: true })
   public async addBrand({ brand_name }: IBrand) {
     const result: IResult = await $axios.$post(
       this.url,
       { brand_name },
       config
     );
-    this.context.commit("ADD_BRAND", { brand_name });
+    console.log(result);
+    this.context.commit("ADD_BRAND", {
+      brand_id: result.data.brand_id,
+      brand_name
+    });
     setNotification(result.message, result.success, this.path);
   }
 

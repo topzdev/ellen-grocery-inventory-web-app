@@ -47,8 +47,8 @@ export default class SupplierTable extends SupplierInfoMixins {
   search: string = "";
   headers: Array<Object> = [
     { text: "Supplier Name", align: "left", value: "supplier_name" },
-    { text: "Address", value: "address" },
-    { text: "Email Address", value: "email" },
+    { text: "Address", value: "company_address" },
+    { text: "Email Address", value: "email_address" },
     { text: "Contact", value: "cp_no" },
     { text: "Actions", value: "action", sortable: false }
   ];

@@ -23,15 +23,22 @@ export default class Supplier extends VuexModule {
   }
 
   @Mutation
-  public DELETE_SUPPLIER(id: number) {
+  public DELETE_SUPPLIER(supplier_id: number) {
     this.suppliers = this.suppliers.filter(
-      (item: ISupplierInfo) => item.id != id
+      (item: ISupplierInfo) => item.supplier_id != supplier_id
+    );
+  }
+
+  @Mutation
+  public UPDATE_SUPPLIER(supplier: ISupplierInfo) {
+    this.suppliers = this.suppliers.map(item =>
+      item.supplier_id === supplier.supplier_id ? supplier : item
     );
   }
 
   @Mutation
   public ADD_SUPPLIER(supplier: ISupplierInfo) {
-    this.suppliers = [...this.suppliers, supplier];
+    this.suppliers = [supplier, ...this.suppliers];
   }
 
   @Action({ rawError: true })
@@ -52,17 +59,18 @@ export default class Supplier extends VuexModule {
 
   @Action({ rawError: true })
   public async updateSupplier(supplier: ISupplierInfo): Promise<void> {
-    console.log(supplier);
     const result = await $axios.$put(this.url, supplier, config);
-    console.log(result);
+
+    this.context.commit("UPDATE_SUPPLIER", supplier);
+
     setNotification(result.message, result.success, this.path);
   }
 
   @Action({ rawError: true })
-  public async deleteSupplier(id: number): Promise<void> {
-    const result = await $axios.$delete(`${this.url}${id}`);
+  public async deleteSupplier(supplier_id: number): Promise<void> {
+    const result = await $axios.$delete(`${this.url}${supplier_id}`);
 
-    this.context.commit("DELETE_SUPPLIER", id);
+    this.context.commit("DELETE_SUPPLIER", supplier_id);
 
     setNotification(result.message, result.success, this.path);
   }

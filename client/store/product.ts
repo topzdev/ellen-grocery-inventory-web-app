@@ -3,6 +3,7 @@ import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import IProduct from "~/interfaces/IProductInfo";
 import { setNotification } from "~/utils/setNotification";
+import IResult from "~/interfaces/IResult";
 
 @Module({
   name: "product",
@@ -48,6 +49,11 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
+  public ADD_PRODUCT(product: IProduct): void {
+    this.products = [product, ...this.products];
+  }
+
+  @Mutation
   public DELETE_PRODUCT(product_id: number) {
     this.products = this.products.filter(prod => prod.product_id != product_id);
   }
@@ -62,9 +68,17 @@ export default class Product extends VuexModule {
   @Action({ rawError: true })
   public async addProduct(product: IProduct): Promise<void> {
     try {
-      console.log(product)
-      const result = await $axios.$post("/api/product", product, config);
+      console.log(product);
+      const result: IResult = await $axios.$post(
+        "/api/product",
+        product,
+        config
+      );
 
+      this.context.commit("ADD_PRODUCT", {
+        product_id: result.data.product_id,
+        ...product
+      });
       setNotification(result.message, result.success, this.path);
     } catch (error) {
       console.error(error.stack);

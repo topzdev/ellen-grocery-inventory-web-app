@@ -38,30 +38,13 @@
           </v-card>
         </v-col>
         <v-col cols="5" class="d-flex">
-          <v-card width="100%">
-            <v-card-text>
-              <v-text-field solo label="Search brand" prepend-inner-icon="mdi-magnify" clearable />
-              <v-list subheader>
-                <v-subheader>Total brands {{brandList.length}}</v-subheader>
-                <v-list-item-group v-model="active" color="primary">
-                  <v-list-item
-                    v-for="(item, i) in brandList.slice(0, 5)"
-                    :key="i"
-                    @click="setBrand(item)"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title v-text="item.brand_name" />
-                    </v-list-item-content>
-                    <v-spacer />
-
-                    <v-list-item-icon>
-                      <v-icon class="mr-2" @click="showDelete(item)">mdi-delete</v-icon>
-                    </v-list-item-icon>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card-text>
-          </v-card>
+          <brand-list
+            :active="active"
+            :show-delete="showDelete"
+            :search-brand="searchBrand"
+            :brand-list="brandList"
+            :set-brand="setBrand"
+          />
         </v-col>
       </v-row>
     </v-card>
@@ -71,8 +54,11 @@
 <script lang="ts">
 import { Component } from "vue-property-decorator";
 import BrandMixin from "@/mixins/BrandMixin";
+import BrandList from "@/components/brand/BrandList.vue";
 
-@Component
+@Component({
+  components: { BrandList }
+})
 export default class brand extends BrandMixin {
   test() {
     console.log("Hello World");

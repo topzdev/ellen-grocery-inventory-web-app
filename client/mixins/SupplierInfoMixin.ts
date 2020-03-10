@@ -16,8 +16,8 @@ export default class SupplierInfoMixin extends Vue {
 
   supplier: ISupplierInfo = {
     supplier_name: "",
-    address: "",
-    email: "",
+    company_address: "",
+    email_address: "",
     cp_no: "",
     tel_no: "",
     fax: "",
@@ -47,8 +47,6 @@ export default class SupplierInfoMixin extends Vue {
   }
 
   deleteItem(supplier: ISupplier) {
-    console.log(supplier.id);
-
     frontendStore.setDeleteModal({
       show: true,
       name: supplier.supplier_name,
@@ -57,15 +55,15 @@ export default class SupplierInfoMixin extends Vue {
 
     processStore.setCurrentToDelete({
       deleteFunction: supplierStore.deleteSupplier,
-      id: supplier.id
+      id: supplier.supplier_id
     });
   }
 
   // Rules
   rules: Object = {
     supplier_name: [(v: any) => !!v || "Supplier Name is required"],
-    address: [(v: any) => !!v || "Company Address is required"],
-    email: [
+    company_address: [(v: any) => !!v || "Company Address is required"],
+    email_address: [
       (v: any) => !!v || "Email Address is required",
       (v: any) => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],

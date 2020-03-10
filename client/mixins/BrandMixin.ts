@@ -13,7 +13,6 @@ import IBrand from "~/interfaces/IBrand";
 class BrandMixin extends Vue {
   valid: boolean = false;
   dialog: boolean = true;
-  active: number = -1;
   public isEdit: boolean = false;
   public brandStore: IBrandModule;
   public frontendStore: IFrontendModule;
@@ -75,6 +74,11 @@ class BrandMixin extends Vue {
       deleteFunction: this.brandStore.deleteBrand,
       id: this.brand.brand_id
     });
+  }
+
+  searchBrand(search: string) {
+    if (search.length <= 0) this.brandStore.fetchBrands();
+    this.brandStore.searchBrands(search);
   }
 
   get brandList() {
