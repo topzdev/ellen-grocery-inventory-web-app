@@ -1,7 +1,7 @@
 import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import IProduct from "~/interfaces/IProductInfo";
+import IProduct from "~/interfaces/IProduct";
 import { setNotification } from "~/utils/setNotification";
 import IResult from "~/interfaces/IResult";
 

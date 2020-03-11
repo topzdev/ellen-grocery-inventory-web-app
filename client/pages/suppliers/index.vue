@@ -14,15 +14,15 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import supplierTable from "@/components/tables/supplierTable.vue";
+import supplierTable from "@/components/supplier/SupplierTable.vue";
 @Component({
   components: {
     supplierTable
   }
 })
 export default class index extends Vue {
-  readonly supplierPath: string = "suppliers";
-  readonly actionLink: Array<Object> = [
+  supplierPath: string = "suppliers";
+  actionLink: Array<Object> = [
     {
       title: "Add Supplier",
       subtitle: "Add New Supplier",
@@ -37,7 +37,7 @@ export default class index extends Vue {
     }
   ];
 
-  public openSupplierModal() {
+  openSupplierModal() {
     console.log("Hello, World");
   }
 }

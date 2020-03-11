@@ -31,7 +31,7 @@ class RoleController extends QueryExtend {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.roleTable} WHERE role_id = $1 FETCH FIRST 1 ONLY ROW"`,
+			text: `SELECT * FROM "${this.roleTable}" WHERE role_id = $1 FETCH FIRST 1 ROW ONLY`,
 			values: [id]
 		};
 
@@ -52,7 +52,7 @@ class RoleController extends QueryExtend {
 		const role_name: IRole = req.body.role_name;
 
 		const query: QueryConfig = {
-			text: `INSERT INTO "${this.roleTable}" (role_name) VALUES ($1)`,
+			text: `INSERT INTO "${this.roleTable}" (role_name) VALUES ($1) RETURNING role_id`,
 			values: [role_name]
 		};
 

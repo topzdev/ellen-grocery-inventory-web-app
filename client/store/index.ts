@@ -5,6 +5,7 @@ import config from "~/configs/axiosConfig";
 import { $axios } from "~/utils/axios";
 import IResult from "~/interfaces/IResult";
 import ICategory from "~/interfaces/ICategory";
+import IRole from "~/interfaces/IRole";
 
 const initializer = (store: Store<any>) => initialiseStores(store);
 
@@ -28,6 +29,11 @@ export const actions: ActionTree<RootState, RootState> = {
     const supplier: IResult = await $axios.$get("/api/supplier");
 
     commit("supplier/SET_SUPPLIERS", supplier.data);
+
+    //Fetch Roles
+    const roles: IResult = await $axios.$get("/api/role");
+
+    commit("role/SET_ROLES", roles.data);
   }
 };
 

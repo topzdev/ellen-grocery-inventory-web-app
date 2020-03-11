@@ -46,7 +46,7 @@ router.put('/', (req: Request, res: Response) => {
  * @description     delete role
  * @access          private
  */
-router.delete('/', (req: Request, res: Response) => {
+router.delete('/:id', (req: Request, res: Response) => {
 	controller.deleteRole(req, res);
 });
 

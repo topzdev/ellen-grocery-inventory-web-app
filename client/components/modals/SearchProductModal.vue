@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import IProduct from "@/interfaces/productInfoInterface";
+import IProduct from "@/interfaces/IProduct";
 import { productStore, frontendStore, processStore } from "@/store";
 
 @Component

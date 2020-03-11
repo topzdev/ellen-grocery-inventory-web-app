@@ -6,7 +6,7 @@ import {
   Module
 } from "vuex-module-decorators";
 import { ICurrentDelete } from "~/interfaces/IProcess";
-import IProductInfo from "~/interfaces/IProductInfo";
+import IProductInfo from "~/interfaces/IProduct";
 import ISupplierInfo from "~/interfaces/ISupplier";
 
 @Module({

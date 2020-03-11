@@ -3,20 +3,20 @@
     <v-col>
       <v-card :flat="true">
         <v-card-title>
-          Supplier Table
+          Account Table
           <v-spacer />
           <v-text-field
             v-model="search"
             append-icon="mdi-search"
-            label="Search by Supplier Name, Address, Contact and Email Address"
+            label="Search by Account Username or ID"
             single-line
             hide-details
           />
         </v-card-title>
         <v-data-table
           :headers="headers"
+          :items="accountList"
           :items-per-page="5"
-          :items="suppliersData"
           :search="search"
           item-key="name"
           class="elevation-1"
@@ -30,7 +30,7 @@
         >
           <template v-slot:item.action="{ item }">
             <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
-            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon @click="showDelete(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </v-card>
@@ -40,21 +40,21 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import SupplierInfoMixins from "@/mixins/SupplierInfoMixin";
+import AccountMixin from "@/mixins/AccountMixin";
 
 @Component
-export default class SupplierTable extends SupplierInfoMixins {
+export default class AccountTable extends AccountMixin {
   search: string = "";
   headers: Array<Object> = [
-    { text: "Supplier Name", align: "left", value: "supplier_name" },
-    { text: "Address", value: "company_address" },
-    { text: "Email Address", value: "email_address" },
-    { text: "Contact", value: "cp_no" },
+    { text: "Account ID", align: "left", value: "account_id" },
+    { text: "Fullname", value: "fullname" },
+    { text: "Username", value: "username" },
+    { text: "Role", value: "role_name" },
     { text: "Actions", value: "action", sortable: false }
   ];
 
-  get suppliersData() {
-    return this.supplierStore.getSupplier;
+  created() {
+    this.accountStore.fetchAccounts();
   }
 }
 </script>

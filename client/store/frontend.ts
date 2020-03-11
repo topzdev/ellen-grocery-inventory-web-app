@@ -75,9 +75,9 @@ export default class Frontend extends VuexModule {
     this.showCategoryModal = state;
   }
 
-  @Action
+  @Action({ commit: "SET_OPEN_SIDEBAR" })
   public toggleSidebar(): void {
-    this.context.commit("SET_OPEN_SIDEBAR");
+    return;
   }
 
   @Action
@@ -86,30 +86,30 @@ export default class Frontend extends VuexModule {
     if (redirect !== undefined) $nuxt.$router.back();
   }
 
-  @Action
+  @Action({ commit: "SET_SHOW_SNACKBAR" })
   public setSnackbar(snackbarConfig: ISnackbar) {
     this.redirect(snackbarConfig.redirect);
-    this.context.commit("SET_SHOW_SNACKBAR", snackbarConfig);
+    return snackbarConfig;
   }
-  @Action
+  @Action({ commit: "SET_SHOW_DELETE_MODAL" })
   public setDeleteModal(modalConfig: IDeleteModal) {
     this.redirect(modalConfig.redirect);
-    this.context.commit("SET_SHOW_DELETE_MODAL", modalConfig);
+    return modalConfig;
   }
-  @Action
+  @Action({ commit: "SET_SHOW_SEARCH_MODAL" })
   public setSearchModal(modalConfig: ISearchModal) {
-    this.context.commit("SET_SHOW_SEARCH_MODAL", modalConfig);
+    return modalConfig;
   }
-  @Action
+  @Action({ commit: "SET_SHOW_BARCODE_MODAL" })
   public setBarcodeModal(show: boolean) {
-    this.context.commit("SET_SHOW_BARCODE_MODAL", show);
+    return show;
   }
-  @Action
+  @Action({ commit: "SET_SHOW_BRAND_MODAL" })
   public setBrandModal(show: boolean) {
-    this.context.commit("SET_SHOW_BRAND_MODAL", show);
+    return show;
   }
-  @Action
+  @Action({ commit: "SET_SHOW_CATEGORY_MODAL" })
   public setCategoryModal(show: boolean) {
-    this.context.commit("SET_SHOW_CATEGORY_MODAL", show);
+    return show;
   }
 }

@@ -9,20 +9,20 @@
       </v-col>
     </v-row>
 
-    <product-table />
+    <account-table />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import ProductTable from "@/components/tables/ProductTable.vue";
+import AccountTable from "@/components/account/AccountTable.vue";
 @Component({
   components: {
-    ProductTable
+    AccountTable
   }
 })
 export default class Index extends Vue {
-  parentPath: string = "products";
+  parentPath: string = "accounts";
   actionLink: Array<Object> = [
     {
       title: "Add Account",
@@ -44,9 +44,9 @@ export default class Index extends Vue {
     },
     {
       title: "Manage Role",
-      subtitle: "Renew and replenish out of stock Accounts",
+      subtitle: "Add Roles and Modify it",
       color: "purple darken-1",
-      to: `/${this.parentPath}/stock`
+      to: `/${this.parentPath}/role`
     }
   ];
 }

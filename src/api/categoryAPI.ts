@@ -1,9 +1,20 @@
-import express, { Request, Response } from 'express'
-import CategoryController from '../controllers/CategoryController'
+import express, { Request, Response } from 'express';
+import CategoryController from '../controllers/CategoryController';
 
 const router = express.Router();
 
-const controller = new CategoryController ;
+const controller = new CategoryController();
+
+/**
+ * @route           GET api/category
+ * @description     fetch all category
+ * @access          public
+ * @param           search
+ */
+
+router.get('/search/:search', (req: Request, res: Response) => {
+	controller.searchCategory(req, res);
+});
 
 /**
  * @route           GET api/category
@@ -11,10 +22,9 @@ const controller = new CategoryController ;
  * @access          public
  */
 
-router.get('/', (req: Request, res: Response) =>{
-    controller.getCategories(req, res)
-})
-
+router.get('/', (req: Request, res: Response) => {
+	controller.getCategories(req, res);
+});
 
 /**
  * @route           GET api/category
@@ -22,28 +32,27 @@ router.get('/', (req: Request, res: Response) =>{
  * @access          public
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) =>{
-    controller.getSingleCategory(req, res)
-})
+router.get('/:id', (req: Request, res: Response) => {
+	controller.getSingleCategory(req, res);
+});
 
 /**
  * @route           POST api/category
  * @description     add category
  * @access          private
  */
-router.post('/', (req: Request, res: Response) =>{
-    controller.addCategory(req, res)
-})
+router.post('/', (req: Request, res: Response) => {
+	controller.addCategory(req, res);
+});
 
 /**
  * @route           PUT api/category
  * @description     update category
  * @access          private
  */
-router.put('/', (req: Request, res: Response)=>{
-    controller.updateCategory(req, res)
-})
-
+router.put('/', (req: Request, res: Response) => {
+	controller.updateCategory(req, res);
+});
 
 /**
  * @route           PUT api/category
@@ -51,9 +60,8 @@ router.put('/', (req: Request, res: Response)=>{
  * @access          private
  * @param           id
  */
-router.delete('/:id', (req: Request, res: Response)=>{
-    controller.deleteCategory(req, res);
-})
-
+router.delete('/:id', (req: Request, res: Response) => {
+	controller.deleteCategory(req, res);
+});
 
 export default router;

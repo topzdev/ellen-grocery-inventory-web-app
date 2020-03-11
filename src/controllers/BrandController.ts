@@ -9,6 +9,27 @@ class BrandController extends QueryExtend {
 		console.log('Brand Controller');
 	}
 
+	public async searchBrand(req: Request, res: Response): Promise<any> {
+		const search = req.params.search;
+
+		const query: QueryConfig = {
+			text: `SELECT * FROM "${this.brandTable}" WHERE brand_name LIKE $1`,
+			values: [`%${search}%`]
+		};
+
+		try {
+			const result = await this.client.query(query);
+
+			return res.json({
+				message: 'Brand Searched Successfully',
+				success: true,
+				data: result.rows
+			});
+		} catch (error) {
+			return console.error(error.stack);
+		}
+	}
+
 	public async getBrands(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.brandTable}"`
@@ -44,7 +65,7 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error);
+			return console.error(error.stack);
 		}
 	}
 
@@ -52,20 +73,19 @@ class BrandController extends QueryExtend {
 		const { brand_name }: IBrand = req.body;
 
 		const query: QueryConfig = {
-			text: `INSERT INTO "${this.brandTable}" (brand_name) VALUES ($1)`,
+			text: `INSERT INTO "${this.brandTable}" (brand_name) VALUES ($1) RETURNING brand_id`,
 			values: [brand_name]
 		};
 
 		try {
 			const result = await this.client.query(query);
-
 			return res.json({
 				message: 'Brand Successfully Added ',
 				success: true,
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error);
+			return console.error(error.stack);
 		}
 	}
 
@@ -86,7 +106,7 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error);
+			return console.error(error.stack);
 		}
 	}
 
@@ -107,7 +127,7 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			console.error(error);
+			return console.error(error.stack);
 		}
 	}
 }

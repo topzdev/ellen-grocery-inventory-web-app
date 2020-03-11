@@ -126,10 +126,10 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import ProductInfoMixin from "@/mixins/ProductInfoMixin";
+import ProductMixin from "@/mixins/ProductMixin";
 
 @Component
-export default class add extends ProductInfoMixin {
+export default class add extends ProductMixin {
   valid: boolean = false;
   dialog: boolean = true;
 

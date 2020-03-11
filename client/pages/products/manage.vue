@@ -113,7 +113,7 @@
                 color="error"
                 class="mr-4 d-flex ml-auto"
                 large
-                @click="showDelete"
+                @click="deleteItem(product)"
               >Delete</v-btn>
               <v-btn
                 :disabled="!valid"
@@ -132,10 +132,10 @@
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
-import ProductInfoMixin from "@/mixins/ProductInfoMixin";
+import ProductMixin from "@/mixins/ProductMixin";
 
 @Component
-export default class Manage extends ProductInfoMixin {
+export default class Manage extends ProductMixin {
   valid: boolean = false;
   dialog: boolean = true;
 
@@ -144,17 +144,6 @@ export default class Manage extends ProductInfoMixin {
     if (this.$refs.manageForm.validate()) {
       this.productStore.updateProduct(this.product);
     }
-  }
-
-  showDelete(): void {
-    this.frontendStore.setDeleteModal({
-      show: true,
-      name: this.product.product_name
-    });
-    this.processStore.setCurrentToDelete({
-      deleteFunction: this.productStore.deleteProduct,
-      id: this.product.barcode
-    });
   }
 
   // Showing the product search modal when this view is mounted to views
@@ -174,11 +163,6 @@ export default class Manage extends ProductInfoMixin {
   // When the view of this page is not rendered in dom it will destroy the modal and current product value
   destroyed() {
     this.processStore.setCurrentProduct(undefined);
-    console.log(
-      this.product,
-      this.processStore.toManageProduct,
-      " Destroyed!..."
-    );
     this.showSearchModal(false);
   }
 

@@ -83,7 +83,7 @@ class ProductController extends QueryExtend {
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.productTable}" 
 			(barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image)
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING product_id`,
 			values: [
 				barcode,
 				product_name,
@@ -187,7 +187,7 @@ class ProductController extends QueryExtend {
 
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.productTable}" WHERE barcode LIKE $1`,
-			values: ['%' + search + '%']
+			values: [`%${search}%`]
 		};
 
 		try {

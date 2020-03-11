@@ -9,6 +9,27 @@ class CategoryController extends QueryExtend {
 		console.log('Category Controller');
 	}
 
+	public async searchCategory(req: Request, res: Response): Promise<any> {
+		const search = req.params.search;
+
+		const query: QueryConfig = {
+			text: `SELECT * FROM "${this.categoryTable}" WHERE category_name LIKE $1`,
+			values: [`%${search}%`]
+		};
+
+		try {
+			const result = await this.client.query(query);
+
+			return res.json({
+				message: 'Category Searched Successfully',
+				success: true,
+				data: result.rows
+			});
+		} catch (error) {
+			return console.error(error.stack);
+		}
+	}
+
 	public async getCategories(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.categoryTable}"`
@@ -51,7 +72,7 @@ class CategoryController extends QueryExtend {
 		const { category_name, description }: ICategory = req.body;
 
 		const query: QueryConfig = {
-			text: `INSERT INTO "${this.categoryTable}" (category_name, description) VALUES ($1, $2)`,
+			text: `INSERT INTO "${this.categoryTable}" (category_name, description) VALUES ($1, $2) RETURNING category_id`,
 			values: [category_name, description]
 		};
 
@@ -61,7 +82,7 @@ class CategoryController extends QueryExtend {
 			return res.json({
 				message: 'Category Successfully Added',
 				success: true,
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (error) {
 			return console.error(error.stack);

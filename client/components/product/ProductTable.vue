@@ -15,7 +15,7 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="products"
+          :items="productList"
           :items-per-page="5"
           :search="search"
           item-key="name"
@@ -39,14 +39,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { productStore, frontendStore, processStore } from "@/store";
-import IProductInfo from "@/interfaces/productInfoInterface";
+import { Component } from "vue-property-decorator";
+import ProductMixin from "@/mixins/ProductMixin";
+
 @Component
-export default class ProductTable extends Vue {
+export default class ProductTable extends ProductMixin {
   search: string = "";
   headers: Array<Object> = [
-    { text: "Product Name", align: "left", value: "product_name" },
+    { text: "Account Name", align: "left", value: "product_name" },
     { text: "Barcode", value: "barcode" },
     { text: "Price", value: "price" },
     { text: "Quantity", value: "quantity" },
@@ -54,34 +54,8 @@ export default class ProductTable extends Vue {
     { text: "Actions", value: "action", sortable: false }
   ];
 
-  get products() {
-    return productStore.getProducts;
-  }
-
   created() {
-    productStore.fetchProducts();
-  }
-
-  manageItem(item: IProductInfo) {
-    processStore.setCurrentProduct(item);
-    this.$router.push("products/manage");
-  }
-
-  deleteItem(item: IProductInfo) {
-    console.log(item.barcode);
-
-    // showing the dialog
-    frontendStore.setDeleteModal({
-      show: true,
-      name: item.product_name,
-      title: "Product"
-    });
-
-    // Assigning what delete function to be process
-    processStore.setCurrentToDelete({
-      deleteFunction: productStore.deleteProduct,
-      id: item.product_id
-    });
+    this.productStore.fetchProducts();
   }
 }
 </script>

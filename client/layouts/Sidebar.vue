@@ -45,11 +45,15 @@ export default class Sidebar extends Vue {
     { title: "Suppliers", icon: "mdi-truck", to: "/suppliers" },
     { title: "Addons", icon: "mdi-decagram", to: "/others" },
     { title: "Customers", icon: "mdi-account", to: "/customers" },
-    { title: "Account", icon: "mdi-account-group-outline", to: "/account" }
+    { title: "Account", icon: "mdi-account-group-outline", to: "/accounts" }
   ];
 
   get sidebarState() {
     return frontendStore.sidebarState;
+  }
+
+  set sidebarState(value: boolean) {
+    frontendStore.toggleSidebar();
   }
 }
 </script>

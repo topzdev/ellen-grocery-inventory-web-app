@@ -8,7 +8,7 @@ class SupplierController extends QueryExtend {
 		super();
 		console.log('Supplier Controller');
 	}
-	
+
 	public async getSuppliers(req: Request, res: Response): Promise<any> {
 		const query: QueryConfig = {
 			text: `SELECT * FROM "${this.supplierTable}"`
@@ -41,7 +41,7 @@ class SupplierController extends QueryExtend {
 			return res.json({
 				message: 'Supplier Successfully fetched',
 				success: true,
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (error) {
 			console.error(error.stack);
@@ -63,7 +63,7 @@ class SupplierController extends QueryExtend {
 		const query: QueryConfig = {
 			text: `INSERT INTO "${this.supplierTable}"
 			(supplier_name, email_address, company_address, cp_no, tel_no, fax, website, description) 
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING supplier_id`,
 			values: [
 				supplier_name,
 				email_address,
@@ -81,7 +81,7 @@ class SupplierController extends QueryExtend {
 
 			return res.json({
 				message: 'Supplier Successfully Added',
-				data: result.rows,
+				data: result.rows[0],
 				success: true
 			});
 		} catch (error) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="3" v-for="link in actionLink" :key="link.title">
+      <v-col v-for="link in actionLink" :key="link.title" cols="3">
         <v-card height="100%" :color="link.color" dark elevation="4" :to="link.to" :link="true">
           <v-card-title class="headline" v-text="link.title" />
           <v-card-subtitle v-text="link.subtitle" />
@@ -15,15 +15,15 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import ProductTable from "@/components/tables/ProductTable.vue";
+import ProductTable from "@/components/product/ProductTable.vue";
 @Component({
   components: {
     ProductTable
   }
 })
 export default class Index extends Vue {
-  readonly parentPath: string = "products";
-  readonly actionLink: Array<Object> = [
+  parentPath: string = "products";
+  actionLink: Array<Object> = [
     {
       title: "Add Product",
       subtitle: "Add New Product",

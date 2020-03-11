@@ -1,5 +1,5 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { brandStore, categoryStore, supplierStore } from "@/store";
+import { brandStore, categoryStore, supplierStore, roleStore } from "@/store";
 
 @Component({ inheritAttrs: false })
 export default class SelectMixin extends Vue {
@@ -15,6 +15,10 @@ export default class SelectMixin extends Vue {
 
   get brands() {
     return brandStore.getBrands;
+  }
+
+  get roles() {
+    return roleStore.getRoles;
   }
 
   input(value: number) {

@@ -10,7 +10,7 @@ import {
 import ISupplier from "@/interfaces/ISupplier";
 import ISupplierInfo from "@/interfaces/ISupplier";
 @Component
-export default class SupplierInfoMixin extends Vue {
+export default class SupplierMixin extends Vue {
   supplierStore: ISupplierModule;
   processStore: IProcessModule;
 
