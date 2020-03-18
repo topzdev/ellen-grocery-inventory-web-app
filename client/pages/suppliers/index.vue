@@ -27,13 +27,13 @@ export default class index extends Vue {
       title: "Add Supplier",
       subtitle: "Add New Supplier",
       color: "blue darken-1",
-      to: `/${this.supplierPath}/add`
+      to: `/${this.supplierPath}/supplier_add`
     },
     {
       title: "Update Supplier",
       subtitle: "Update Supplier Information",
       color: "orange darken-1",
-      to: `/${this.supplierPath}/update`
+      to: `/${this.supplierPath}/supplier_manage`
     }
   ];
 

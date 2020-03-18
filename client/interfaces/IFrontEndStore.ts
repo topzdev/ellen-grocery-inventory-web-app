@@ -12,7 +12,7 @@ interface IDeleteModal extends IRedirect {
   title?: string;
   message?: string;
   show: boolean;
-  name?: string;
+  name?: string | any | null;
 }
 
 interface ISearchModal extends IRedirect {

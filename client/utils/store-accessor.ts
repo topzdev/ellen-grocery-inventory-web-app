@@ -8,6 +8,7 @@ import IBrandModule from "~/store/brand";
 import ICategoryModule from "~/store/category";
 import IRoleModule from "~/store/role";
 import IAccountModule from "~/store/account";
+import ICustomerModule from "~/store/customer";
 
 let productStore: IProductModule;
 let frontendStore: IFrontendModule;
@@ -17,6 +18,7 @@ let brandStore: IBrandModule;
 let categoryStore: ICategoryModule;
 let roleStore: IRoleModule;
 let accountStore: IAccountModule;
+let customerStore: ICustomerModule;
 
 function initialiseStores(store: Store<any>): void {
   productStore = getModule(IProductModule, store);
@@ -27,6 +29,7 @@ function initialiseStores(store: Store<any>): void {
   categoryStore = getModule(ICategoryModule, store);
   roleStore = getModule(IRoleModule, store);
   accountStore = getModule(IAccountModule, store);
+  customerStore = getModule(ICustomerModule, store);
 }
 
 export {
@@ -39,6 +42,7 @@ export {
   categoryStore,
   roleStore,
   accountStore,
+  customerStore,
   IProductModule,
   IFrontendModule,
   ISupplierModule,
@@ -46,5 +50,6 @@ export {
   IBrandModule,
   ICategoryModule,
   IRoleModule,
-  IAccountModule
+  IAccountModule,
+  ICustomerModule
 };

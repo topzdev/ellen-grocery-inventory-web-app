@@ -28,25 +28,25 @@ export default class Index extends Vue {
       title: "Add Account",
       subtitle: "Add New Account",
       color: "blue darken-1",
-      to: `/${this.parentPath}/add`
+      to: `/${this.parentPath}/account_add`
     },
     {
       title: "Update Account",
       subtitle: "Update or Remove Existing Account Information",
       color: "orange darken-1",
-      to: `/${this.parentPath}/manage`
+      to: `/${this.parentPath}/account_manage`
     },
     {
       title: "Transactions",
       subtitle: "Renew and replenish out of stock Accounts",
       color: "purple darken-1",
-      to: `/${this.parentPath}/stock`
+      to: `/${this.parentPath}/stock_manage`
     },
     {
       title: "Manage Role",
       subtitle: "Add Roles and Modify it",
       color: "purple darken-1",
-      to: `/${this.parentPath}/role`
+      to: `/${this.parentPath}/role_manage`
     }
   ];
 }

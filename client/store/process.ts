@@ -46,18 +46,18 @@ export default class Process extends VuexModule {
     this.currentSupplier = supplier;
   }
 
-  @Action
+  @Action({ commit: "SET_CURRENT_DELETE" })
   setCurrentToDelete(toDelete: ICurrentDelete | undefined) {
-    this.context.commit("SET_CURRENT_DELETE", toDelete);
+    return toDelete;
   }
 
-  @Action
+  @Action({ commit: "SET_CURRENT_PRODUCT" })
   setCurrentProduct(product: IProductInfo | undefined) {
-    this.context.commit("SET_CURRENT_PRODUCT", product);
+    return product;
   }
 
-  @Action
+  @Action({ commit: "SET_CURRENT_SUPPLIER" })
   setCurrentSupplier(supplier: ISupplierInfo | undefined) {
-    this.context.commit("SET_CURRENT_SUPPLIER", supplier);
+    return supplier;
   }
 }

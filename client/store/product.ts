@@ -39,7 +39,7 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
-  public LOW(product: IProduct): void {
+  public SET_CURRENT(product: IProduct): void {
     this.singleProduct = product;
   }
 
@@ -54,6 +54,13 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
+  private UPDATE_PRODUCT(product: IProduct) {
+    this.products = this.products.map(item =>
+      item.product_id === product.product_id ? product : item
+    );
+  }
+
+  @Mutation
   public DELETE_PRODUCT(product_id: number) {
     this.products = this.products.filter(prod => prod.product_id != product_id);
   }
@@ -65,85 +72,57 @@ export default class Product extends VuexModule {
 
   //action
 
-  @Action({ rawError: true })
-  public async addProduct(product: IProduct): Promise<void> {
-    try {
-      console.log(product);
-      const result: IResult = await $axios.$post(
-        "/api/product",
-        product,
-        config
-      );
+  @Action({ commit: "ADD_PRODUCT" })
+  public async addProduct(product: IProduct) {
+    console.log(product);
+    const result: IResult = await $axios.$post("/api/product", product, config);
 
-      this.context.commit("ADD_PRODUCT", {
-        product_id: result.data.product_id,
-        ...product
-      });
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
+    setNotification(result.message, result.success, this.path);
+    return {
+      product_id: result.data.product_id,
+      ...product
+    };
   }
 
-  @Action({ rawError: true })
-  public async fetchSingleProduct(barcode: string): Promise<void> {
-    try {
-      console.log(barcode);
-      const result = await $axios.$get(`/api/product/${barcode}`);
+  @Action({ commit: "SET_CURRENT" })
+  public async fetchSingleProduct(barcode: string) {
+    console.log(barcode);
+    const result: IResult = await $axios.$get(`/api/product/${barcode}`);
 
-      this.context.commit("LOW", result.data != undefined ? result.data : null);
-    } catch (error) {
-      console.error(error.stack);
-    }
+    return result.data != undefined ? result.data : null;
   }
 
-  @Action({ rawError: true })
-  public async fetchProducts(): Promise<void> {
-    try {
-      const result = await $axios.$get("/api/product", config);
-      console.log(result);
-      this.context.commit("SET_PRODUCTS", result.data);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: "SET_PRODUCTS" })
+  public async fetchProducts() {
+    const result: IResult = await $axios.$get("/api/product", config);
+    return result.data;
   }
 
-  @Action({ rawError: true })
-  public async updateProduct(product: IProduct): Promise<void> {
-    try {
-      const result = await $axios.$put("/api/product", product, config);
-
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: "UPDATE_PRODUCT" })
+  public async updateProduct(product: IProduct) {
+    const result: IResult = await $axios.$put("/api/product", product, config);
+    setNotification(result.message, result.success, this.path);
+    return product;
   }
 
-  @Action({ rawError: true })
-  public async deleteProduct(product_id: number): Promise<void> {
-    try {
-      const result = await $axios.$delete(`/api/product/${product_id}`, config);
-
-      this.context.commit("DELETE_PRODUCT", product_id);
-
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: "DELETE_PRODUCT" })
+  public async deleteProduct(product_id: number) {
+    const result: IResult = await $axios.$delete(
+      `/api/product/${product_id}`,
+      config
+    );
+    setNotification(result.message, result.success, this.path);
+    return product_id;
   }
 
-  @Action({ rawError: true })
-  public async searchProduct(searchString: string): Promise<void> {
-    try {
-      const result = await $axios.$post(
-        `/api/product/search/`,
-        { searchString },
-        config
-      );
-      console.log(result);
-      this.context.commit("SET_SEARCH", result.data);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: "SET_SEARCH" })
+  public async searchProduct(searchString: string) {
+    const result: IResult = await $axios.$post(
+      `/api/product/search/`,
+      { searchString },
+      config
+    );
+
+    return result.data;
   }
 }

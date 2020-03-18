@@ -41,37 +41,30 @@ export default class Supplier extends VuexModule {
     this.suppliers = [supplier, ...this.suppliers];
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "SET_SUPPLIERS" })
   public async fetchSuppliers() {
     const result = await $axios.$get(this.url);
-
-    this.context.commit("SET_SUPPLIERS", result.data);
+    return result.data;
   }
 
-  @Action({ rawError: true })
-  public async addSupplier(supplier: ISupplierInfo): Promise<void> {
+  @Action({ commit: "ADD_SUPPLIER" })
+  public async addSupplier(supplier: ISupplierInfo) {
     const result = await $axios.$post(this.url, supplier, config);
-
-    this.context.commit("ADD_SUPPLIER", supplier);
-
     setNotification(result.message, result.success, this.path);
+    return supplier;
   }
 
-  @Action({ rawError: true })
-  public async updateSupplier(supplier: ISupplierInfo): Promise<void> {
+  @Action({ commit: "UPDATE_SUPPLIER" })
+  public async updateSupplier(supplier: ISupplierInfo) {
     const result = await $axios.$put(this.url, supplier, config);
-
-    this.context.commit("UPDATE_SUPPLIER", supplier);
-
     setNotification(result.message, result.success, this.path);
+    return supplier;
   }
 
-  @Action({ rawError: true })
-  public async deleteSupplier(supplier_id: number): Promise<void> {
+  @Action({ commit: "DELETE_SUPPLIER" })
+  public async deleteSupplier(supplier_id: number) {
     const result = await $axios.$delete(`${this.url}${supplier_id}`);
-
-    this.context.commit("DELETE_SUPPLIER", supplier_id);
-
     setNotification(result.message, result.success, this.path);
+    return supplier_id;
   }
 }

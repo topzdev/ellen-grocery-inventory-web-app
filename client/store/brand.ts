@@ -38,52 +38,51 @@ export default class Brand extends VuexModule {
     this.brands = this.brands.filter(item => item.brand_id !== brand_id);
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "SET_BRANDS" })
   public async fetchBrands() {
     const result: IResult = await $axios.$get(this.url, config);
 
-    this.context.commit("SET_BRANDS", result.data);
+    return result.data;
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "SET_BRANDS" })
   public async searchBrands(search: string) {
     const result: IResult = await $axios.$get(`${this.url}/search/${search}`);
 
-    this.context.commit("SET_BRANDS", result.data);
+    return result.data;
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "ADD_BRAND" })
   public async addBrand({ brand_name }: IBrand) {
     const result: IResult = await $axios.$post(
       this.url,
       { brand_name },
       config
     );
-    console.log(result);
-    this.context.commit("ADD_BRAND", {
+    setNotification(result.message, result.success, this.path);
+    return {
       brand_id: result.data.brand_id,
       brand_name
-    });
-    setNotification(result.message, result.success, this.path);
+    };
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "UPDATE_BRAND" })
   public async updateBrand({ brand_name, brand_id }: IBrand) {
     const result: IResult = await $axios.$put(
       this.url,
       { brand_name, brand_id },
       config
     );
-
-    this.context.commit("UPDATE_BRAND", { brand_name, brand_id });
     setNotification(result.message, result.success, this.path);
+
+    return { brand_name, brand_id };
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "DELETE_BRAND" })
   public async deleteBrand(brand_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${brand_id}`);
-
-    this.context.commit("DELETE_BRAND", brand_id);
     setNotification(result.message, result.success, this.path);
+
+    return brand_id;
   }
 }

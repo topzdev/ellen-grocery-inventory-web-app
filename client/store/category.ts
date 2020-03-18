@@ -40,37 +40,34 @@ export default class Category extends VuexModule {
     );
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "SET_CATEGORIES" })
   public async fetchCategories() {
     const result: IResult = await $axios.$get(this.url, config);
 
-    this.context.commit("SET_CATEGORIES", result.data);
+    return result.data;
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "ADD_CATEGORY" })
   public async addCategory(category: ICategory) {
     const result: IResult = await $axios.$post(this.url, category, config);
-
-    this.context.commit("ADD_CATEGORY", {
+    setNotification(result.message, result.success, this.path);
+    return {
       category_id: result.data.category_id,
       ...category
-    });
-    setNotification(result.message, result.success, this.path);
+    };
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "UPDATE_CATEGORY" })
   public async updateCategory(category: ICategory) {
     const result: IResult = await $axios.$put(this.url, category, config);
-
-    this.context.commit("UPDATE_CATEGORY", category);
     setNotification(result.message, result.success, this.path);
+    return category;
   }
 
-  @Action({ rawError: true })
+  @Action({ commit: "DELETE_CATEGORY" })
   public async deleteCategory(category_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${category_id}`);
-
-    this.context.commit("DELETE_CATEGORY", category_id);
     setNotification(result.message, result.success, this.path);
+    return category_id;
   }
 }

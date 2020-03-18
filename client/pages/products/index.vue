@@ -28,13 +28,13 @@ export default class Index extends Vue {
       title: "Add Product",
       subtitle: "Add New Product",
       color: "blue darken-1",
-      to: `/${this.parentPath}/add`
+      to: `/${this.parentPath}/product_add`
     },
     {
       title: "Manage Product",
       subtitle: "Update or Remove Existing Product Information",
       color: "orange darken-1",
-      to: `/${this.parentPath}/manage`
+      to: `/${this.parentPath}/product_manage`
     },
     {
       title: "Manage Stocks",
