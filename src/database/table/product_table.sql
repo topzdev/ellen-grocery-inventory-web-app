@@ -4,14 +4,12 @@ CREATE TABLE IF NOT EXISTS product_table(
   product_name VARCHAR(50) UNIQUE NOT NULL,
   barcode VARCHAR(50) UNIQUE NOT NULL,
   description VARCHAR(300),
-  quantity_min INTEGER CHECK(quantity_min > 0),
+  quantity_min INTEGER,
   quantity_max INTEGER,
-  quantity INTEGER CHECK(
-    quantity > quantity_min
-    AND quantity < quantity_max
-  ),
+  quantity INTEGER,
   price FLOAT(2),
   image TEXT,
+  image_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(product_id, barcode),
   category_id INTEGER,

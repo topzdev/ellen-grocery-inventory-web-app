@@ -1,5 +1,6 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { brandStore, categoryStore, supplierStore, roleStore } from "@/store";
+import {frontendStore} from '@/store'
 
 @Component({ inheritAttrs: false })
 export default class SelectMixin extends Vue {
@@ -23,5 +24,10 @@ export default class SelectMixin extends Vue {
 
   input(value: number) {
     this.$emit("input", value);
+  }
+
+  openModal(name: string){
+//@ts-ignore
+    frontendStore[`set${name}Modal`](true);
   }
 }

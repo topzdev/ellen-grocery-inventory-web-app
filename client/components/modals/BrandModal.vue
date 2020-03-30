@@ -4,7 +4,6 @@
       <v-toolbar :flat="true">
         <v-toolbar-title class="headline" dark primary-title v-text="brandTitle" />
         <v-spacer />
-        <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
       </v-toolbar>
 
       <v-card-text style="max-height: 200px;">
@@ -23,26 +22,6 @@
         <v-btn class="mr-4" text large @click="closeModal">Cancel</v-btn>
         <v-spacer />
         <v-btn
-          v-if="isEdit"
-          :disabled="!valid"
-          color="error"
-          class="mr-4 d-flex ml-auto"
-          large
-          text
-          @click="showDelete"
-        >Delete</v-btn>
-        <v-btn
-          v-if="isEdit"
-          :disabled="!valid"
-          color="warning"
-          class="d-flex ml-auto"
-          large
-          text
-          @click="validate"
-        >Update Brand</v-btn>
-
-        <v-btn
-          v-else
           :disabled="!valid"
           color="success"
           class="d-flex ml-auto"

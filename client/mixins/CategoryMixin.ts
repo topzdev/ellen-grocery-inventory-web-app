@@ -19,7 +19,7 @@ class CategoryMixin extends Vue {
   frontendStore: IFrontendModule;
   processStore: IProcessModule;
 
-  public category: ICategory = {
+  category: ICategory = {
     category_name: "",
     category_id: undefined,
     description: null
@@ -60,17 +60,7 @@ class CategoryMixin extends Vue {
     this.category = JSON.parse(JSON.stringify(item));
   }
 
-  setCancel() {
-    this.isEdit = false;
-    this.category = {
-      category_name: "",
-      category_id: undefined,
-      description: null
-    };
-    // @ts-ignore
-    this.$refs.manageForm.resetValidation();
-  }
-
+  
   validate(): void {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {

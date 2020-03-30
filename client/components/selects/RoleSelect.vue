@@ -7,7 +7,16 @@
     label="Role"
     :value="value"
     @change="input"
-  />
+  >
+   <template v-slot:prepend-item>
+      <v-list-item ripple dense @click="openModal('Role')"> 
+        <v-list-item-content>
+          <v-list-item-title>Add More Role All</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider class="mt-2"></v-divider>
+    </template>
+  </v-select>
 </template>
 
 <script lang="ts">

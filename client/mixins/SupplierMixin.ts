@@ -5,7 +5,8 @@ import {
   processStore,
   ISupplierModule,
   IProcessModule,
-  productStore
+  productStore,
+  IFrontendModule
 } from "@/store";
 import ISupplier from "@/interfaces/ISupplier";
 import ISupplierInfo from "@/interfaces/ISupplier";
@@ -13,6 +14,7 @@ import ISupplierInfo from "@/interfaces/ISupplier";
 export default class SupplierMixin extends Vue {
   supplierStore: ISupplierModule;
   processStore: IProcessModule;
+  frontendStore: IFrontendModule;
 
   supplier: ISupplierInfo = {
     supplier_name: "",
@@ -29,11 +31,10 @@ export default class SupplierMixin extends Vue {
     super();
     this.supplierStore = supplierStore;
     this.processStore = processStore;
+    this.frontendStore = frontendStore;
   }
 
   manageItem(supplier: ISupplier) {
-    //   ! Assignment
-    console.log(supplier);
     this.$router.push("suppliers/update");
     processStore.setCurrentSupplier(supplier);
   }
@@ -57,6 +58,10 @@ export default class SupplierMixin extends Vue {
       deleteFunction: supplierStore.deleteSupplier,
       id: supplier.supplier_id
     });
+  }
+
+  get supplierTitle() {
+    return "Add Supplier" 
   }
 
   // Rules

@@ -2,7 +2,7 @@
   <v-form ref="productForm" v-model="valid">
     <v-card flat>
       <v-card-actions>
-        <back-btn to="/others" title="Add Supplier" />
+        <back-btn to="/others" title="Add Product" />
       </v-card-actions>
       <v-row class="px-3">
         <v-col cols="12">
@@ -91,7 +91,7 @@
                 <v-col cols="4">
                   <p>Upload Product Image</p>
                   <v-card height="250px" width="250px" class="mb-4">
-                    <v-img :src="product.image" width="100%" height="100%" draggable="false"></v-img>
+                    <v-img :src="product.image_url" width="100%" height="100%" draggable="false"></v-img>
                   </v-card>
 
                   <v-file-input
@@ -130,6 +130,7 @@ import ProductMixin from "@/mixins/ProductMixin";
 
 @Component
 export default class add extends ProductMixin {
+  
   valid: boolean = false;
   dialog: boolean = true;
 

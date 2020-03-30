@@ -5,6 +5,7 @@
     <barcode-modal />
     <brand-modal/>
     <category-modal/>
+    <supplier-modal/>
   </div>
 </template>
 
@@ -14,7 +15,8 @@ import DeleteModal from "@/components/modals/DeleteModal.vue";
 import SearchProductModal from "@/components/modals/SearchProductModal.vue";
 import BarcodeModal from "@/components/modals/BarcodeModal.vue";
 import BrandModal from "@/components/modals/BrandModal.vue";
-import CategoryModal from "@/components/modals/BrandModal.vue";
+import CategoryModal from "@/components/modals/CategoryModal.vue";
+import SupplierModal from "@/components/modals/SupplierModal.vue"
 
 @Component({
   components: {
@@ -22,7 +24,8 @@ import CategoryModal from "@/components/modals/BrandModal.vue";
     BarcodeModal,
     SearchProductModal,
     BrandModal,
-    CategoryModal
+    CategoryModal,
+    SupplierModal
   }
 })
 export default class Modals extends Vue {}

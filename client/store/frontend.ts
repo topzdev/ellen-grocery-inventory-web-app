@@ -16,6 +16,7 @@ export default class Frontend extends VuexModule {
   private showSearchModal: ISearchModal = { show: false };
   private showBarcodeModal: boolean = false;
   private showBrandModal: boolean = false;
+  private showSupplierModal: boolean = false;
   private showCategoryModal: boolean = false;
 
   get sidebarState(): boolean {
@@ -45,6 +46,10 @@ export default class Frontend extends VuexModule {
   get categoryModalState(): boolean {
     return this.showCategoryModal;
   }
+  get supplierModalState(): boolean {
+    return this.showSupplierModal;
+  }
+
 
   @Mutation
   private SET_OPEN_SIDEBAR(): void {
@@ -73,6 +78,11 @@ export default class Frontend extends VuexModule {
   @Mutation
   private SET_SHOW_CATEGORY_MODAL(state: boolean) {
     this.showCategoryModal = state;
+  }
+
+  @Mutation
+  private SET_SHOW_SUPPLIER_MODAL(state: boolean){
+    this.showSupplierModal = state;
   }
 
   @Action({ commit: "SET_OPEN_SIDEBAR" })
@@ -110,6 +120,10 @@ export default class Frontend extends VuexModule {
   }
   @Action({ commit: "SET_SHOW_CATEGORY_MODAL" })
   public setCategoryModal(show: boolean) {
+    return show;
+  }
+  @Action({commit: "SET_SHOW_SUPPLIER_MODAL"})
+  public setSupplierModal(show: boolean){
     return show;
   }
 }

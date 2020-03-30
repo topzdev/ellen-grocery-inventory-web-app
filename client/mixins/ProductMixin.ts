@@ -36,6 +36,7 @@ export default class ProductMixin extends Vue {
     supplier_id: -1,
     category_id: -1,
     image: undefined,
+    image_url: undefined,
     imageFile: undefined
   };
 
@@ -64,7 +65,8 @@ export default class ProductMixin extends Vue {
     // Assigning what delete function to be process
     this.processStore.setCurrentToDelete({
       deleteFunction: productStore.deleteProduct,
-      id: item.product_id
+      id: item.product_id,
+      others: item.image
     });
   }
 
@@ -75,7 +77,7 @@ export default class ProductMixin extends Vue {
     const reader = new FileReader();
 
     reader.onload = function(e){
-      self.product.image = e.target?.result;
+      self.product.image_url = e.target?.result;
       self.product.imageFile = image;
     }
 

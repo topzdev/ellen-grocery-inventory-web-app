@@ -18,4 +18,4 @@ VALUES
     NULL,
     'www.globalfoodinc.com',
     'Your food is our guide'
-  ),
+  )

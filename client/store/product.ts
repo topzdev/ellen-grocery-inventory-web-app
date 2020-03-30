@@ -87,7 +87,7 @@ export default class Product extends VuexModule {
     formData.append('brand_id', product.brand_id.toString())
     formData.append('supplier_id', product.supplier_id.toString())
     formData.append('category_id', product.category_id.toString())
-    formData.append('image', product.imageFile!)
+    formData.append('file', product.imageFile!)
 
     const result: IResult = await $axios.$post("/api/product", formData, config);
     setNotification(result.message, result.success, this.path);
@@ -114,19 +114,36 @@ export default class Product extends VuexModule {
 
   @Action({ commit: "UPDATE_PRODUCT" })
   public async updateProduct(product: IProduct) {
-    const result: IResult = await $axios.$put("/api/product", product, config);
+    const formData = new FormData();
+
+    formData.append('product_name', product.product_name.toString())
+    formData.append('barcode', product.barcode.toString())
+    formData.append('quantity_min', product.quantity_min.toString())
+    formData.append('quantity_max', product.quantity_max.toString())
+    formData.append('quantity', product.quantity.toString())
+    formData.append('price', product.price.toString())
+    formData.append('description', product.description)
+    formData.append('brand_id', product.brand_id.toString())
+    formData.append('supplier_id', product.supplier_id.toString())
+    formData.append('category_id', product.category_id.toString())
+    formData.append('image', product.image!.toString())
+    formData.append('file', product.imageFile!)
+
+
+    const result: IResult = await $axios.$put("/api/product", formData, config);
     setNotification(result.message, result.success, this.path);
     return product;
   }
 
   @Action({ commit: "DELETE_PRODUCT" })
-  public async deleteProduct(product_id: number) {
+  public async deleteProduct({id, others}:any) {
+    console.log('hello', others);
     const result: IResult = await $axios.$delete(
-      `/api/product/${product_id}`,
-      config
+      `/api/product`,
+      {...config, data: { image: others, product_id: id }}
     );
     setNotification(result.message, result.success, this.path);
-    return product_id;
+    return id;
   }
 
   @Action({ commit: "SET_SEARCH" })
