@@ -35,7 +35,8 @@ export default class ProductMixin extends Vue {
     brand_id: -1,
     supplier_id: -1,
     category_id: -1,
-    image: ""
+    image: undefined,
+    imageFile: undefined
   };
 
   // computed property
@@ -49,7 +50,7 @@ export default class ProductMixin extends Vue {
 
   manageItem(item: IProduct) {
     this.processStore.setCurrentProduct(item);
-    this.$router.push("products/manage");
+    this.$router.push("products/product_manage");
   }
 
   deleteItem(item: IProduct) {
@@ -66,6 +67,21 @@ export default class ProductMixin extends Vue {
       id: item.product_id
     });
   }
+
+  uploadImage(image: File){
+    if(!image) return this.product.image = undefined;
+    
+    let self = this;
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+      self.product.image = e.target?.result;
+      self.product.imageFile = image;
+    }
+
+    reader.readAsDataURL(image);
+  }
+
 
   // Rules
   rules: Object = {

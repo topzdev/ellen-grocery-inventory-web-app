@@ -74,10 +74,24 @@ export default class Product extends VuexModule {
 
   @Action({ commit: "ADD_PRODUCT" })
   public async addProduct(product: IProduct) {
-    console.log(product);
-    const result: IResult = await $axios.$post("/api/product", product, config);
 
+    const formData = new FormData();
+
+    formData.append('product_name', product.product_name.toString())
+    formData.append('barcode', product.barcode.toString())
+    formData.append('quantity_min', product.quantity_min.toString())
+    formData.append('quantity_max', product.quantity_max.toString())
+    formData.append('quantity', product.quantity.toString())
+    formData.append('price', product.price.toString())
+    formData.append('description', product.description)
+    formData.append('brand_id', product.brand_id.toString())
+    formData.append('supplier_id', product.supplier_id.toString())
+    formData.append('category_id', product.category_id.toString())
+    formData.append('image', product.imageFile!)
+
+    const result: IResult = await $axios.$post("/api/product", formData, config);
     setNotification(result.message, result.success, this.path);
+
     return {
       product_id: result.data.product_id,
       ...product

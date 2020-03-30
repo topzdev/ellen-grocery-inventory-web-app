@@ -88,20 +88,20 @@
                     </v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="4" class="d-flex flex-column align-center justify-start">
+                <v-col cols="4">
                   <p>Upload Product Image</p>
-                  <v-avatar class="mb-2" color="grey" size="250">
-                    <!-- <img :src="product.image" alt="John" draggable="false" /> -->
-                  </v-avatar>
-                  <v-text-field v-model="product.image" label="Image" required />
+                  <v-card height="250px" width="250px" class="mb-4">
+                    <v-img :src="product.image" width="100%" height="100%" draggable="false"></v-img>
+                  </v-card>
 
-                  <!-- <v-file-input
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Upload Image"
-            prepend-icon="mdi-camera"
-            label="Product image"
-            width="100%"
-                  />-->
+                  <v-file-input
+                    accept="image/png, image/jpeg, image/bmp"
+                    placeholder="Upload Image"
+                    prepend-icon="mdi-camera"
+                    label="Product image"
+                    width="100%"
+                    @change="uploadImage"
+                  />
                 </v-col>
               </v-row>
             </v-card-text>

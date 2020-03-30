@@ -10,6 +10,7 @@ export default interface IProduct {
   brand_id: number;
   supplier_id: number;
   category_id: number;
-  image?: string | undefined;
+  image: string | ArrayBuffer | null | undefined;
+  imageFile: File | undefined; 
   created_at?: string;
 }
