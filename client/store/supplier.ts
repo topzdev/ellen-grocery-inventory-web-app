@@ -12,6 +12,11 @@ export default class Supplier extends VuexModule {
   private url: string = "/api/supplier/";
   private suppliers: Array<ISupplierInfo> = [];
   public path: string = "/suppliers";
+  private loading: boolean = false;
+
+  get getLoading() {
+    return this.loading;
+  }
 
   get getSupplier() {
     return this.suppliers;
@@ -41,6 +46,16 @@ export default class Supplier extends VuexModule {
     this.suppliers = [supplier, ...this.suppliers];
   }
 
+  @Mutation
+  private SET_LOADING(state: boolean) {
+    this.loading = state;
+  }
+
+  @Action({ commit: "SET_LOADING" })
+  setLoading(state: boolean) {
+    return state;
+  }
+
   @Action({ commit: "SET_SUPPLIERS" })
   public async fetchSuppliers() {
     const result = await $axios.$get(this.url);
@@ -48,9 +63,13 @@ export default class Supplier extends VuexModule {
   }
 
   @Action({ commit: "ADD_SUPPLIER" })
-  public async addSupplier(supplier: ISupplierInfo) {
+  public async addSupplier({ supplier, redirect }: { supplier: ISupplierInfo; redirect: boolean; }) {
+
+    this.setLoading(true);
     const result = await $axios.$post(this.url, supplier, config);
-    setNotification(result.message, result.success, this.path);
+    setNotification(result.message, result.success, redirect ? this.path : undefined);
+
+    this.setLoading(false);
     return supplier;
   }
 

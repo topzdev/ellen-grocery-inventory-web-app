@@ -7,11 +7,17 @@ import ICategory from "~/interfaces/ICategory";
 import IResult from "~/interfaces/IResult";
 import { setNotification } from "~/utils/setNotification";
 
+
 @Module({ name: "category", namespaced: true })
 export default class Category extends VuexModule {
   private url: string = "/api/category";
   private path: string = "/product";
   private categories: Array<ICategory> = [];
+  private loading: boolean = false;
+
+  get getLoading() {
+    return this.loading;
+  }
 
   get getCategories() {
     return this.categories;
@@ -33,11 +39,22 @@ export default class Category extends VuexModule {
       item.category_id === category.category_id ? category : item
     );
   }
+
   @Mutation
   private DELETE_CATEGORY(category_id: number): void {
     this.categories = this.categories.filter(
       item => item.category_id !== category_id
     );
+  }
+
+  @Mutation
+  private SET_LOADING(state: boolean) {
+    this.loading = state;
+  }
+
+  @Action({ commit: "SET_LOADING" })
+  setLoading(state: boolean) {
+    return state;
   }
 
   @Action({ commit: "SET_CATEGORIES" })
@@ -48,9 +65,13 @@ export default class Category extends VuexModule {
   }
 
   @Action({ commit: "ADD_CATEGORY" })
-  public async addCategory(category: ICategory) {
+  public async addCategory({ category, redirect }: { category: ICategory, redirect: boolean }) {
+
+    this.setLoading(true);
     const result: IResult = await $axios.$post(this.url, category, config);
-    setNotification(result.message, result.success, this.path);
+    setNotification(result.message, result.success, redirect ? this.path : undefined);
+
+    this.setLoading(false);
     return {
       category_id: result.data.category_id,
       ...category

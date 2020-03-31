@@ -50,11 +50,12 @@ export default class Product extends VuexModule {
 
   @Mutation
   public ADD_PRODUCT(product: IProduct): void {
+    if(!product) return;
     this.products = [product, ...this.products];
   }
 
   @Mutation
-  private UPDATE_PRODUCT(product: IProduct) {
+  public UPDATE_PRODUCT(product: IProduct) {
     this.products = this.products.map(item =>
       item.product_id === product.product_id ? product : item
     );
@@ -72,33 +73,36 @@ export default class Product extends VuexModule {
 
   //action
 
-  @Action({ commit: "ADD_PRODUCT" })
+  @Action({ commit: "ADD_PRODUCT", rawError: true })
   public async addProduct(product: IProduct) {
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append('product_name', product.product_name.toString())
-    formData.append('barcode', product.barcode.toString())
-    formData.append('quantity_min', product.quantity_min.toString())
-    formData.append('quantity_max', product.quantity_max.toString())
-    formData.append('quantity', product.quantity.toString())
-    formData.append('price', product.price.toString())
-    formData.append('description', product.description)
-    formData.append('brand_id', product.brand_id.toString())
-    formData.append('supplier_id', product.supplier_id.toString())
-    formData.append('category_id', product.category_id.toString())
-    formData.append('file', product.imageFile!)
+      formData.append('product_name', product.product_name.toString())
+      formData.append('barcode', product.barcode.toString())
+      formData.append('quantity_min', product.quantity_min.toString())
+      formData.append('quantity_max', product.quantity_max.toString())
+      formData.append('quantity', product.quantity.toString())
+      formData.append('price', product.price.toString())
+      formData.append('description', product.description)
+      formData.append('brand_id', product.brand_id.toString())
+      formData.append('supplier_id', product.supplier_id.toString())
+      formData.append('category_id', product.category_id.toString())
+      formData.append('file', product.imageFile!)
 
-    const result: IResult = await $axios.$post("/api/product", formData, config);
-    setNotification(result.message, result.success, this.path);
+      const result: IResult = await $axios.$post("/api/product", formData, config);
+      
+      
+      setNotification(result.message, result.success, this.path);
 
-    return {
-      product_id: result.data.product_id,
-      ...product
-    };
+      if(result.success) return {
+        product_id: result.data.product_id,
+        ...product
+      };
+      
   }
 
-  @Action({ commit: "SET_CURRENT" })
+  @Action({ commit: "SET_CURRENT", rawError: true })
   public async fetchSingleProduct(barcode: string) {
     console.log(barcode);
     const result: IResult = await $axios.$get(`/api/product/${barcode}`);
@@ -106,16 +110,17 @@ export default class Product extends VuexModule {
     return result.data != undefined ? result.data : null;
   }
 
-  @Action({ commit: "SET_PRODUCTS" })
+  @Action({ commit: "SET_PRODUCTS", rawError: true })
   public async fetchProducts() {
     const result: IResult = await $axios.$get("/api/product", config);
     return result.data;
   }
 
-  @Action({ commit: "UPDATE_PRODUCT" })
+  @Action({ commit: "UPDATE_PRODUCT", rawError: true })
   public async updateProduct(product: IProduct) {
     const formData = new FormData();
 
+    formData.append('product_id', product.product_id!.toString())
     formData.append('product_name', product.product_name.toString())
     formData.append('barcode', product.barcode.toString())
     formData.append('quantity_min', product.quantity_min.toString())
@@ -127,15 +132,16 @@ export default class Product extends VuexModule {
     formData.append('supplier_id', product.supplier_id.toString())
     formData.append('category_id', product.category_id.toString())
     formData.append('image', product.image!.toString())
+    formData.append('image_url', product.image_url!.toString())
     formData.append('file', product.imageFile!)
 
-
     const result: IResult = await $axios.$put("/api/product", formData, config);
+
     setNotification(result.message, result.success, this.path);
     return product;
   }
 
-  @Action({ commit: "DELETE_PRODUCT" })
+  @Action({ commit: "DELETE_PRODUCT", rawError: true})
   public async deleteProduct({id, others}:any) {
     console.log('hello', others);
     const result: IResult = await $axios.$delete(
@@ -146,7 +152,7 @@ export default class Product extends VuexModule {
     return id;
   }
 
-  @Action({ commit: "SET_SEARCH" })
+  @Action({ commit: "SET_SEARCH", rawError: true})
   public async searchProduct(searchString: string) {
     const result: IResult = await $axios.$post(
       `/api/product/search/`,

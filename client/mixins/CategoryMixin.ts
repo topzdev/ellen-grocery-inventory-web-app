@@ -11,6 +11,7 @@ import ICategory from "~/interfaces/ICategory";
 
 @Component
 class CategoryMixin extends Vue {
+  redirect: boolean = true;
   valid: boolean = false;
   dialog: boolean = true;
   isEdit: boolean = false;
@@ -33,7 +34,7 @@ class CategoryMixin extends Vue {
   }
 
   addCategory() {
-    this.categoryStore.addCategory(this.category);
+    this.categoryStore.addCategory({category: this.category, redirect: this.redirect});
   }
 
   updateCategory() {

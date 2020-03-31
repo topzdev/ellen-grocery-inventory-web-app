@@ -3,7 +3,7 @@ import { frontendStore } from "~/utils/store-accessor";
 export function setNotification(
   message: string,
   success: boolean,
-  redirect: string
+  redirect: string | undefined
 ): void {
   frontendStore.setSnackbar({
     message,

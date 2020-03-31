@@ -12,6 +12,7 @@ import ISupplier from "@/interfaces/ISupplier";
 import ISupplierInfo from "@/interfaces/ISupplier";
 @Component
 export default class SupplierMixin extends Vue {
+  redirect: boolean = true;
   supplierStore: ISupplierModule;
   processStore: IProcessModule;
   frontendStore: IFrontendModule;
@@ -40,7 +41,7 @@ export default class SupplierMixin extends Vue {
   }
 
   addSupplier() {
-    this.supplierStore.addSupplier(this.supplier);
+    this.supplierStore.addSupplier({supplier: this.supplier, redirect: this.redirect});
   }
 
   updateSupplier() {

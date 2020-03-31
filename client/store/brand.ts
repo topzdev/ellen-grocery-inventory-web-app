@@ -15,6 +15,13 @@ export default class Brand extends VuexModule {
   private path: string = "/products";
   private brands: Array<IBrand> = [];
 
+  private loading: boolean = false;
+
+  get getLoading() {
+    return this.loading;
+  }
+
+
   get getBrands() {
     return this.brands;
   }
@@ -38,35 +45,49 @@ export default class Brand extends VuexModule {
     this.brands = this.brands.filter(item => item.brand_id !== brand_id);
   }
 
-  @Action({ commit: "SET_BRANDS" })
+  @Mutation
+  private SET_LOADING(state: boolean) {
+    this.loading = state;
+  }
+
+  @Action({ commit: "SET_LOADING" })
+  setLoading(state: boolean) {
+    return state;
+  }
+
+  @Action({ commit: "SET_BRANDS", rawError: true })
   public async fetchBrands() {
     const result: IResult = await $axios.$get(this.url, config);
 
     return result.data;
   }
 
-  @Action({ commit: "SET_BRANDS" })
+  @Action({ commit: "SET_BRANDS", rawError: true })
   public async searchBrands(search: string) {
     const result: IResult = await $axios.$get(`${this.url}/search/${search}`);
 
     return result.data;
   }
 
-  @Action({ commit: "ADD_BRAND" })
-  public async addBrand({ brand_name }: IBrand) {
+  @Action({ commit: "ADD_BRAND", rawError: true })
+  public async addBrand({ brand_name, redirect }: any) {
+
+    this.setLoading(true);
     const result: IResult = await $axios.$post(
       this.url,
       { brand_name },
       config
     );
-    setNotification(result.message, result.success, this.path);
+    setNotification(result.message, result.success, redirect ? this.path : undefined);
+
+    this.setLoading(false);
     return {
       brand_id: result.data.brand_id,
       brand_name
     };
   }
 
-  @Action({ commit: "UPDATE_BRAND" })
+  @Action({ commit: "UPDATE_BRAND", rawError: true })
   public async updateBrand({ brand_name, brand_id }: IBrand) {
     const result: IResult = await $axios.$put(
       this.url,
@@ -78,7 +99,7 @@ export default class Brand extends VuexModule {
     return { brand_name, brand_id };
   }
 
-  @Action({ commit: "DELETE_BRAND" })
+  @Action({ commit: "DELETE_BRAND", rawError: true })
   public async deleteBrand(brand_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${brand_id}`);
     setNotification(result.message, result.success, this.path);

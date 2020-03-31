@@ -1,9 +1,9 @@
 -- @block create product table product_table
 CREATE TABLE IF NOT EXISTS product_table(
   product_id SERIAL NOT NULL,
-  product_name VARCHAR(50) UNIQUE NOT NULL,
-  barcode VARCHAR(50) UNIQUE NOT NULL,
-  description VARCHAR(300),
+  product_name TEXT NOT NULL,
+  barcode TEXT UNIQUE NOT NULL,
+  description TEXT,
   quantity_min INTEGER,
   quantity_max INTEGER,
   quantity INTEGER,

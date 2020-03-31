@@ -28,5 +28,6 @@ import SupplierModal from "@/components/modals/SupplierModal.vue"
     SupplierModal
   }
 })
-export default class Modals extends Vue {}
+export default class Modals extends Vue {
+}
 </script>

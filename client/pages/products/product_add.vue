@@ -22,6 +22,7 @@
                     <v-col cols="6" class="pb-0">
                       <v-text-field
                         v-model="product.product_name"
+                        
                         :rules="rules.product_name"
                         label="Product Name"
                         required
@@ -91,7 +92,7 @@
                 <v-col cols="4">
                   <p>Upload Product Image</p>
                   <v-card height="250px" width="250px" class="mb-4">
-                    <v-img :src="product.image_url" width="100%" height="100%" draggable="false"></v-img>
+                    <v-img :src="setUrlImage" width="100%" height="100%" draggable="false"></v-img>
                   </v-card>
 
                   <v-file-input

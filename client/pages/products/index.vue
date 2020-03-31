@@ -9,17 +9,15 @@
       </v-col>
     </v-row>
 
-    <product-table />
+    <product-view></product-view>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import ProductTable from "@/components/product/ProductTable.vue";
+import ProductView from "@/components/product/ProductView.vue";
 @Component({
-  components: {
-    ProductTable
-  }
+  components: { ProductView }
 })
 export default class Index extends Vue {
   parentPath: string = "products";

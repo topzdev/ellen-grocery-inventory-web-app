@@ -16,11 +16,11 @@ class ProductController extends QueryExtend {
 		const barcode = req.params.barcode;
 
 		try {
+
 			const query: QueryConfig = {
 				text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1`,
 				values: [barcode]
 			};
-	
 
 			const result = await this.client.query(query);
 
@@ -35,7 +35,7 @@ class ProductController extends QueryExtend {
 	}
 
 	public async getProducts(req: Request, res: Response): Promise<any> {
-		
+
 		try {
 			const query: QueryConfig = {
 				text: `SELECT
@@ -60,7 +60,7 @@ class ProductController extends QueryExtend {
 				INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
 				INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id`
 			};
-	
+
 
 			const result = await this.client.query(query);
 			return res.json({
@@ -88,12 +88,25 @@ class ProductController extends QueryExtend {
 		}: IProduct = req.body;
 
 		let image = {
-			public_id: null,
-			image_url: null
+			public_id: "",
+			image_url: ""
 		};
 
 		try {
+			// validate if already exisit
+			let query: QueryConfig = {
+				text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1 OR product_name = $2`,
+				values: [barcode, product_name]
+			}
 
+			let result = await this.client.query(query);
+
+			if (result.rows.length) return res.json({
+				success: false,
+				message: 'Product Already Exist',
+			});
+
+			// validate if the req.files has value then upload the image
 			if (req.files && req.files['file']) {
 				// @ts-ignore
 				let uploaded = await imageUploader.uploadImage(req.files['file'])
@@ -101,7 +114,8 @@ class ProductController extends QueryExtend {
 				image.image_url = uploaded.secure_url
 			}
 
-			const query: QueryConfig = {
+			// after the image successfully added then the rest is saved
+			query = {
 				text: `INSERT INTO "${this.productTable}" 
 				(barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image, image_url)
 					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING product_id`,
@@ -121,7 +135,7 @@ class ProductController extends QueryExtend {
 				]
 			};
 
-			const result = await this.client.query(query);
+			result = await this.client.query(query);
 
 			return res.json({
 				success: true,
@@ -147,16 +161,16 @@ class ProductController extends QueryExtend {
 			supplier_id,
 			category_id,
 			product_id,
-			image
+			image,
+			image_url
 		}: IProduct = req.body;
 
 		let updateImage = {
-			public_id: null,
-			image_url: null
+			public_id: image,
+			image_url: image_url
 		};
 
 		try {
-
 			if (req.files && req.files['file']) {
 				await imageUploader.deleteImage(image!)
 
@@ -168,8 +182,8 @@ class ProductController extends QueryExtend {
 
 			const query: QueryConfig = {
 				text: `UPDATE "${this.productTable}" SET 
-			barcode=$1, product_name=$2, quantity=$3, quantity_max=$4, quantity_min=$5, price=$6, 
-			description=$7, brand_id=$8, supplier_id=$9, category_id=$10, image=$11, image_url=$12 WHERE product_id=$13`,
+							barcode=$1, product_name=$2, quantity=$3, quantity_max=$4, quantity_min=$5, price=$6, 
+							description=$7, brand_id=$8, supplier_id=$9, category_id=$10, image=$11, image_url=$12 WHERE product_id=$13`,
 				values: [
 					barcode,
 					product_name,
@@ -201,7 +215,7 @@ class ProductController extends QueryExtend {
 
 	public async deleteProduct(req: Request, res: Response): Promise<any> {
 		const { product_id, image } = req.body;
-		
+
 		try {
 			const query: QueryConfig = {
 				text: `DELETE FROM "${this.productTable}" WHERE product_id = $1`,
@@ -225,7 +239,7 @@ class ProductController extends QueryExtend {
 		const search = req.body.searchString;
 
 		try {
-			
+
 			const query: QueryConfig = {
 				text: `SELECT * FROM "${this.productTable}" WHERE barcode LIKE $1`,
 				values: [`%${search}%`]

@@ -35,8 +35,8 @@ export default class ProductMixin extends Vue {
     brand_id: -1,
     supplier_id: -1,
     category_id: -1,
-    image: undefined,
-    image_url: undefined,
+    image: "",
+    image_url: "",
     imageFile: undefined
   };
 
@@ -70,13 +70,13 @@ export default class ProductMixin extends Vue {
     });
   }
 
-  uploadImage(image: File){
-    if(!image) return this.product.image = undefined;
-    
+  uploadImage(image: File) {
+    if (!image) return this.product.image = undefined;
+
     let self = this;
     const reader = new FileReader();
 
-    reader.onload = function(e){
+    reader.onload = function (e) {
       self.product.image_url = e.target?.result;
       self.product.imageFile = image;
     }
@@ -84,6 +84,9 @@ export default class ProductMixin extends Vue {
     reader.readAsDataURL(image);
   }
 
+  get setUrlImage() {
+    return this.product.image_url ? this.product.image_url : require('~/assets/img/noimg.jpg')
+  }
 
   // Rules
   rules: Object = {

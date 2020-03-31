@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="modalState" width="500">
-    <v-card>
+    <v-card :loading="loading">
       <v-toolbar :flat="true">
         <v-toolbar-title
           class="headline"
@@ -19,7 +19,7 @@
             label="Category Name"
             required
           />
-          
+
           <v-textarea
             :auto-grow="true"
             label="Description"
@@ -48,12 +48,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import CategoryMixin from "@/mixins/CategoryMixin";
 
 @Component
 export default class CategoryModal extends CategoryMixin {
-   
+  created() {
+    this.redirect = false;
+  }
+
+  get loading() {
+    return this.categoryStore.getLoading;
+  }
 
   get modalState() {
     return this.frontendStore.categoryModalState;
@@ -74,5 +80,9 @@ export default class CategoryModal extends CategoryMixin {
     }
   }
 
+  @Watch("loading")
+  isLoading() {
+    if (!this.loading) this.frontendStore.setCategoryModal(false);
+  }
 }
 </script>

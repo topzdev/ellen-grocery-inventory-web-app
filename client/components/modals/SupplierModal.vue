@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="modalState" width="500">
-    <v-card>
+    <v-card :loading="loading">
       <v-toolbar :flat="true">
         <v-toolbar-title
           class="headline"
@@ -105,13 +105,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import SupplierMixin from "@/mixins/SupplierMixin";
 
 @Component
 export default class SupplierModal extends SupplierMixin {
   valid: boolean = false;
   dialog: boolean = true;
+
+  created() {
+    this.redirect = false;
+  }
+
+  get loading() {
+    return this.supplierStore.getLoading;
+  }
 
   get modalState() {
     return this.frontendStore.supplierModalState;
@@ -130,6 +138,11 @@ export default class SupplierModal extends SupplierMixin {
     if (this.$refs.manageForm.validate()) {
       this.addSupplier();
     }
+  }
+
+  @Watch("loading")
+  isLoading() {
+    if (!this.loading) this.frontendStore.setSupplierModal(false);
   }
 }
 </script>

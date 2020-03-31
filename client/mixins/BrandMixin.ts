@@ -11,6 +11,7 @@ import IBrand from "~/interfaces/IBrand";
 
 @Component
 class BrandMixin extends Vue {
+  redirect: boolean = true;
   valid: boolean = false;
   dialog: boolean = true;
   public isEdit: boolean = false;
@@ -31,7 +32,7 @@ class BrandMixin extends Vue {
   }
 
   addBrand() {
-    this.brandStore.addBrand(this.brand);
+    this.brandStore.addBrand({...this.brand, redirect: this.redirect});
   }
 
   updateBrand() {

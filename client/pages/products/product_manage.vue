@@ -64,7 +64,7 @@
                  <v-col cols="4">
                   <p>Upload Product Image</p>
                   <v-card height="250px" width="250px" class="mb-4">
-                    <v-img :src="product.image_url" width="100%" height="100%" draggable="false"></v-img>
+                    <v-img :src="setUrlImage" width="100%" height="100%" draggable="false"></v-img>
                   </v-card>
 
                   <v-file-input
@@ -115,6 +115,7 @@ export default class Manage extends ProductMixin {
   validate(): void {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {
+      console.log(this.product);
       this.productStore.updateProduct(this.product);
     }
   }

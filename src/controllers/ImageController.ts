@@ -27,9 +27,12 @@ class ImageController {
 	}
 
 	public async deleteImage(public_id: string){
+		
 		await cloudinary.v2.uploader.destroy(public_id, (error: any, result: Error)=>{
 			if(error) return console.error('Error on delete image in cloudinary', error.stack);
 			
+			// @ts-ignore
+			if(result.result === "not found") throw Error("Error on delete image")
 			console.log('Successfully Deleted', result)
 		})
 	}

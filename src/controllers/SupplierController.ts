@@ -10,9 +10,9 @@ class SupplierController extends QueryExtend {
 	}
 
 	public async getSuppliers(req: Request, res: Response): Promise<any> {
-		
+
 		try {
-			
+
 			const query: QueryConfig = {
 				text: `SELECT * FROM "${this.supplierTable}"`
 			};
@@ -32,7 +32,6 @@ class SupplierController extends QueryExtend {
 	public async getSingleSupplier(req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
 
-		
 		try {
 
 			const query: QueryConfig = {
@@ -145,7 +144,7 @@ class SupplierController extends QueryExtend {
 				text: `DELETE FROM "${this.supplierTable}" WHERE supplier_id = $1`,
 				values: [id]
 			};
-			
+
 			const result = await this.client.query(query);
 
 			return res.json({

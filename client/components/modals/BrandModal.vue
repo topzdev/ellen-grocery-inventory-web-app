@@ -1,8 +1,13 @@
 <template>
   <v-dialog v-model="modalState" width="500">
-    <v-card>
+    <v-card :loading="loading">
       <v-toolbar :flat="true">
-        <v-toolbar-title class="headline" dark primary-title v-text="brandTitle" />
+        <v-toolbar-title
+          class="headline"
+          dark
+          primary-title
+          v-text="brandTitle"
+        />
         <v-spacer />
       </v-toolbar>
 
@@ -28,18 +33,27 @@
           large
           text
           @click="validate"
-        >Add Brand</v-btn>
+          >Add Brand</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 import BrandMixin from "@/mixins/BrandMixin";
 
 @Component
 export default class DeleteModal extends BrandMixin {
+  created() {
+    this.redirect = false;
+  }
+
+  get loading() {
+    return this.brandStore.getLoading;
+  }
+
   get modalState() {
     return this.frontendStore.brandModalState;
   }
@@ -50,6 +64,11 @@ export default class DeleteModal extends BrandMixin {
 
   closeModal() {
     this.frontendStore.setBrandModal(false);
+  }
+
+  @Watch("loading")
+  isLoading() {
+    if (!this.loading) this.frontendStore.setBrandModal(false);
   }
 }
 </script>
