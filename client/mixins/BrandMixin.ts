@@ -32,7 +32,7 @@ class BrandMixin extends Vue {
   }
 
   addBrand() {
-    this.brandStore.addBrand({...this.brand, redirect: this.redirect});
+    this.brandStore.addBrand({ ...this.brand, redirect: this.redirect });
   }
 
   updateBrand() {
@@ -73,7 +73,8 @@ class BrandMixin extends Vue {
 
     this.processStore.setCurrentToDelete({
       deleteFunction: this.brandStore.deleteBrand,
-      id: this.brand.brand_id
+      id: this.brand.brand_id,
+      others: { redirect: this.redirect }
     });
   }
 

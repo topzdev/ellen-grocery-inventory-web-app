@@ -41,7 +41,7 @@ export default class SupplierMixin extends Vue {
   }
 
   addSupplier() {
-    this.supplierStore.addSupplier({supplier: this.supplier, redirect: this.redirect});
+    this.supplierStore.addSupplier({ supplier: this.supplier, redirect: this.redirect });
   }
 
   updateSupplier() {
@@ -62,29 +62,23 @@ export default class SupplierMixin extends Vue {
   }
 
   get supplierTitle() {
-    return "Add Supplier" 
+    return "Add Supplier"
   }
 
   // Rules
   rules: Object = {
-    supplier_name: [(v: any) => !!v || "Supplier Name is required"],
-    company_address: [(v: any) => !!v || "Company Address is required"],
-    email_address: [
-      (v: any) => !!v || "Email Address is required",
-      (v: any) => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    tel_no: [(v: any) => !!v || "Telephone Number is required"],
+    supplier_name: [
+      (v: string) => !!v || "Supplier Name is required",
+      (v: string) => v.length <= 50 || "A maximum of 50 characters is allowed"],
+    company_address: [(v: string) => !!v || "Company Address is required"],
+    tel_no: [(v: string) => !!v || "Telephone Number is required"],
     description: [
-      (v: any) =>
-        (v || "").length <= 99 || `A maximum of 99 characters is allowed`
+      (v: string) =>
+        v.length <= 300 || "A maximum of 300 characters is allowed",
     ],
     website: [
-      (v: any) =>
-        v.length > 0
-          ? /(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/.test(
-              v
-            ) || "Invalid website url"
-          : true
+      (v: string) =>
+        v.length > 0 ? /(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/.test(v) || "Invalid website url" : true
     ]
   };
 }

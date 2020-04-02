@@ -2,12 +2,7 @@
   <v-dialog v-model="modalState" width="500">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
-        <v-toolbar-title
-          class="headline"
-          dark
-          primary-title
-          v-text="supplierTitle"
-        />
+        <v-toolbar-title class="headline" dark primary-title v-text="supplierTitle" />
         <v-spacer />
       </v-toolbar>
 
@@ -21,6 +16,7 @@
                     v-model="supplier.supplier_name"
                     :rules="rules.supplier_name"
                     label="Suppliers Name"
+                    counter="50"
                     required
                   />
                 </v-col>
@@ -30,15 +26,13 @@
                     v-model="supplier.tel_no"
                     :rules="rules.tel_no"
                     label="Telephone Number"
+                    counter="20"
                     required
                   />
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
-                  <v-text-field
-                    v-model="supplier.cp_no"
-                    label="Cellphone Number"
-                  />
+                  <v-text-field v-model="supplier.cp_no" label="Cellphone Number" counter="50" />
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
@@ -61,13 +55,14 @@
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
-                  <v-text-field v-model="supplier.fax" label="Fax" />
+                  <v-text-field v-model="supplier.fax" label="Fax" counter="20" />
                 </v-col>
                 <v-col cols="6" class="pb-0">
                   <v-text-field
                     v-model="supplier.website"
                     :rules="rules.website"
                     label="Website"
+                    counter="100"
                   />
                 </v-col>
 
@@ -75,7 +70,7 @@
                   <v-textarea
                     v-model="supplier.description"
                     :rules="rules.description"
-                    :counter="99"
+                    counter="300"
                     :auto-grow="true"
                     label="Description"
                   />
@@ -91,14 +86,7 @@
         <v-btn class="mr-4" text large @click="closeModal">Cancel</v-btn>
         <v-spacer />
 
-        <v-btn
-          color="success"
-          class="d-flex ml-auto"
-          large
-          text
-          @click="validate"
-          >Add Category</v-btn
-        >
+        <v-btn color="success" class="d-flex ml-auto" large text @click="validate">Add Category</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

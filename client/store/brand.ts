@@ -4,7 +4,8 @@ import config from "~/configs/axiosConfig";
 
 import IBrand from "~/interfaces/IBrand";
 import IResult from "~/interfaces/IResult";
-import { setNotification } from "~/utils/setNotification";
+import { IDeleteConfig } from '~/interfaces/IUniversal';
+import { frontendStore } from '~/utils/store-accessor';
 
 /**
  * ? TASK: retun the id of the added product, updated product ...
@@ -12,7 +13,7 @@ import { setNotification } from "~/utils/setNotification";
 @Module({ name: "brand", namespaced: true })
 export default class Brand extends VuexModule {
   private url: string = "/api/brand";
-  private path: string = "/products";
+  private path: string = "/others";
   private brands: Array<IBrand> = [];
 
   private loading: boolean = false;
@@ -78,13 +79,11 @@ export default class Brand extends VuexModule {
       { brand_name },
       config
     );
-    setNotification(result.message, result.success, redirect ? this.path : undefined);
 
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
-    return {
-      brand_id: result.data.brand_id,
-      brand_name
-    };
+    return { brand_id: result.data.brand_id, brand_name };
   }
 
   @Action({ commit: "UPDATE_BRAND", rawError: true })
@@ -94,16 +93,19 @@ export default class Brand extends VuexModule {
       { brand_name, brand_id },
       config
     );
-    setNotification(result.message, result.success, this.path);
 
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
     return { brand_name, brand_id };
   }
 
   @Action({ commit: "DELETE_BRAND", rawError: true })
-  public async deleteBrand(brand_id: number) {
-    const result: IResult = await $axios.$delete(`${this.url}/${brand_id}`);
-    setNotification(result.message, result.success, this.path);
+  public async deleteBrand({ id, redirect }: IDeleteConfig) {
+    const result: IResult = await $axios.$delete(`${this.url}/${id}`);
 
-    return brand_id;
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(redirect);
+    return id;
   }
 }

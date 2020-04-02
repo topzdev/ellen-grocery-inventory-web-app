@@ -1,6 +1,6 @@
 <template>
   <v-card width="100%">
-    <v-card-text>
+    <v-card-text max-height="400px">
       <v-text-field
         solo
         label="Search brand"
@@ -8,9 +8,20 @@
         @input="searchBrand"
       />
       <v-list subheader>
-        <v-subheader>Total brands {{ brandList.length }}</v-subheader>
+        <v-subheader>
+          <v-row>
+            <v-col>Total brands {{ brandList.length }}</v-col>
+            <v-col cols="auto">
+              <v-select :items="items" label="Rows" dense flat single-line v-model="selected"></v-select>
+            </v-col>
+          </v-row>
+        </v-subheader>
         <v-list-item-group color="primary">
-          <v-list-item v-for="(item, i) in brandList.slice(0, 5)" :key="i" @click="setBrand(item)">
+          <v-list-item
+            v-for="(item, i) in brandList.slice(0, rows)"
+            :key="i"
+            @click="setBrand(item)"
+          >
             <v-list-item-content>
               <v-list-item-title v-text="item.brand_name" />
             </v-list-item-content>
@@ -37,5 +48,11 @@ export default class BrandList extends Vue {
   @Prop(Array) brandList: Array<IBrand> | undefined;
   @Prop(Number) active: Number | undefined;
   @Prop(Function) setBrand: Function | undefined;
+  selected = "5";
+  items = ["5", "10", "25", "all"];
+
+  get rows() {
+    return this.selected === "all" ? this.brandList!.length : this.selected;
+  }
 }
 </script>

@@ -18,6 +18,7 @@ export default class Frontend extends VuexModule {
   private showBrandModal: boolean = false;
   private showSupplierModal: boolean = false;
   private showCategoryModal: boolean = false;
+  private productViewMode: string = 'Product Table';
 
   get sidebarState(): boolean {
     return this.openSidebar;
@@ -48,6 +49,10 @@ export default class Frontend extends VuexModule {
   }
   get supplierModalState(): boolean {
     return this.showSupplierModal;
+  }
+
+  get getProductView() {
+    return this.productViewMode
   }
 
 
@@ -81,8 +86,13 @@ export default class Frontend extends VuexModule {
   }
 
   @Mutation
-  private SET_SHOW_SUPPLIER_MODAL(state: boolean){
+  private SET_SHOW_SUPPLIER_MODAL(state: boolean) {
     this.showSupplierModal = state;
+  }
+
+  @Mutation
+  private SET_PRODUCT_VIEW_MODE(mode: string) {
+    this.productViewMode = mode;
   }
 
   @Action({ commit: "SET_OPEN_SIDEBAR" })
@@ -90,20 +100,12 @@ export default class Frontend extends VuexModule {
     return;
   }
 
-  @Action
-  public redirect(redirect: string | undefined): void {
-    // @ts-ignore
-    if (redirect !== undefined) $nuxt.$router.back();
-  }
-
   @Action({ commit: "SET_SHOW_SNACKBAR" })
   public setSnackbar(snackbarConfig: ISnackbar) {
-    this.redirect(snackbarConfig.redirect);
     return snackbarConfig;
   }
   @Action({ commit: "SET_SHOW_DELETE_MODAL" })
   public setDeleteModal(modalConfig: IDeleteModal) {
-    this.redirect(modalConfig.redirect);
     return modalConfig;
   }
   @Action({ commit: "SET_SHOW_SEARCH_MODAL" })
@@ -122,8 +124,18 @@ export default class Frontend extends VuexModule {
   public setCategoryModal(show: boolean) {
     return show;
   }
-  @Action({commit: "SET_SHOW_SUPPLIER_MODAL"})
-  public setSupplierModal(show: boolean){
+  @Action({ commit: "SET_SHOW_SUPPLIER_MODAL" })
+  public setSupplierModal(show: boolean) {
     return show;
   }
+  @Action({ commit: "SET_PRODUCT_VIEW_MODE" })
+  public setProductView(mode: string) {
+    return mode;
+  }
+  @Action
+  public setRedirect(redirect: boolean | string | undefined) {
+    if (typeof redirect === 'string') $nuxt.$router.push(redirect)
+    else if (typeof redirect === 'boolean') $nuxt.$router.back();
+  }
+
 }

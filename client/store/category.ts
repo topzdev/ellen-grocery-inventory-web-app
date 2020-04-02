@@ -5,13 +5,13 @@ import config from "~/configs/axiosConfig";
 
 import ICategory from "~/interfaces/ICategory";
 import IResult from "~/interfaces/IResult";
-import { setNotification } from "~/utils/setNotification";
+import { frontendStore } from '~/utils/store-accessor';
 
 
 @Module({ name: "category", namespaced: true })
 export default class Category extends VuexModule {
   private url: string = "/api/category";
-  private path: string = "/product";
+  private path: string = "/others";
   private categories: Array<ICategory> = [];
   private loading: boolean = false;
 
@@ -69,26 +69,32 @@ export default class Category extends VuexModule {
 
     this.setLoading(true);
     const result: IResult = await $axios.$post(this.url, category, config);
-    setNotification(result.message, result.success, redirect ? this.path : undefined);
 
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
-    return {
-      category_id: result.data.category_id,
-      ...category
-    };
+
+    return { category_id: result.data.category_id, ...category };
   }
 
   @Action({ commit: "UPDATE_CATEGORY" })
   public async updateCategory(category: ICategory) {
     const result: IResult = await $axios.$put(this.url, category, config);
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return category;
   }
 
   @Action({ commit: "DELETE_CATEGORY" })
   public async deleteCategory(category_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${category_id}`);
-    setNotification(result.message, result.success, this.path);
+
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return category_id;
   }
 }

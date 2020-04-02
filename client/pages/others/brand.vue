@@ -39,7 +39,6 @@
         </v-col>
         <v-col cols="5" class="d-flex">
           <brand-list
-            :active="active"
             :show-delete="showDelete"
             :search-brand="searchBrand"
             :brand-list="brandList"

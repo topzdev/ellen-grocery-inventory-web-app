@@ -3,7 +3,7 @@ import ICustomer from "~/interfaces/ICustomer";
 import config from "~/configs/axiosConfig";
 import { $axios } from "~/utils/axios";
 import IResult from "~/interfaces/IResult";
-import { setNotification } from "~/utils/setNotification";
+import { frontendStore } from '~/utils/store-accessor';
 
 @Module({
   name: "customer",
@@ -73,24 +73,27 @@ export default class Customer extends VuexModule {
   @Action({ commit: "ADD_CUSTOMER" })
   public async addCustomer(customer: ICustomer) {
     const result: IResult = await $axios.$post(this.url, customer, config);
-    setNotification(result.message, result.success, this.path);
-    return {
-      customer_id: result.data.customer_id,
-      ...customer
-    };
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+    return { customer_id: result.data.customer_id, ...customer };
   }
 
   @Action({ commit: "UPDATE_CUSTOMER" })
   public async updateCustomer(customer: ICustomer) {
     const result: IResult = await $axios.$put(this.url, customer, config);
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
     return customer;
   }
 
   @Action({ commit: "DELETE_CUSTOMER" })
   public async deleteCustomer(customer_id: number) {
     const result: IResult = await $axios.$delete(`${this.url}/${customer_id}`);
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
     return customer_id;
   }
 }

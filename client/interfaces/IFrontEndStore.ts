@@ -1,3 +1,4 @@
+
 interface IRedirect {
   redirect?: string | undefined;
 }

@@ -2,7 +2,6 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import IRole from "~/interfaces/IRole";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import { setNotification } from "~/utils/setNotification";
 import IResult from "~/interfaces/IResult";
 
 @Module({

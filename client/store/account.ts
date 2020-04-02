@@ -2,8 +2,8 @@ import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
 import IAccount from "~/interfaces/IAccount";
 import IResult from "~/interfaces/IResult";
 import { $axios } from "~/utils/axios";
-import { setNotification } from "~/utils/setNotification";
 import config from "~/configs/axiosConfig";
+import { frontendStore } from '~/utils/store-accessor';
 
 @Module({
   name: "account",
@@ -92,7 +92,9 @@ export default class Account extends VuexModule {
         account,
         config
       );
-      setNotification(result.message, result.success, this.path);
+
+      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+      frontendStore.setRedirect(this.path)
 
       return {
         account_id: result.data.account_id,
@@ -108,7 +110,8 @@ export default class Account extends VuexModule {
     try {
       const result: IResult = await $axios.$put(`${this.url}`, account, config);
 
-      setNotification(result.message, result.success, this.path);
+      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+      frontendStore.setRedirect(this.path)
 
       return account;
     } catch (error) {
@@ -121,7 +124,8 @@ export default class Account extends VuexModule {
     try {
       const result: IResult = await $axios.$delete(`${this.url}/${account_id}`);
 
-      setNotification(result.message, result.success, this.path);
+      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+      frontendStore.setRedirect(this.path)
 
       return account_id;
     } catch (error) {

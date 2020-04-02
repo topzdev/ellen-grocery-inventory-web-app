@@ -2,8 +2,8 @@ import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import IProduct from "~/interfaces/IProduct";
-import { setNotification } from "~/utils/setNotification";
 import IResult from "~/interfaces/IResult";
+import { frontendStore } from '~/utils/store-accessor';
 
 @Module({
   name: "product",
@@ -50,7 +50,7 @@ export default class Product extends VuexModule {
 
   @Mutation
   public ADD_PRODUCT(product: IProduct): void {
-    if(!product) return;
+    if (!product) return;
     this.products = [product, ...this.products];
   }
 
@@ -76,30 +76,31 @@ export default class Product extends VuexModule {
   @Action({ commit: "ADD_PRODUCT", rawError: true })
   public async addProduct(product: IProduct) {
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append('product_name', product.product_name.toString())
-      formData.append('barcode', product.barcode.toString())
-      formData.append('quantity_min', product.quantity_min.toString())
-      formData.append('quantity_max', product.quantity_max.toString())
-      formData.append('quantity', product.quantity.toString())
-      formData.append('price', product.price.toString())
-      formData.append('description', product.description)
-      formData.append('brand_id', product.brand_id.toString())
-      formData.append('supplier_id', product.supplier_id.toString())
-      formData.append('category_id', product.category_id.toString())
-      formData.append('file', product.imageFile!)
+    formData.append('product_name', product.product_name.toString())
+    formData.append('barcode', product.barcode.toString())
+    formData.append('quantity_min', product.quantity_min.toString())
+    formData.append('quantity_max', product.quantity_max.toString())
+    formData.append('quantity', product.quantity.toString())
+    formData.append('price', product.price.toString())
+    formData.append('description', product.description)
+    formData.append('brand_id', product.brand_id.toString())
+    formData.append('supplier_id', product.supplier_id.toString())
+    formData.append('category_id', product.category_id.toString())
+    formData.append('file', product.imageFile!)
 
-      const result: IResult = await $axios.$post("/api/product", formData, config);
-      
-      
-      setNotification(result.message, result.success, this.path);
+    const result: IResult = await $axios.$post("/api/product", formData, config);
 
-      if(result.success) return {
-        product_id: result.data.product_id,
-        ...product
-      };
-      
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
+    if (result.success) return {
+      product_id: result.data.product_id,
+      ...product
+    };
+
   }
 
   @Action({ commit: "SET_CURRENT", rawError: true })
@@ -137,22 +138,27 @@ export default class Product extends VuexModule {
 
     const result: IResult = await $axios.$put("/api/product", formData, config);
 
-    setNotification(result.message, result.success, this.path);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return product;
   }
 
-  @Action({ commit: "DELETE_PRODUCT", rawError: true})
-  public async deleteProduct({id, others}:any) {
+  @Action({ commit: "DELETE_PRODUCT", rawError: true })
+  public async deleteProduct({ id, others }: any) {
     console.log('hello', others);
     const result: IResult = await $axios.$delete(
       `/api/product`,
-      {...config, data: { image: others, product_id: id }}
+      { ...config, data: { image: others, product_id: id } }
     );
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return id;
   }
 
-  @Action({ commit: "SET_SEARCH", rawError: true})
+  @Action({ commit: "SET_SEARCH", rawError: true })
   public async searchProduct(searchString: string) {
     const result: IResult = await $axios.$post(
       `/api/product/search/`,

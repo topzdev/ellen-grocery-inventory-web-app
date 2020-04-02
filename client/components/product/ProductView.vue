@@ -21,6 +21,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ProductTable from "@/components/product/ProductTable.vue";
 import ProductList from "@/components/product/ProductList.vue";
+import { frontendStore } from "@/store";
 @Component({
   components: {
     ProductTable,
@@ -29,8 +30,15 @@ import ProductList from "@/components/product/ProductList.vue";
 })
 export default class ProductView extends Vue {
   search = "";
-  selected = "Product Table";
   items = ["Product Table", "Product List"];
+
+  get selected() {
+    return frontendStore.getProductView;
+  }
+
+  set selected(mode: string) {
+    frontendStore.setProductView(mode);
+  }
 }
 </script>
 

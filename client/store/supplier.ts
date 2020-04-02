@@ -2,8 +2,7 @@ import { VuexModule, Mutation, Action, Module } from "vuex-module-decorators";
 import ISupplierInfo from "~/interfaces/ISupplier";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import { setNotification } from "~/utils/setNotification";
-
+import { frontendStore } from '~/utils/store-accessor'
 @Module({
   name: "supplier",
   namespaced: true
@@ -67,23 +66,32 @@ export default class Supplier extends VuexModule {
 
     this.setLoading(true);
     const result = await $axios.$post(this.url, supplier, config);
-    setNotification(result.message, result.success, redirect ? this.path : undefined);
 
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
-    return supplier;
+
+    return { supplier_id: result.data.supplier_id, ...supplier };
   }
 
   @Action({ commit: "UPDATE_SUPPLIER" })
   public async updateSupplier(supplier: ISupplierInfo) {
     const result = await $axios.$put(this.url, supplier, config);
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return supplier;
   }
 
   @Action({ commit: "DELETE_SUPPLIER" })
   public async deleteSupplier(supplier_id: number) {
     const result = await $axios.$delete(`${this.url}${supplier_id}`);
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
     return supplier_id;
   }
 }

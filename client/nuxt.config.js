@@ -36,7 +36,7 @@ export default {
   plugins: [
     "@/plugins/axios-accessor",
     "@/utils/store-accessor",
-    "@/plugins/global-components",
+    "@/plugins/global-components"
   ],
   /*
    ** Nuxt.js dev-modules

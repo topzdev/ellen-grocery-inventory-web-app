@@ -40,6 +40,7 @@ export default class Sidebar extends Vue {
   expandOnHover: boolean = true;
   items: Array<Object> = [
     { title: "Home", icon: "mdi-storefront", to: "d" },
+    { title: "Cashier", icon: "mdi-cash-register", to: "/cashier" },
     { title: "Product", icon: "mdi-basket-fill", to: "/products" },
     { title: "Suppliers", icon: "mdi-truck", to: "/suppliers" },
     { title: "Addons", icon: "mdi-decagram", to: "/others" },
