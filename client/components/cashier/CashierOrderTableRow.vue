@@ -1,22 +1,28 @@
 <template>
   <tr>
-    <td>Bear Brand Chocolate</td>
-    <td class="text-center d-flex align-center" style="text-align:center" width="150px">
-      <cashier-quantity-input></cashier-quantity-input>
+    <td>{{order.name}}</td>
+    <td class="text-center" style="text-align:center" width="150px">
+      <cashier-quantity-input :model="order.quantity"></cashier-quantity-input>
     </td>
-    <td class="text-right">₱500</td>
+    <td class="text-right">₱{{order.price}}</td>
   </tr>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import CashierQuantityInput from "./CashierQuantityInput.vue";
+import IOrder from "@/interfaces/IOrder";
 
 @Component({
   components: { CashierQuantityInput }
 })
-export default class CashierOrderTableRow extends Vue {}
+export default class CashierOrderTableRow extends Vue {
+  @Prop(Object) order: IOrder | undefined;
+}
 </script>
 
-<style>
+<style scoped>
+.order-card {
+  display: flex;
+}
 </style>

@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS supplier_table(
   email_address TEXT,
   company_address TEXT,
   fax VARCHAR(20),
-  cp_no VARCHAR(12),
-  tel_no VARCHAR(10),
+  cp_no VARCHAR(20),
+  tel_no VARCHAR(20),
   website VARCHAR(100),
   description VARCHAR(300)
 )

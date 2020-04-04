@@ -1,5 +1,5 @@
 <template>
-  <v-simple-table>
+  <v-simple-table dense :fixed-header="true" height="400">
     <template v-slot:default>
       <thead>
         <tr>
@@ -10,7 +10,7 @@
       </thead>
 
       <tbody>
-        <cashier-order-table-row></cashier-order-table-row>
+        <cashier-order-table-row v-for="order in orders" :key="order.product_id" :order="order"></cashier-order-table-row>
       </tbody>
     </template>
   </v-simple-table>
@@ -18,11 +18,16 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import CashierOrderTablerRow from "./CashierOrderTableRow.vue";
+import CashierOrderTableRow from "./CashierOrderTableRow.vue";
+import { cashierStore } from "../../store";
 
 @Component({
-  components: { CashierOrderTablerRow }
+  components: { CashierOrderTableRow }
 })
-export default class CashierOrderTable extends Vue {}
+export default class CashierOrderTable extends Vue {
+  get orders() {
+    return cashierStore.getOrders;
+  }
+}
 </script>
 

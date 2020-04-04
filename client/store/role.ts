@@ -3,6 +3,7 @@ import IRole from "~/interfaces/IRole";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import IResult from "~/interfaces/IResult";
+import { frontendStore } from '@/utils/store-accessor'
 
 @Module({
   name: "role",
@@ -41,58 +42,52 @@ export default class Role extends VuexModule {
 
   @Action({ commit: "SET_ROLE" })
   public async searchRoles(search: string) {
-    try {
-      const result: IResult = await $axios.$get(`${this.url}/search`);
-      return result.data;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+
+    const result: IResult = await $axios.$get(`${this.url}/search`);
+    return result.data;
+
   }
 
   @Action({ commit: "SET_ROLE" })
   public async fetchRoles() {
-    try {
-      const result: IResult = await $axios.$post(`${this.url}`);
-      setNotification(result.message, result.success, this.path);
-      return result.data;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+
+    const result: IResult = await $axios.$post(`${this.url}`);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+    return result.data;
+
   }
 
   @Action({ commit: "ADD_ROLE" })
   public async addRole(role: IRole) {
-    try {
-      const result: IResult = await $axios.$post(`${this.url}`, role, config);
-      setNotification(result.message, result.success, this.path);
-      return {
-        role_id: result.data.role_id,
-        ...role
-      };
-    } catch (error) {
-      return console.log(error.stack);
-    }
+
+    const result: IResult = await $axios.$post(`${this.url}`, role, config);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+    return {
+      role_id: result.data.role_id,
+      ...role
+    };
+
   }
 
   @Action({ commit: "UPDATE_ROLE" })
   public async updateRole(role: IRole) {
-    try {
-      const result: IResult = await $axios.$put(`${this.url}`, role, config);
-      setNotification(result.message, result.success, this.path);
-      return role;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+
+    const result: IResult = await $axios.$put(`${this.url}`, role, config);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+    return role;
+
   }
 
   @Action({ commit: "DELETE_ROLE" })
   public async deleteRole(role_id: number) {
-    try {
-      const result: IResult = await $axios.$delete(`${this.url}/${role_id}`);
-      setNotification(result.message, result.success, this.path);
-      return role_id;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+
+    const result: IResult = await $axios.$delete(`${this.url}/${role_id}`);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+    return role_id;
+
   }
 }

@@ -2,19 +2,18 @@
   <div>
     <v-app-bar color="primary" dark app>
       <v-app-bar-nav-icon @click="openSidebar" />
-      <v-toolbar-title v-text="title"/>
+      <v-toolbar-title v-text="title" />
     </v-app-bar>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue} from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { frontendStore } from "@/store";
 
-@Component({
-})
+@Component({})
 export default class Navbar extends Vue {
-  title: string = "Ellen Inventory System"
+  title: string = "Ellen Inventory System";
   clipped: boolean = false;
   drawer: boolean = false;
   fixed: boolean = false;
