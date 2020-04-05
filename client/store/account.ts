@@ -4,6 +4,7 @@ import IResult from "~/interfaces/IResult";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import { frontendStore } from '~/utils/store-accessor';
+import { SET_ACCOUNTS, SET_CURRENT_ACCOUNT, ADD_ACCOUNT, UPDATE_ACCOUNT, DELETE_ACCOUNT } from '~/configs/types';
 
 @Module({
   name: "account",
@@ -24,35 +25,35 @@ export default class Account extends VuexModule {
   }
 
   @Mutation
-  private SET_ACCOUNTS(accounts: Array<IAccount>) {
+  private [SET_ACCOUNTS](accounts: Array<IAccount>) {
     this.accounts = accounts;
   }
 
   @Mutation
-  private SET_CURRENT_ACCOUNT(account: IAccount) {
+  private [SET_CURRENT_ACCOUNT](account: IAccount) {
     this.current = account;
   }
 
   @Mutation
-  private ADD_ACCOUNT(account: IAccount) {
+  private [ADD_ACCOUNT](account: IAccount) {
     this.accounts = [account, ...this.accounts];
   }
 
   @Mutation
-  private UPDATE_ACCOUNT(account: IAccount) {
+  private [UPDATE_ACCOUNT](account: IAccount) {
     this.accounts = this.accounts.map(item =>
       item.account_id === account.account_id ? account : item
     );
   }
 
   @Mutation
-  private DELETE_ACCOUNT(account_id: number) {
+  private [DELETE_ACCOUNT](account_id: number) {
     this.accounts = this.accounts.filter(
       item => item.account_id !== account_id
     );
   }
 
-  @Action({ commit: "SET_ACCOUNTS" })
+  @Action({ commit: SET_ACCOUNTS })
   public async searchAccounts(search: string) {
     try {
       const result: IResult = await $axios.$get(`${this.url}/search`);
@@ -62,7 +63,7 @@ export default class Account extends VuexModule {
     }
   }
 
-  @Action({ commit: "SET_CURRENT_ACCOUNT" })
+  @Action({ commit: SET_CURRENT_ACCOUNT })
   public async fetchSingleAccount(account_id: number | undefined) {
     if (account_id === undefined) return account_id;
 
@@ -74,7 +75,7 @@ export default class Account extends VuexModule {
     }
   }
 
-  @Action({ commit: "SET_ACCOUNTS" })
+  @Action({ commit: SET_ACCOUNTS })
   public async fetchAccounts() {
     try {
       const result: IResult = await $axios.$get(`${this.url}`);
@@ -84,7 +85,7 @@ export default class Account extends VuexModule {
     }
   }
 
-  @Action({ commit: "ADD_ACCOUNT" })
+  @Action({ commit: ADD_ACCOUNT })
   public async addAccount(account: IAccount) {
     try {
       const result: IResult = await $axios.$post(
@@ -105,7 +106,7 @@ export default class Account extends VuexModule {
     }
   }
 
-  @Action({ commit: "UPDATE_ACCOUNT" })
+  @Action({ commit: UPDATE_ACCOUNT })
   public async updateAccount(account: IAccount) {
     try {
       const result: IResult = await $axios.$put(`${this.url}`, account, config);
@@ -119,7 +120,7 @@ export default class Account extends VuexModule {
     }
   }
 
-  @Action({ commit: "DELETE_ACCOUNT" })
+  @Action({ commit: DELETE_ACCOUNT })
   public async deleteAccount(account_id: number) {
     try {
       const result: IResult = await $axios.$delete(`${this.url}/${account_id}`);

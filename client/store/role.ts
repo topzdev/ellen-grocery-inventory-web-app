@@ -4,6 +4,7 @@ import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '@/utils/store-accessor'
+import { SET_ROLE, ADD_ROLE, UPDATE_ROLE, DELETE_ROLE } from '~/configs/types';
 
 @Module({
   name: "role",
@@ -19,28 +20,28 @@ export default class Role extends VuexModule {
   }
 
   @Mutation
-  private SET_ROLES(roles: Array<IRole>) {
+  private [SET_ROLE](roles: Array<IRole>) {
     this.roles = roles;
   }
 
   @Mutation
-  private ADD_ROLE(role: IRole) {
+  private [ADD_ROLE](role: IRole) {
     this.roles = [role, ...this.roles];
   }
 
   @Mutation
-  private UPDATE_ROLE(role: IRole) {
+  private [UPDATE_ROLE](role: IRole) {
     this.roles = this.roles.map(item =>
       item.role_id === role.role_id ? role : item
     );
   }
 
   @Mutation
-  private DELETE_ROLE(role_id: number) {
+  private [DELETE_ROLE](role_id: number) {
     this.roles = this.roles.filter(item => item.role_id !== role_id);
   }
 
-  @Action({ commit: "SET_ROLE" })
+  @Action({ commit: SET_ROLE })
   public async searchRoles(search: string) {
 
     const result: IResult = await $axios.$get(`${this.url}/search`);
@@ -48,7 +49,7 @@ export default class Role extends VuexModule {
 
   }
 
-  @Action({ commit: "SET_ROLE" })
+  @Action({ commit: SET_ROLE })
   public async fetchRoles() {
 
     const result: IResult = await $axios.$post(`${this.url}`);
@@ -58,7 +59,7 @@ export default class Role extends VuexModule {
 
   }
 
-  @Action({ commit: "ADD_ROLE" })
+  @Action({ commit: ADD_ROLE })
   public async addRole(role: IRole) {
 
     const result: IResult = await $axios.$post(`${this.url}`, role, config);
@@ -71,7 +72,7 @@ export default class Role extends VuexModule {
 
   }
 
-  @Action({ commit: "UPDATE_ROLE" })
+  @Action({ commit: UPDATE_ROLE })
   public async updateRole(role: IRole) {
 
     const result: IResult = await $axios.$put(`${this.url}`, role, config);
@@ -81,7 +82,7 @@ export default class Role extends VuexModule {
 
   }
 
-  @Action({ commit: "DELETE_ROLE" })
+  @Action({ commit: DELETE_ROLE })
   public async deleteRole(role_id: number) {
 
     const result: IResult = await $axios.$delete(`${this.url}/${role_id}`);

@@ -3,9 +3,10 @@
     <delete-modal />
     <search-product-modal />
     <barcode-modal />
-    <brand-modal/>
-    <category-modal/>
-    <supplier-modal/>
+    <brand-modal />
+    <category-modal />
+    <supplier-modal />
+    <customer-modal />
   </div>
 </template>
 
@@ -16,7 +17,8 @@ import SearchProductModal from "@/components/modals/SearchProductModal.vue";
 import BarcodeModal from "@/components/modals/BarcodeModal.vue";
 import BrandModal from "@/components/modals/BrandModal.vue";
 import CategoryModal from "@/components/modals/CategoryModal.vue";
-import SupplierModal from "@/components/modals/SupplierModal.vue"
+import SupplierModal from "@/components/modals/SupplierModal.vue";
+import CustomerModal from "@/components/modals/CustomerModal.vue";
 
 @Component({
   components: {
@@ -25,9 +27,9 @@ import SupplierModal from "@/components/modals/SupplierModal.vue"
     SearchProductModal,
     BrandModal,
     CategoryModal,
-    SupplierModal
+    SupplierModal,
+    CustomerModal
   }
 })
-export default class Modals extends Vue {
-}
+export default class Modals extends Vue {}
 </script>

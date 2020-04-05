@@ -8,7 +8,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <customer-table />
+    <customer-table></customer-table>
   </div>
 </template>
 

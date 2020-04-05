@@ -22,7 +22,6 @@
                     <v-col cols="6" class="pb-0">
                       <v-text-field
                         v-model="product.product_name"
-                        
                         :rules="rules.product_name"
                         label="Product Name"
                         required
@@ -131,7 +130,6 @@ import ProductMixin from "@/mixins/ProductMixin";
 
 @Component
 export default class add extends ProductMixin {
-  
   valid: boolean = false;
   dialog: boolean = true;
 

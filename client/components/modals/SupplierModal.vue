@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="modalState" width="500">
+  <v-dialog v-model="modalState" width="800">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
         <v-toolbar-title class="headline" dark primary-title v-text="supplierTitle" />

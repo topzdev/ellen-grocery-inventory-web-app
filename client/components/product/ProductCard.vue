@@ -1,6 +1,5 @@
 <template>
   <v-card
-    outlined
     class="d-flex product-card"
     :class="cardTextDisbled"
     height="100%"
@@ -66,7 +65,7 @@ export default class ProductCard extends ProductMixin {
   }
 
   get titleStyle() {
-    return this.isCashier ? "subtitle-2" : "title";
+    return this.isCashier ? "subtitle-1 font-weight-bold" : "title";
   }
 
   get cardStyle() {
@@ -78,7 +77,7 @@ export default class ProductCard extends ProductMixin {
   }
 
   get imageSize() {
-    return this.isCashier ? "60px" : "100px";
+    return this.isCashier ? "70px" : "100px";
   }
 
   get cardTextDisbled() {

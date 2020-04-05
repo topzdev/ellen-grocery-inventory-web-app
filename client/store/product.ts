@@ -4,6 +4,7 @@ import config from "~/configs/axiosConfig";
 import IProduct from "~/interfaces/IProduct";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
+import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
 
 @Module({
   name: "product",
@@ -34,46 +35,46 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
-  public ADD_NEW_PRODUCT(product: IProduct): void {
+  public [ADD_NEW_PRODUCT](product: IProduct): void {
     this.products.unshift(product);
   }
 
   @Mutation
-  public SET_CURRENT(product: IProduct): void {
+  public [SET_CURRENT](product: IProduct): void {
     this.singleProduct = product;
   }
 
   @Mutation
-  public SET_PRODUCTS(products: Array<IProduct>): void {
+  public [SET_PRODUCTS](products: Array<IProduct>): void {
     this.products = products;
   }
 
   @Mutation
-  public ADD_PRODUCT(product: IProduct): void {
+  public [ADD_PRODUCT](product: IProduct): void {
     if (!product) return;
     this.products = [product, ...this.products];
   }
 
   @Mutation
-  public UPDATE_PRODUCT(product: IProduct) {
+  public [UPDATE_PRODUCT](product: IProduct) {
     this.products = this.products.map(item =>
       item.product_id === product.product_id ? product : item
     );
   }
 
   @Mutation
-  public DELETE_PRODUCT(product_id: number) {
+  public [DELETE_PRODUCT](product_id: number) {
     this.products = this.products.filter(prod => prod.product_id != product_id);
   }
 
   @Mutation
-  public SET_SEARCH(searched: Array<IProduct>): void {
+  public [SET_SEARCH](searched: Array<IProduct>): void {
     this.search = searched;
   }
 
   //action
 
-  @Action({ commit: "ADD_PRODUCT", rawError: true })
+  @Action({ commit: ADD_PRODUCT, rawError: true })
   public async addProduct(product: IProduct) {
 
     const formData = new FormData();
@@ -103,7 +104,7 @@ export default class Product extends VuexModule {
 
   }
 
-  @Action({ commit: "SET_CURRENT", rawError: true })
+  @Action({ commit: SET_CURRENT, rawError: true })
   public async fetchSingleProduct(barcode: string) {
     console.log(barcode);
     const result: IResult = await $axios.$get(`/api/product/${barcode}`);
@@ -111,13 +112,13 @@ export default class Product extends VuexModule {
     return result.data != undefined ? result.data : null;
   }
 
-  @Action({ commit: "SET_PRODUCTS", rawError: true })
+  @Action({ commit: SET_PRODUCTS, rawError: true })
   public async fetchProducts() {
     const result: IResult = await $axios.$get("/api/product", config);
     return result.data;
   }
 
-  @Action({ commit: "UPDATE_PRODUCT", rawError: true })
+  @Action({ commit: UPDATE_PRODUCT, rawError: true })
   public async updateProduct(product: IProduct) {
     const formData = new FormData();
 
@@ -144,7 +145,7 @@ export default class Product extends VuexModule {
     return product;
   }
 
-  @Action({ commit: "DELETE_PRODUCT", rawError: true })
+  @Action({ commit: DELETE_PRODUCT, rawError: true })
   public async deleteProduct({ id, others }: any) {
     console.log('hello', others);
     const result: IResult = await $axios.$delete(
@@ -158,7 +159,7 @@ export default class Product extends VuexModule {
     return id;
   }
 
-  @Action({ commit: "SET_SEARCH", rawError: true })
+  @Action({ commit: SET_SEARCH, rawError: true })
   public async searchProduct(searchString: string) {
     const result: IResult = await $axios.$post(
       `/api/product/search/`,

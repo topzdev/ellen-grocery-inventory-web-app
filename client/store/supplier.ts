@@ -3,6 +3,7 @@ import ISupplierInfo from "~/interfaces/ISupplier";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import { frontendStore } from '~/utils/store-accessor'
+import { SET_SUPPLIERS, DELETE_SUPPLIER, UPDATE_SUPPLIER, ADD_SUPPLIER, SET_LOADING } from '~/configs/types';
 @Module({
   name: "supplier",
   namespaced: true
@@ -22,46 +23,46 @@ export default class Supplier extends VuexModule {
   }
 
   @Mutation
-  public SET_SUPPLIERS(suppliers: Array<ISupplierInfo>) {
+  public [SET_SUPPLIERS](suppliers: Array<ISupplierInfo>) {
     this.suppliers = suppliers;
   }
 
   @Mutation
-  public DELETE_SUPPLIER(supplier_id: number) {
+  public [DELETE_SUPPLIER](supplier_id: number) {
     this.suppliers = this.suppliers.filter(
       (item: ISupplierInfo) => item.supplier_id != supplier_id
     );
   }
 
   @Mutation
-  public UPDATE_SUPPLIER(supplier: ISupplierInfo) {
+  public [UPDATE_SUPPLIER](supplier: ISupplierInfo) {
     this.suppliers = this.suppliers.map(item =>
       item.supplier_id === supplier.supplier_id ? supplier : item
     );
   }
 
   @Mutation
-  public ADD_SUPPLIER(supplier: ISupplierInfo) {
+  public [ADD_SUPPLIER](supplier: ISupplierInfo) {
     this.suppliers = [supplier, ...this.suppliers];
   }
 
   @Mutation
-  private SET_LOADING(state: boolean) {
+  private [SET_LOADING](state: boolean) {
     this.loading = state;
   }
 
-  @Action({ commit: "SET_LOADING" })
+  @Action({ commit: SET_LOADING })
   setLoading(state: boolean) {
     return state;
   }
 
-  @Action({ commit: "SET_SUPPLIERS" })
+  @Action({ commit: SET_SUPPLIERS })
   public async fetchSuppliers() {
     const result = await $axios.$get(this.url);
     return result.data;
   }
 
-  @Action({ commit: "ADD_SUPPLIER" })
+  @Action({ commit: ADD_SUPPLIER })
   public async addSupplier({ supplier, redirect }: { supplier: ISupplierInfo; redirect: boolean; }) {
 
     this.setLoading(true);
@@ -75,7 +76,7 @@ export default class Supplier extends VuexModule {
     return { supplier_id: result.data.supplier_id, ...supplier };
   }
 
-  @Action({ commit: "UPDATE_SUPPLIER" })
+  @Action({ commit: UPDATE_SUPPLIER })
   public async updateSupplier(supplier: ISupplierInfo) {
     const result = await $axios.$put(this.url, supplier, config);
 
@@ -85,7 +86,7 @@ export default class Supplier extends VuexModule {
     return supplier;
   }
 
-  @Action({ commit: "DELETE_SUPPLIER" })
+  @Action({ commit: DELETE_SUPPLIER })
   public async deleteSupplier(supplier_id: number) {
     const result = await $axios.$delete(`${this.url}${supplier_id}`);
 

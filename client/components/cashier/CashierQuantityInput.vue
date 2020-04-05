@@ -1,9 +1,9 @@
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center quantity-input">
     <v-btn @click="value--" :disabled="value < 1" color="primary" depressed fab x-small dark>
       <v-icon>mdi-minus</v-icon>
     </v-btn>
-    <v-text-field v-model.number="model" class="text-center" type="number"></v-text-field>
+    <v-text-field v-model.number="model" class="quantity-input" type="number"></v-text-field>
     <v-btn @click="value++" :disabled="maxValue" color="primary" depressed fab x-small dark>
       <v-icon>mdi-plus</v-icon>
     </v-btn>
@@ -38,16 +38,16 @@ export default class CashierQuantityInput extends Vue {
 </script>
 
 <style>
-.v-text-field__slot input {
+.quantity-input .v-text-field__slot input {
   text-align: center;
   -webkit-appearance: none;
 }
-.v-text-field__slot input::-webkit-outer-spin-button,
+.quantity-input .v-text-field__slot input::-webkit-outer-spin-button,
 .v-text-field__slot input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-.v-btn--fab.v-size--x-small {
+.quantity-input .v-btn--fab.v-size--x-small {
   height: 25px !important;
   width: 25px !important;
 }

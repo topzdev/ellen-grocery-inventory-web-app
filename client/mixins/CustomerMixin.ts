@@ -11,6 +11,7 @@ import ICustomer from "~/interfaces/ICustomer";
 
 @Component
 export default class CustomerMixin extends Vue {
+  redirect: boolean = true;
   valid: boolean = false;
   dialog: boolean = true;
   public isEdit: boolean = false;
@@ -21,13 +22,10 @@ export default class CustomerMixin extends Vue {
   public customer: ICustomer = {
     firstname: "",
     lastname: "",
-    middlename: "",
     email_address: null,
     home_address: null,
     cp_no: null,
     tel_no: null,
-    points: 0,
-    fax: null
   };
 
   constructor() {
@@ -38,7 +36,7 @@ export default class CustomerMixin extends Vue {
   }
 
   addCustomer() {
-    this.customerStore.addCustomer(this.customer);
+    this.customerStore.addCustomer({ customer: this.customer, redirect: this.redirect });
   }
 
   updateCustomer() {
@@ -56,13 +54,10 @@ export default class CustomerMixin extends Vue {
     this.customer = {
       firstname: "",
       lastname: "",
-      middlename: "",
       email_address: null,
       home_address: null,
       cp_no: null,
       tel_no: null,
-      points: 0,
-      fax: null
     };
     // @ts-ignore
     this.$refs.manageForm.resetValidation();
@@ -72,10 +67,8 @@ export default class CustomerMixin extends Vue {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {
       if (this.isEdit) {
-        console.log("Not Editing");
         this.updateCustomer();
       } else {
-        console.log("Add");
         this.addCustomer();
       }
     }
@@ -85,7 +78,7 @@ export default class CustomerMixin extends Vue {
     this.customer = item;
     this.frontendStore.setDeleteModal({
       show: true,
-      name: this.customer.customer_id,
+      name: this.customer.firstname + " " + this.customer.firstname,
       title: "Customer"
     });
 
@@ -97,7 +90,7 @@ export default class CustomerMixin extends Vue {
 
   async manageItem(item: ICustomer) {
     await this.customerStore.fetchSingleCustomer(item.customer_id!);
-    this.$router.push("customers/manage_customer");
+    this.$router.push("customers/customer_manage");
   }
 
   searchCustomer(search: string) {
@@ -115,11 +108,5 @@ export default class CustomerMixin extends Vue {
 
   rules: Object = {
     firstname: [(v: any) => !!v || "First Name is required"],
-    lastname: [(v: any) => !!v || "Last Name is required"],
-    middlename: [(v: any) => !!v || "Middle Name is required"],
-    points: [
-      (v: any) =>
-        v <= -1 || v != null || "Points cannot be empty or less than 0"
-    ]
   };
 }

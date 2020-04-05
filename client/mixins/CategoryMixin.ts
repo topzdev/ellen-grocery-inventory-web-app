@@ -34,7 +34,7 @@ class CategoryMixin extends Vue {
   }
 
   addCategory() {
-    this.categoryStore.addCategory({category: this.category, redirect: this.redirect});
+    this.categoryStore.addCategory({ category: this.category, redirect: this.redirect });
   }
 
   updateCategory() {
@@ -61,7 +61,7 @@ class CategoryMixin extends Vue {
     this.category = JSON.parse(JSON.stringify(item));
   }
 
-  
+
   validate(): void {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {

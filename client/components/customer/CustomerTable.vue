@@ -1,9 +1,9 @@
 <template>
   <v-row>
     <v-col>
-      <v-card :flat="true">
+      <v-card>
         <v-card-title>
-          Customer Table
+          Customer Table ({{customerList.length}})
           <v-spacer />
           <v-text-field
             v-model="search"
@@ -46,11 +46,9 @@ import CustomerMixin from "@/mixins/CustomerMixin";
 export default class CustomerTable extends CustomerMixin {
   search: string = "";
   headers: Array<Object> = [
-    { text: "Customer ID", align: "left", value: "customer_id" },
     { text: "Full Name", value: "fullname" },
-    { text: "Points", value: "points" },
     { text: "Home Address", value: "home_address" },
-    { text: "Email Address", value: "email_adress" },
+    { text: "Email Address", value: "email_address" },
     { text: "Actions", value: "action", sortable: false }
   ];
 
