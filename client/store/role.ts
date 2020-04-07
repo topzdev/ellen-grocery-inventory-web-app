@@ -4,7 +4,7 @@ import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '@/utils/store-accessor'
-import { SET_ROLE, ADD_ROLE, UPDATE_ROLE, DELETE_ROLE } from '~/configs/types';
+import { SET_ROLE, ADD_ROLE, UPDATE_ROLE, DELETE_ROLE, SET_LOADING } from '~/configs/types';
 
 @Module({
   name: "role",
@@ -14,6 +14,11 @@ export default class Role extends VuexModule {
   private url: string = "/api/role";
   private path: string = "/accounts";
   private roles: Array<IRole> = [];
+  private loading: boolean = false;
+
+  get getLoading() {
+    return this.loading;
+  }
 
   get getRoles(): Array<IRole> {
     return this.roles;
@@ -41,6 +46,16 @@ export default class Role extends VuexModule {
     this.roles = this.roles.filter(item => item.role_id !== role_id);
   }
 
+  @Mutation
+  private [SET_LOADING](state: boolean) {
+    this.loading = state;
+  }
+
+  @Action({ commit: SET_LOADING })
+  setLoading(state: boolean) {
+    return state;
+  }
+
   @Action({ commit: SET_ROLE })
   public async searchRoles(search: string) {
 
@@ -60,11 +75,14 @@ export default class Role extends VuexModule {
   }
 
   @Action({ commit: ADD_ROLE })
-  public async addRole(role: IRole) {
+  public async addRole({ role, redirect }: { role: IRole, redirect: boolean }) {
 
+    this.setLoading(true);
     const result: IResult = await $axios.$post(`${this.url}`, role, config);
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
-    frontendStore.setRedirect(this.path)
+    frontendStore.setRedirect(redirect ? this.path : undefined)
+    this.setLoading(false);
+
     return {
       role_id: result.data.role_id,
       ...role

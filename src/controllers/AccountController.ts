@@ -76,23 +76,38 @@ class AccountController extends QueryExtends {
 
 		let hashPassword = await bcrypt.hash(password, 10);
 
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.accountTable}" (firstname,
-                lastname,  middlename, username,  email_address, role_id, password)
-                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING account_id`,
-			values: [
-				firstname,
-				lastname,
-				middlename,
-				username,
-				email_address,
-				role_id,
-				hashPassword
-			]
-		};
 
 		try {
-			const result = await this.client.query(query);
+			let query: QueryConfig = {
+				text: `SELECT account_id FROM "${this.accountTable}" WHERE username = $1`,
+				values: [username]
+			}
+
+			let result = await this.client.query(query);
+
+			if (result.rows.length) return res.json({
+				success: false,
+				message: 'Username Already Exist',
+			});
+
+			query = {
+				text: `INSERT INTO "${this.accountTable}" (firstname,
+					lastname,  middlename, username,  email_address, role_id, password)
+					VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING account_id`,
+				values: [
+					firstname,
+					lastname,
+					middlename,
+					username,
+					email_address,
+					role_id,
+					hashPassword
+				]
+			};
+
+
+
+			result = await this.client.query(query);
 
 			return res.json({
 				message: 'Account Successfully Added',

@@ -18,7 +18,7 @@ import ProductCard from "./ProductCard.vue";
 export default class ProductList extends ProductMixin {
   @Prop(String) mode: string | undefined;
   created() {
-    this.productStore.fetchProducts();
+    this.productStore.fetchProducts({ search: "" });
   }
 }
 </script>

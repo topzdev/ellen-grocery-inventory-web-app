@@ -11,14 +11,13 @@ import IRole from "~/interfaces/IRole";
 
 @Component
 class RoleMixin extends Vue {
-  valid: boolean = false;
-  dialog: boolean = true;
-  public isEdit: boolean = false;
-  public roleStore: IRoleModule;
-  public frontendStore: IFrontendModule;
-  public processStore: IProcessModule;
+  redirect: boolean = true;
+  isEdit: boolean = false;
+  roleStore: IRoleModule;
+  frontendStore: IFrontendModule;
+  processStore: IProcessModule;
 
-  public role: IRole = {
+  role: IRole = {
     role_id: undefined,
     role_name: ""
   };
@@ -31,7 +30,7 @@ class RoleMixin extends Vue {
   }
 
   addRole() {
-    this.roleStore.addRole(this.role);
+    this.roleStore.addRole({ role: this.role, redirect: this.redirect });
   }
 
   updateRole() {

@@ -12,14 +12,12 @@ import IBrand from "~/interfaces/IBrand";
 @Component
 class BrandMixin extends Vue {
   redirect: boolean = true;
-  valid: boolean = false;
-  dialog: boolean = true;
-  public isEdit: boolean = false;
-  public brandStore: IBrandModule;
-  public frontendStore: IFrontendModule;
-  public processStore: IProcessModule;
+  isEdit: boolean = false;
+  brandStore: IBrandModule;
+  frontendStore: IFrontendModule;
+  processStore: IProcessModule;
 
-  public brand: IBrand = {
+  brand: IBrand = {
     brand_id: undefined,
     brand_name: ""
   };

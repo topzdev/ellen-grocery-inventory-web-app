@@ -5,6 +5,13 @@ import IProduct from "~/interfaces/IProduct";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
 import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
+import queryGenerator from '~/utils/queryGenerator';
+
+interface ISearchQuery {
+  search?: string;
+  limit?: number | string;
+  offset?: number | string;
+}
 
 @Module({
   name: "product",
@@ -13,7 +20,6 @@ import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT
 export default class Product extends VuexModule {
   // states
   private products: Array<IProduct> = [];
-  private search: Array<IProduct> = [];
   private singleProduct: object = {};
   public path = "/products";
 
@@ -23,10 +29,6 @@ export default class Product extends VuexModule {
 
   get getAddonItems() {
     return [];
-  }
-
-  get getSearchProducts() {
-    return this.search;
   }
 
   get tangina() {
@@ -65,11 +67,6 @@ export default class Product extends VuexModule {
   @Mutation
   public [DELETE_PRODUCT](product_id: number) {
     this.products = this.products.filter(prod => prod.product_id != product_id);
-  }
-
-  @Mutation
-  public [SET_SEARCH](searched: Array<IProduct>): void {
-    this.search = searched;
   }
 
   //action
@@ -113,10 +110,11 @@ export default class Product extends VuexModule {
   }
 
   @Action({ commit: SET_PRODUCTS, rawError: true })
-  public async fetchProducts() {
-    const result: IResult = await $axios.$get("/api/product", config);
+  public async fetchProducts(query: ISearchQuery) {
+    const result: IResult = await $axios.$get(`/api/product${queryGenerator(query)}`, config);
     return result.data;
   }
+
 
   @Action({ commit: UPDATE_PRODUCT, rawError: true })
   public async updateProduct(product: IProduct) {
@@ -157,16 +155,5 @@ export default class Product extends VuexModule {
     frontendStore.setRedirect(this.path)
 
     return id;
-  }
-
-  @Action({ commit: SET_SEARCH, rawError: true })
-  public async searchProduct(searchString: string) {
-    const result: IResult = await $axios.$post(
-      `/api/product/search/`,
-      { searchString },
-      config
-    );
-
-    return result.data;
   }
 }

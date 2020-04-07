@@ -10,10 +10,19 @@ class CustomerController extends QueryExtend {
 	}
 
 	public async fetchCustomers(req: Request, res: Response): Promise<any> {
+		const { search, limit, offset } = req.query;
+
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.customerTable}"`
+			text: `SELECT 
+				customer_id,
+				firstname ||' '|| lastname AS fullname,
+				home_address,
+				email_address
+			FROM "${this.customerTable}" 
+			${this.queryAnalyzer("firstname ||' '|| lastname", search, limit, offset)} `
 		};
 
+		console.log(req.query, query);
 		try {
 			const result = await this.client.query(query);
 
@@ -27,11 +36,11 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async fetchSingleCustomer( req: Request, res: Response): Promise<any> {
+	public async fetchSingleCustomer(req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.customerTable}" WHERE customer_id = $1 FETCH FIRST 1 ONLY ROW`,
+			text: `SELECT * FROM "${this.customerTable}" WHERE customer_id = $1 FETCH FIRST 1 ROW ONLY`,
 			values: [id]
 		};
 
@@ -52,30 +61,28 @@ class CustomerController extends QueryExtend {
 		const {
 			firstname,
 			lastname,
-			middlename,
 			email_address,
+			home_address,
 			cp_no,
 			tel_no,
 			points,
-			fax
 		}: ICustomer = req.body;
 
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.customerTable}" (firstname, lastname, middlename, 
-                email_address, cp_no, tel_no, points, fax) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-			values: [
-				firstname,
-				lastname,
-				middlename,
-				email_address,
-				cp_no,
-				tel_no,
-				points,
-				fax
-			]
-		};
 
 		try {
+
+			const query: QueryConfig = {
+				text: `INSERT INTO "${this.customerTable}" (firstname,lastname,home_address, 
+					email_address, cp_no, tel_no) VALUES ($1,$2,$3,$4,$5,$6) RETURNING customer_id`,
+				values: [
+					firstname,
+					lastname,
+					home_address,
+					email_address,
+					cp_no,
+					tel_no,
+				]
+			};
 			const result = await this.client.query(query);
 
 			return res.json({
@@ -93,26 +100,23 @@ class CustomerController extends QueryExtend {
 			customer_id,
 			firstname,
 			lastname,
-			middlename,
+			home_address,
 			email_address,
 			cp_no,
 			tel_no,
 			points,
-			fax
 		}: ICustomer = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.customerTable}" SET(firstname = $1, lastname = $2, middlename = $3, 
-                email_address = $4, cp_no = $5, tel_no = $6, points = $7, fax = $8) WHERE customer_id = $9`,
+                 cp_no = $4, tel_no = $5, home_address = $6) WHERE customer_id = $7`,
 			values: [
 				firstname,
 				lastname,
-				middlename,
 				email_address,
 				cp_no,
 				tel_no,
-				points,
-				fax,
+				home_address,
 				customer_id
 			]
 		};

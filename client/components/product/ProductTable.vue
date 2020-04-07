@@ -6,13 +6,6 @@
     :search="search"
     item-key="name"
     class="elevation-1"
-    :footer-props="{
-            showFirstLastPage: true,
-            firstIcon: 'mdi-arrow-collapse-left',
-            lastIcon: 'mdi-arrow-collapse-right',
-            prevIcon: 'mdi-minus',
-            nextIcon: 'mdi-plus'
-          }"
   >
     <template v-slot:item.action="{ item }">
       <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
@@ -27,7 +20,6 @@ import ProductMixin from "@/mixins/ProductMixin";
 
 @Component
 export default class ProductTable extends ProductMixin {
-  search: string = "";
   headers: Array<Object> = [
     { text: "Account Name", align: "left", value: "product_name" },
     { text: "Barcode", value: "barcode" },
@@ -38,7 +30,7 @@ export default class ProductTable extends ProductMixin {
   ];
 
   created() {
-    this.productStore.fetchProducts();
+    this.productStore.fetchProducts({ search: "" });
   }
 }
 </script>

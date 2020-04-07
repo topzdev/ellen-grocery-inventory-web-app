@@ -4,7 +4,7 @@ import {
   ISearchModal
 } from "~/interfaces/IFrontEndStore";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { SET_OPEN_SIDEBAR, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY } from '~/configs/types';
+import { SET_OPEN_SIDEBAR, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_SHOW_ROLE_MODAL } from '~/configs/types';
 
 @Module({
   name: "frontend",
@@ -20,6 +20,7 @@ export default class Frontend extends VuexModule {
   private showSupplierModal: boolean = false;
   private showCategoryModal: boolean = false;
   private showCustomerModal: boolean = false;
+  private showRoleModal: boolean = true;
   private showPaymentTray: boolean = false;
   private productViewMode: string = 'Product Table';
 
@@ -59,6 +60,10 @@ export default class Frontend extends VuexModule {
     return this.showCustomerModal;
   }
 
+  get roleModalState(): boolean {
+    return this.showRoleModal;
+  }
+
   get getProductView() {
     return this.productViewMode
   }
@@ -71,26 +76,32 @@ export default class Frontend extends VuexModule {
   private [SET_OPEN_SIDEBAR](): void {
     this.openSidebar = !this.openSidebar;
   }
+
   @Mutation
   private [SET_SHOW_SNACKBAR](snackbarConfig: ISnackbar): void {
     this.showSnackbar = snackbarConfig;
   }
+
   @Mutation
   private [SET_SHOW_DELETE_MODAL](show: IDeleteModal) {
     this.showDeleteModal = show;
   }
+
   @Mutation
   private [SET_SHOW_SEARCH_MODAL](state: ISearchModal) {
     this.showSearchModal = state;
   }
+
   @Mutation
   private [SET_SHOW_BARCODE_MODAL](state: boolean) {
     this.showBarcodeModal = state;
   }
+
   @Mutation
   private [SET_SHOW_BRAND_MODAL](state: boolean) {
     this.showBrandModal = state;
   }
+
   @Mutation
   private [SET_SHOW_CATEGORY_MODAL](state: boolean) {
     this.showCategoryModal = state;
@@ -104,6 +115,11 @@ export default class Frontend extends VuexModule {
   @Mutation
   private [SET_SHOW_CUSTOMER_MODAL](state: boolean) {
     this.showCustomerModal = state;
+  }
+
+  @Mutation
+  private [SET_SHOW_ROLE_MODAL](state: boolean) {
+    this.showRoleModal = state;
   }
 
   @Mutation
@@ -126,22 +142,27 @@ export default class Frontend extends VuexModule {
   public setSnackbar(snackbarConfig: ISnackbar) {
     return snackbarConfig;
   }
+
   @Action({ commit: SET_SHOW_DELETE_MODAL })
   public setDeleteModal(modalConfig: IDeleteModal) {
     return modalConfig;
   }
+
   @Action({ commit: SET_SHOW_SEARCH_MODAL })
   public setSearchModal(modalConfig: ISearchModal) {
     return modalConfig;
   }
+
   @Action({ commit: SET_SHOW_BARCODE_MODAL })
   public setBarcodeModal(show: boolean) {
     return show;
   }
+
   @Action({ commit: SET_SHOW_BRAND_MODAL })
   public setBrandModal(show: boolean) {
     return show;
   }
+
   @Action({ commit: SET_SHOW_CATEGORY_MODAL })
   public setCategoryModal(show: boolean) {
     return show;
@@ -154,6 +175,11 @@ export default class Frontend extends VuexModule {
 
   @Action({ commit: SET_SHOW_CUSTOMER_MODAL })
   public setCustomerModal(show: boolean) {
+    return show;
+  }
+
+  @Action({ commit: SET_SHOW_ROLE_MODAL })
+  public setRoleModal(show: boolean) {
     return show;
   }
 

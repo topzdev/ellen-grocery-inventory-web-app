@@ -16,6 +16,16 @@ class QueryExtend {
 	constructor() {
 		this.client = new Pool();
 	}
+
+	public queryAnalyzer(searchString: string, search?: string, limit?: string, offset?: string) {
+		let query = '';
+		if (search && searchString) query += `WHERE ${searchString} ILIKE '%${search}%'`
+		if (limit) {
+			query += `LIMIT ${limit} `
+			if (offset) query += `OFFSET ${offset}`
+		}
+		return query;
+	}
 }
 
 export default QueryExtend;

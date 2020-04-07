@@ -19,7 +19,7 @@
     </v-card-text>
     <v-card-actions>
       <v-row no-gutters>
-        <v-col cols="6 mb-2 pr-2">
+        <!-- <v-col cols="6 mb-2 pr-2">
           <v-btn color="deep-orange darken-1" block large>
             Hold
             <v-icon right dark>mdi-pause-circle</v-icon>
@@ -30,7 +30,7 @@
             Coupon
             <v-icon right dark>mdi-ticket-percent</v-icon>
           </v-btn>
-        </v-col>
+        </v-col>-->
         <v-col cols="12">
           <v-btn color="success" x-large block @click="openPaymentTray(true)">Pay</v-btn>
         </v-col>

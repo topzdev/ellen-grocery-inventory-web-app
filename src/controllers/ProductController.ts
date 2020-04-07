@@ -36,6 +36,8 @@ class ProductController extends QueryExtend {
 
 	public async getProducts(req: Request, res: Response): Promise<any> {
 
+		const { search, limit, offset } = req.query;
+
 		try {
 			const query: QueryConfig = {
 				text: `SELECT
@@ -55,12 +57,13 @@ class ProductController extends QueryExtend {
 				brand.brand_name,
 				category.category_name,
 				supplier.supplier_name
-				FROM "${this.productTable}" product 
+				FROM "${this.productTable}" product
 				INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
 				INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
-				INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id`
-			};
+				INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id
+				${this.queryAnalyzer("product.product_name", search, limit, offset)}`,
 
+			};
 
 			const result = await this.client.query(query);
 			return res.json({
@@ -228,27 +231,6 @@ class ProductController extends QueryExtend {
 			return res.json({
 				success: true,
 				message: 'Successfully Deleted',
-				data: result.rows
-			});
-		} catch (err) {
-			console.log('Database error', err.stack);
-		}
-	}
-
-	public async productSearch(req: Request, res: Response): Promise<any> {
-		const search = req.body.searchString;
-
-		try {
-
-			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.productTable}" WHERE barcode LIKE $1`,
-				values: [`%${search}%`]
-			};
-
-			const result = await this.client.query(query);
-
-			return res.json({
-				message: 'Product Successfully Searched',
 				data: result.rows
 			});
 		} catch (err) {

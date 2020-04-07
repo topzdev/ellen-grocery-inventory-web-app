@@ -7,6 +7,7 @@
     <category-modal />
     <supplier-modal />
     <customer-modal />
+    <role-modal />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import BrandModal from "@/components/modals/BrandModal.vue";
 import CategoryModal from "@/components/modals/CategoryModal.vue";
 import SupplierModal from "@/components/modals/SupplierModal.vue";
 import CustomerModal from "@/components/modals/CustomerModal.vue";
+import RoleModal from "@/components/modals/RoleModal.vue";
 
 @Component({
   components: {
@@ -28,7 +30,8 @@ import CustomerModal from "@/components/modals/CustomerModal.vue";
     BrandModal,
     CategoryModal,
     SupplierModal,
-    CustomerModal
+    CustomerModal,
+    RoleModal
   }
 })
 export default class Modals extends Vue {}

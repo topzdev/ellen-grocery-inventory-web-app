@@ -1,10 +1,11 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { IFrontendModule, frontendStore, ICashierModule, cashierStore, IProductModule, productStore } from '~/store';
-
+import dayjs from 'dayjs';
 
 @Component
 export default class CashierMixin extends Vue {
-
+    dateTime: string = "";
+    search: string = "";
     frontendStore: IFrontendModule;
     cashierStore: ICashierModule;
     productStore: IProductModule;
@@ -34,5 +35,19 @@ export default class CashierMixin extends Vue {
 
     openPaymentTray(show: boolean) {
         this.frontendStore.setPaymentTray(show);
+    }
+
+    realtime() {
+        this.dateTime = dayjs().format('MMMM DD, YYYY h:mm:ss')
+    }
+
+    created() {
+        setInterval(this.realtime, 1000);
+    }
+
+    @Watch('search')
+    searchProduct() {
+        console.log(this.search)
+        this.productStore.fetchProducts({ search: this.search })
     }
 }

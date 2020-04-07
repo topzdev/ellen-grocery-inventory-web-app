@@ -5,16 +5,6 @@ const router = express.Router();
 const controller = new ProductController();
 
 /**
- * @route           POST api/product
- * @description     add brand
- * @access          private
- */
-
-router.post('/search/', (req: Request, res: Response) => {
-	controller.productSearch(req, res);
-});
-
-/**
  * @route           GET api/product
  * @description     Search single product via barcode
  * @access          private

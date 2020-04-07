@@ -2,7 +2,7 @@
   <v-card :flat="true">
     <v-card-title>
       <div width="300px">
-        <v-select v-model="selected" :items="items" hide-details></v-select>
+        <v-select v-model="selected" :items="views" hide-details></v-select>
       </div>
       <v-spacer />
       <v-text-field
@@ -22,15 +22,15 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ProductTable from "@/components/product/ProductTable.vue";
 import ProductList from "@/components/product/ProductList.vue";
 import { frontendStore } from "@/store";
+import ProductMixin from "../../mixins/ProductMixin";
 @Component({
   components: {
     ProductTable,
     ProductList
   }
 })
-export default class ProductView extends Vue {
-  search = "";
-  items = ["Product Table", "Product List"];
+export default class ProductView extends ProductMixin {
+  views = ["Product Table", "Product List"];
 
   get selected() {
     return frontendStore.getProductView;

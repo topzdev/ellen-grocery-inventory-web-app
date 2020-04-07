@@ -1,4 +1,4 @@
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import IProduct from "~/interfaces/IProduct";
 import {
   productStore,
@@ -11,9 +11,10 @@ import {
 
 @Component
 export default class ProductMixin extends Vue {
-  public productStore: IProductModule;
-  public frontendStore: IFrontendModule;
-  public processStore: IProcessModule;
+  productStore: IProductModule;
+  frontendStore: IFrontendModule;
+  processStore: IProcessModule;
+  search = "";
 
   constructor() {
     super();
@@ -118,5 +119,11 @@ export default class ProductMixin extends Vue {
     brand_id: [(v: any) => !!v || "Brand is required"],
     supplier_id: [(v: any) => !!v || "Supplier Name is required"],
     category_id: [(v: any) => !!v || "Category is required"]
+  };
+
+
+  @Watch("search")
+  searchProduct() {
+    this.productStore.fetchProducts({ search: this.search })
   };
 }
