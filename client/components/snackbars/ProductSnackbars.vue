@@ -19,7 +19,11 @@ export default class SuccessSnackbars extends Vue {
   }
 
   get snackbarColor() {
-    return frontendStore.snackbarState.success ? "success" : "error";
+    return this.snackbar.success ? "success" : "error";
+  }
+
+  get snackbarShow() {
+    return this.snackbar.show !== undefined ? this.snackbar.show : true;
   }
 }
 </script>

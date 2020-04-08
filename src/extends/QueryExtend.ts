@@ -10,6 +10,7 @@ class QueryExtend {
 	protected readonly customerTable: string = 'customer_table';
 	protected readonly accountTable: string = 'account_table';
 	protected readonly roleTable: string = 'role_table';
+	protected readonly transactionTable: string = 'transaction_table';
 
 	protected client: Pool;
 

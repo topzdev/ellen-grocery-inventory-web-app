@@ -11,6 +11,7 @@ import IRole from "~/interfaces/IRole";
 
 @Component
 class RoleMixin extends Vue {
+  valid: boolean = false;
   redirect: boolean = true;
   isEdit: boolean = false;
   roleStore: IRoleModule;
@@ -47,7 +48,7 @@ class RoleMixin extends Vue {
     this.isEdit = false;
     this.role = { role_name: "", role_id: undefined };
     // @ts-ignore
-    this.$refs.manageForm.resetValidation();
+    this.$refs.manageForm.reset();
   }
 
   validate(): void {

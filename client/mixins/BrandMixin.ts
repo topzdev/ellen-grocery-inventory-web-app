@@ -11,6 +11,7 @@ import IBrand from "~/interfaces/IBrand";
 
 @Component
 class BrandMixin extends Vue {
+  valid: boolean = false;
   redirect: boolean = true;
   isEdit: boolean = false;
   brandStore: IBrandModule;
@@ -47,7 +48,7 @@ class BrandMixin extends Vue {
     this.isEdit = false;
     this.brand = { brand_name: "", brand_id: undefined };
     // @ts-ignore
-    this.$refs.manageForm.resetValidation();
+    this.$refs.manageForm.reset();
   }
 
   validate(): void {

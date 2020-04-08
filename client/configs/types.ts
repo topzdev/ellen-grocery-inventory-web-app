@@ -74,6 +74,10 @@ export const ADD_ROLE = "ADD_ROLE"
 export const UPDATE_ROLE = "UPDATE_ROLE"
 export const DELETE_ROLE = "DELETE_ROLE"
 
+// Transaction Mutations
+export const SET_TRANSACTION = "SET_TRANSACTION"
+export const ADD_TRANSACTION = "ADD_TRANSACTION"
+
 
 // Utility Mutations
 export const SET_LOADING = "SET_LOADING"

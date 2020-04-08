@@ -1,5 +1,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { IFrontendModule, frontendStore, ICashierModule, cashierStore, IProductModule, productStore } from '~/store';
+import {
+    IFrontendModule, frontendStore, ICashierModule,
+    cashierStore, IProductModule, productStore, transactionStore, ITransactionModule
+} from '~/store';
 import dayjs from 'dayjs';
 
 @Component
@@ -9,12 +12,14 @@ export default class CashierMixin extends Vue {
     frontendStore: IFrontendModule;
     cashierStore: ICashierModule;
     productStore: IProductModule;
+    transactionStore: ITransactionModule;
 
     constructor() {
         super()
         this.cashierStore = cashierStore;
         this.frontendStore = frontendStore;
         this.productStore = productStore;
+        this.transactionStore = transactionStore
     }
 
     get orders() {
@@ -23,6 +28,10 @@ export default class CashierMixin extends Vue {
 
     get calculations() {
         return this.cashierStore.getCalculation;
+    }
+
+    get transactions() {
+        return this.transactionStore.getTransactions
     }
 
     get paymentTrayState() {

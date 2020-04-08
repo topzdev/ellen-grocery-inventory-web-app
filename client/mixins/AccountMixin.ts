@@ -63,7 +63,7 @@ class AccountMixin extends Vue {
       password: ""
     };
     // @ts-ignore
-    this.$refs.manageForm.resetValidation();
+    this.$refs.manageForm.reset();
   }
 
   validate(): void {

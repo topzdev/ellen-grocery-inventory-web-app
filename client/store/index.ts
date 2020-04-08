@@ -33,7 +33,7 @@ export const actions: ActionTree<RootState, RootState> = {
     //Fetch Roles
     const roles: IResult = await $axios.$get("/api/role");
 
-    commit("role/SET_ROLES", roles.data);
+    commit("role/SET_ROLE", roles.data);
   }
 };
 

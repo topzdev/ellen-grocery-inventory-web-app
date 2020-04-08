@@ -9,7 +9,8 @@ import {
 	brandAPI,
 	customerAPI,
 	accountAPI,
-	roleAPI
+	roleAPI,
+	transactionAPI
 } from './api/index';
 
 class Server {
@@ -37,6 +38,7 @@ class Server {
 		router.use('/api/customer', customerAPI);
 		router.use('/api/account', accountAPI);
 		router.use('/api/role', roleAPI);
+		router.use('/api/transaction', transactionAPI)
 
 		this.app.use('/', router);
 	}

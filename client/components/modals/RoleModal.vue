@@ -57,12 +57,14 @@ export default class ComponentName extends RoleMixin {
   }
 
   closeModal() {
+    // @ts-ignore
+    this.$refs.manageForm.reset();
     this.frontendStore.setRoleModal(false);
   }
 
   @Watch("loading")
   isLoading() {
-    if (!this.loading) this.frontendStore.setRoleModal(false);
+    if (!this.loading) this.closeModal();
   }
 }
 </script>

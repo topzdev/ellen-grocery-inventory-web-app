@@ -20,7 +20,7 @@ export default class Frontend extends VuexModule {
   private showSupplierModal: boolean = false;
   private showCategoryModal: boolean = false;
   private showCustomerModal: boolean = false;
-  private showRoleModal: boolean = true;
+  private showRoleModal: boolean = false;
   private showPaymentTray: boolean = false;
   private productViewMode: string = 'Product Table';
 

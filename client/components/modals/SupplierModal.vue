@@ -16,7 +16,6 @@
                     v-model="supplier.supplier_name"
                     :rules="rules.supplier_name"
                     label="Suppliers Name"
-                    counter="50"
                     required
                   />
                 </v-col>
@@ -26,13 +25,12 @@
                     v-model="supplier.tel_no"
                     :rules="rules.tel_no"
                     label="Telephone Number"
-                    counter="20"
                     required
                   />
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
-                  <v-text-field v-model="supplier.cp_no" label="Cellphone Number" counter="50" />
+                  <v-text-field v-model="supplier.cp_no" label="Cellphone Number" />
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
@@ -55,22 +53,16 @@
                 </v-col>
 
                 <v-col cols="6" class="pb-0">
-                  <v-text-field v-model="supplier.fax" label="Fax" counter="20" />
+                  <v-text-field v-model="supplier.fax" label="Fax" />
                 </v-col>
                 <v-col cols="6" class="pb-0">
-                  <v-text-field
-                    v-model="supplier.website"
-                    :rules="rules.website"
-                    label="Website"
-                    counter="100"
-                  />
+                  <v-text-field v-model="supplier.website" :rules="rules.website" label="Website" />
                 </v-col>
 
                 <v-col cols="12">
                   <v-textarea
                     v-model="supplier.description"
                     :rules="rules.description"
-                    counter="300"
                     :auto-grow="true"
                     label="Description"
                   />
@@ -98,9 +90,6 @@ import SupplierMixin from "@/mixins/SupplierMixin";
 
 @Component
 export default class SupplierModal extends SupplierMixin {
-  valid: boolean = false;
-  dialog: boolean = true;
-
   created() {
     this.redirect = false;
   }
@@ -117,10 +106,6 @@ export default class SupplierModal extends SupplierMixin {
     this.frontendStore.setSupplierModal(show);
   }
 
-  closeModal() {
-    this.frontendStore.setSupplierModal(false);
-  }
-
   validate(): void {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {
@@ -128,9 +113,15 @@ export default class SupplierModal extends SupplierMixin {
     }
   }
 
+  closeModal() {
+    // @ts-ignore
+    this.$refs.manageForm.reset();
+    this.frontendStore.setSupplierModal(false);
+  }
+
   @Watch("loading")
   isLoading() {
-    if (!this.loading) this.frontendStore.setSupplierModal(false);
+    if (!this.loading) this.closeModal();
   }
 }
 </script>

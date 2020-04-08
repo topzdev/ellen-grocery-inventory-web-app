@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS transaction_table(
   ended_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   total_amount FLOAT(2) NOT NULL,
+  amount_paid FLOAT(2) NOT NULL,
   CONSTRAINT transaction_table_customer_id 
   FOREIGN KEY (customer_id) REFERENCES customer_table (
     customer_id) MATCH SIMPLE ON UPDATE NO ACTION 

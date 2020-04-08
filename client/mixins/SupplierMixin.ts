@@ -12,6 +12,8 @@ import ISupplier from "@/interfaces/ISupplier";
 import ISupplierInfo from "@/interfaces/ISupplier";
 @Component
 export default class SupplierMixin extends Vue {
+  valid: boolean = false;
+  dialog: boolean = true;
   redirect: boolean = true;
   supplierStore: ISupplierModule;
   processStore: IProcessModule;
@@ -67,18 +69,9 @@ export default class SupplierMixin extends Vue {
 
   // Rules
   rules: Object = {
-    supplier_name: [
-      (v: string) => !!v || "Supplier Name is required",
-      (v: string) => v.length <= 50 || "A maximum of 50 characters is allowed"],
+    supplier_name: [(v: string) => !!v || "Supplier Name is required"],
     company_address: [(v: string) => !!v || "Company Address is required"],
     tel_no: [(v: string) => !!v || "Telephone Number is required"],
-    description: [
-      (v: string) =>
-        v.length <= 300 || "A maximum of 300 characters is allowed",
-    ],
-    website: [
-      (v: string) =>
-        v.length > 0 ? /(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/.test(v) || "Invalid website url" : true
-    ]
+
   };
 }

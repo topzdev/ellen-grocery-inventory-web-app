@@ -60,7 +60,7 @@ export default class CustomerMixin extends Vue {
       tel_no: null,
     };
     // @ts-ignore
-    this.$refs.manageForm.resetValidation();
+    this.$refs.manageForm.reset();
   }
 
   validate(): void {

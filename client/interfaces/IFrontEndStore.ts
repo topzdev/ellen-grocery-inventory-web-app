@@ -5,7 +5,7 @@ interface IRedirect {
 
 interface ISnackbar extends IRedirect {
   message?: string;
-  show: boolean;
+  show?: boolean;
   success?: boolean;
 }
 

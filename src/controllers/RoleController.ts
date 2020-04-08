@@ -30,12 +30,13 @@ class RoleController extends QueryExtend {
 	public async fetchSingleRole(req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
 
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.roleTable}" WHERE role_id = $1 FETCH FIRST 1 ROW ONLY`,
-			values: [id]
-		};
 
 		try {
+			const query: QueryConfig = {
+				text: `SELECT * FROM "${this.roleTable}" WHERE role_id = $1 FETCH FIRST 1 ROW ONLY`,
+				values: [id]
+			};
+
 			const result = await this.client.query(query);
 
 			return res.json({
@@ -50,14 +51,26 @@ class RoleController extends QueryExtend {
 
 	public async addRole(req: Request, res: Response): Promise<any> {
 		const role_name: IRole = req.body.role_name;
-
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.roleTable}" (role_name) VALUES ($1) RETURNING role_id`,
-			values: [role_name]
-		};
-
 		try {
-			const result = await this.client.query(query);
+			// validate if already exisit
+			let query: QueryConfig = {
+				text: `SELECT role_name FROM "${this.roleTable}" WHERE role_name = $1`,
+				values: [role_name]
+			}
+
+			let result = await this.client.query(query);
+
+			if (result.rows.length) return res.json({
+				success: false,
+				message: 'Role Already Exist',
+			});
+
+			query = {
+				text: `INSERT INTO "${this.roleTable}" (role_name) VALUES ($1) RETURNING role_id`,
+				values: [role_name]
+			};
+
+			result = await this.client.query(query);
 
 			return res.json({
 				message: 'Role Successfully Added',

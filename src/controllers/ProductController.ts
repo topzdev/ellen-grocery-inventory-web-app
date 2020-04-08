@@ -143,7 +143,7 @@ class ProductController extends QueryExtend {
 			return res.json({
 				success: true,
 				message: 'Product Successfully Added',
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (err) {
 			console.log(req.body);

@@ -2,12 +2,7 @@
   <v-dialog v-model="modalState" width="500">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
-        <v-toolbar-title
-          class="headline"
-          dark
-          primary-title
-          v-text="brandTitle"
-        />
+        <v-toolbar-title class="headline" dark primary-title v-text="brandTitle" />
         <v-spacer />
       </v-toolbar>
 
@@ -33,8 +28,7 @@
           large
           text
           @click="validate"
-          >Add Brand</v-btn
-        >
+        >Add Brand</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -68,7 +62,11 @@ export default class DeleteModal extends BrandMixin {
 
   @Watch("loading")
   isLoading() {
-    if (!this.loading) this.frontendStore.setBrandModal(false);
+    if (!this.loading) {
+      // @ts-ignore
+      this.$refs.manageForm.reset();
+      this.frontendStore.setBrandModal(false);
+    }
   }
 }
 </script>

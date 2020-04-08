@@ -5,7 +5,7 @@
         <back-btn to="/accounts" title="Add Account" />
       </v-card-actions>
       <v-row class="px-3">
-        <v-col cols="8">
+        <v-col cols="7">
           <v-card>
             <v-card-text>
               <v-row class="px-4">

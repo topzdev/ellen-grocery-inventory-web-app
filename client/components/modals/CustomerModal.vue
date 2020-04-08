@@ -96,12 +96,14 @@ export default class CustomerModal extends CustomerMixin {
   }
 
   closeModal() {
+    // @ts-ignore
+    this.$refs.manageForm.reset();
     this.frontendStore.setCategoryModal(false);
   }
 
   @Watch("loading")
   isLoading() {
-    if (!this.loading) this.frontendStore.setCategoryModal(false);
+    if (!this.loading) this.closeModal();
   }
 }
 </script>

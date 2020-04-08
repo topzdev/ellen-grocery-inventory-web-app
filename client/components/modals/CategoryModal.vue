@@ -2,12 +2,7 @@
   <v-dialog v-model="modalState" width="500">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
-        <v-toolbar-title
-          class="headline"
-          dark
-          primary-title
-          v-text="categoryTitle"
-        />
+        <v-toolbar-title class="headline" dark primary-title v-text="categoryTitle" />
         <v-spacer />
       </v-toolbar>
 
@@ -34,14 +29,7 @@
         <v-btn class="mr-4" text large @click="closeModal">Cancel</v-btn>
         <v-spacer />
 
-        <v-btn
-          color="success"
-          class="d-flex ml-auto"
-          large
-          text
-          @click="validate"
-          >Add Category</v-btn
-        >
+        <v-btn color="success" class="d-flex ml-auto" large text @click="validate">Add Category</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -70,19 +58,14 @@ export default class CategoryModal extends CategoryMixin {
   }
 
   closeModal() {
-    this.frontendStore.setCategoryModal(false);
-  }
-
-  validate() {
     // @ts-ignore
-    if (this.$refs.manageForm.validate()) {
-      this.addCategory();
-    }
+    this.$refs.manageForm.reset();
+    this.frontendStore.setCategoryModal(false);
   }
 
   @Watch("loading")
   isLoading() {
-    if (!this.loading) this.frontendStore.setCategoryModal(false);
+    if (!this.loading) this.closeModal();
   }
 }
 </script>

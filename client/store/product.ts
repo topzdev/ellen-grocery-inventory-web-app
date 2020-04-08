@@ -5,13 +5,8 @@ import IProduct from "~/interfaces/IProduct";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
 import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
-import queryGenerator from '~/utils/queryGenerator';
-
-interface ISearchQuery {
-  search?: string;
-  limit?: number | string;
-  offset?: number | string;
-}
+import filterGenerator from '~/utils/filterGenerator';
+import IFilter from '~/interfaces/IFilter';
 
 @Module({
   name: "product",
@@ -21,6 +16,7 @@ export default class Product extends VuexModule {
   // states
   private products: Array<IProduct> = [];
   private singleProduct: object = {};
+  private url: string = "api/product";
   public path = "/products";
 
   get getProducts() {
@@ -88,7 +84,7 @@ export default class Product extends VuexModule {
     formData.append('category_id', product.category_id.toString())
     formData.append('file', product.imageFile!)
 
-    const result: IResult = await $axios.$post("/api/product", formData, config);
+    const result: IResult = await $axios.$post(`${this.url}`, formData, config);
 
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
@@ -104,14 +100,14 @@ export default class Product extends VuexModule {
   @Action({ commit: SET_CURRENT, rawError: true })
   public async fetchSingleProduct(barcode: string) {
     console.log(barcode);
-    const result: IResult = await $axios.$get(`/api/product/${barcode}`);
+    const result: IResult = await $axios.$get(`${this.url}/${barcode}`);
 
     return result.data != undefined ? result.data : null;
   }
 
   @Action({ commit: SET_PRODUCTS, rawError: true })
-  public async fetchProducts(query: ISearchQuery) {
-    const result: IResult = await $axios.$get(`/api/product${queryGenerator(query)}`, config);
+  public async fetchProducts(query: IFilter) {
+    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(query)}`, config);
     return result.data;
   }
 
@@ -135,7 +131,7 @@ export default class Product extends VuexModule {
     formData.append('image_url', product.image_url!.toString())
     formData.append('file', product.imageFile!)
 
-    const result: IResult = await $axios.$put("/api/product", formData, config);
+    const result: IResult = await $axios.$put(`${this.url}`, formData, config);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
@@ -147,7 +143,7 @@ export default class Product extends VuexModule {
   public async deleteProduct({ id, others }: any) {
     console.log('hello', others);
     const result: IResult = await $axios.$delete(
-      `/api/product`,
+      `${this.url}`,
       { ...config, data: { image: others, product_id: id } }
     );
 
