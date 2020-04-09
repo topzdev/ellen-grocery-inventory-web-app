@@ -9,17 +9,6 @@ const controller = new CategoryController();
  * @route           GET api/category
  * @description     fetch all category
  * @access          public
- * @param           search
- */
-
-router.get('/search/:search', (req: Request, res: Response) => {
-	controller.searchCategory(req, res);
-});
-
-/**
- * @route           GET api/category
- * @description     fetch all category
- * @access          public
  */
 
 router.get('/', (req: Request, res: Response) => {
@@ -27,7 +16,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 /**
- * @route           GET api/category
+ * @route           GET api/category 
  * @description     fetch single category
  * @access          public
  * @param			id

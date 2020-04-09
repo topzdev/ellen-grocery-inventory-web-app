@@ -7,6 +7,8 @@ import ICategory from "~/interfaces/ICategory";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
 import { SET_LOADING, SET_CATEGORIES, ADD_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY } from '~/configs/types';
+import IFilter from '~/interfaces/IFilter';
+import filterGenerator from '~/utils/filterGenerator';
 
 
 @Module({ name: "category", namespaced: true })
@@ -59,13 +61,12 @@ export default class Category extends VuexModule {
   }
 
   @Action({ commit: SET_CATEGORIES })
-  public async fetchCategories() {
-    const result: IResult = await $axios.$get(this.url, config);
-
+  public async fetchCategories(filter: IFilter) {
+    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
     return result.data;
   }
 
-  @Action({ commit: ADD_CATEGORY })
+  @Action({ rawError: true })
   public async addCategory({ category, redirect }: { category: ICategory, redirect: boolean }) {
 
     this.setLoading(true);
@@ -75,7 +76,7 @@ export default class Category extends VuexModule {
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    return { category_id: result.data.category_id, ...category };
+    if (result.success) return this.context.commit(ADD_CATEGORY, { ...category, category_id: result.data.category_id });
   }
 
   @Action({ commit: UPDATE_CATEGORY })

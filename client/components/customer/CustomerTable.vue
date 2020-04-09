@@ -53,7 +53,7 @@ export default class CustomerTable extends CustomerMixin {
   ];
 
   created() {
-    this.customerStore.fetchCustomers();
+    this.customerStore.fetchCustomers({});
   }
 }
 </script>

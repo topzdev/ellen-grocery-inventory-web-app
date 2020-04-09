@@ -92,13 +92,12 @@ export default class CustomerModal extends CustomerMixin {
   }
 
   set modalState(show: boolean) {
-    this.frontendStore.setCategoryModal(show);
+    this.frontendStore.setCustomerModal(show);
   }
 
   closeModal() {
     // @ts-ignore
-    this.$refs.manageForm.reset();
-    this.frontendStore.setCategoryModal(false);
+    this.frontendStore.setCustomerModal(false);
   }
 
   @Watch("loading")

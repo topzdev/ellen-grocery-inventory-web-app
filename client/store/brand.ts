@@ -6,7 +6,9 @@ import IBrand from "~/interfaces/IBrand";
 import IResult from "~/interfaces/IResult";
 import { IDeleteConfig } from '~/interfaces/IUniversal';
 import { frontendStore } from '~/utils/store-accessor';
-import { SET_BRANDS, ADD_BRAND, UPDATE_BRAND, DELETE_BRAND, SET_LOADING } from '~/configs/types';
+import { SET_BRANDS, ADD_BRAND, UPDATE_BRAND, DELETE_BRAND, SET_LOADING, ADD_TRANSACTION } from '~/configs/types';
+import IFilter from '~/interfaces/IFilter';
+import filterGenerator from '~/utils/filterGenerator';
 
 /**
  * ? TASK: retun the id of the added product, updated product ...
@@ -58,22 +60,15 @@ export default class Brand extends VuexModule {
   }
 
   @Action({ commit: SET_BRANDS, rawError: true })
-  public async fetchBrands() {
-    const result: IResult = await $axios.$get(this.url, config);
-
+  public async fetchBrands(filter: IFilter) {
+    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
     return result.data;
   }
 
-  @Action({ commit: SET_BRANDS, rawError: true })
-  public async searchBrands(search: string) {
-    const result: IResult = await $axios.$get(`${this.url}/search/${search}`);
-
-    return result.data;
-  }
-
-  @Action({ commit: ADD_BRAND, rawError: true })
+  @Action({ rawError: true })
   public async addBrand({ brand_name, redirect }: any) {
 
+    console.log('Processed Mehh')
     this.setLoading(true);
     const result: IResult = await $axios.$post(
       this.url,
@@ -84,7 +79,9 @@ export default class Brand extends VuexModule {
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
-    return { brand_id: result.data.brand_id, brand_name };
+
+    if (result.success) return this.context.commit(ADD_BRAND, { brand_name, brand_id: result.data.brand_id });
+
   }
 
   @Action({ commit: UPDATE_BRAND, rawError: true })

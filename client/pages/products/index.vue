@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid>
     <v-row>
       <v-col v-for="link in actionLink" :key="link.title" cols="3">
         <v-card height="100%" :color="link.color" dark elevation="4" :to="link.to" :link="true">
@@ -10,7 +10,7 @@
     </v-row>
 
     <product-view></product-view>
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">

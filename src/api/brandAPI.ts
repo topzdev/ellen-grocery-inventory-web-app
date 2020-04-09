@@ -7,16 +7,6 @@ const controller = new BrandController();
 
 /**
  * @route           GET api/brand
- * @description     search brands
- * @access          public
- * @param   		search
- */
-router.get('/search/:search', (req: Request, res: Response) => {
-	controller.searchBrand(req, res);
-});
-
-/**
- * @route           GET api/brand
  * @description     fetch all brands
  * @access          public
  */

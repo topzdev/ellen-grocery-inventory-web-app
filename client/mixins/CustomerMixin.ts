@@ -94,7 +94,7 @@ export default class CustomerMixin extends Vue {
   }
 
   searchCustomer(search: string) {
-    if (search.length <= 0) this.customerStore.fetchCustomers();
+    if (search.length <= 0) this.customerStore.fetchCustomers({});
     this.customerStore.searchCustomers(search);
   }
 

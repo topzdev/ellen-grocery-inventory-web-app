@@ -78,9 +78,19 @@ class BrandMixin extends Vue {
   }
 
   searchBrand(search: string) {
-    if (search.length <= 0) this.brandStore.fetchBrands();
-    this.brandStore.searchBrands(search);
+    this.brandStore.fetchBrands({ search })
   }
+
+
+  clearFields() {
+    this.brand.brand_id = undefined;
+    this.brand.brand_name = ""
+  }
+
+  closeModal() {
+    this.frontendStore.setBrandModal(false);
+  }
+
 
   get brandList() {
     return this.brandStore.getBrands;
@@ -88,6 +98,21 @@ class BrandMixin extends Vue {
 
   get brandTitle() {
     return this.isEdit ? "Edit Brand" : "Add Brand";
+  }
+
+  get loading() {
+    if (this.brandStore.getLoading) {
+      this.frontendStore.setBrandModal(false);
+    }
+    return this.brandStore.getLoading;
+  }
+
+  get modalState() {
+    return this.frontendStore.brandModalState;
+  }
+
+  set modalState(show: boolean) {
+    this.frontendStore.setBrandModal(show);
   }
 
   rules: Object = {

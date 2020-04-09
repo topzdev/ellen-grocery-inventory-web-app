@@ -98,7 +98,7 @@ class ProductController extends QueryExtend {
 		try {
 			// validate if already exisit
 			let query: QueryConfig = {
-				text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1 OR product_name = $2`,
+				text: `SELECT 1 FROM "${this.productTable}" WHERE barcode = $1 OR product_name = $2`,
 				values: [barcode, product_name]
 			}
 

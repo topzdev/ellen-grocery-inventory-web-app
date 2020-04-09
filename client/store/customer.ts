@@ -5,6 +5,8 @@ import { $axios } from "~/utils/axios";
 import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
 import { SET_CURRENT_CUSTOMER, SET_CUSTOMERS, ADD_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, SET_LOADING } from '~/configs/types';
+import IFilter from '~/interfaces/IFilter';
+import filterGenerator from '~/utils/filterGenerator';
 
 @Module({
   name: "customer",
@@ -76,8 +78,8 @@ export default class Customer extends VuexModule {
   }
 
   @Action({ commit: SET_CUSTOMERS })
-  public async fetchCustomers() {
-    const result: IResult = await $axios.$get(this.url);
+  public async fetchCustomers(filter: IFilter) {
+    const result: IResult = await $axios.$get(this.url + filterGenerator(filter));
     return result.data;
   }
 

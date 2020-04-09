@@ -21,8 +21,8 @@ class CategoryMixin extends Vue {
   processStore: IProcessModule;
 
   category: ICategory = {
-    category_name: "",
     category_id: undefined,
+    category_name: "",
     description: null
   };
 
@@ -61,6 +61,10 @@ class CategoryMixin extends Vue {
     this.category = JSON.parse(JSON.stringify(item));
   }
 
+  searchCategory(search: string) {
+    this.categoryStore.fetchCategories({ search })
+  }
+
 
   validate(): void {
     // @ts-ignore
@@ -82,12 +86,7 @@ class CategoryMixin extends Vue {
   }
 
   rules: Object = {
-    category_name: [(v: any) => !!v || "Category Name is required"],
-    description: [
-      (v: any) =>
-        (v != null && v.length <= 300) ||
-        "Description length must not exceed to 300"
-    ]
+    category_name: [(v: any) => !!v || "Category Name is required"]
   };
 }
 

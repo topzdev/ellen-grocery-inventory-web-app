@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="modalState" width="800">
+  <v-dialog v-model="modalState" width="800" style="overflow: hidden !important;">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
         <v-toolbar-title class="headline" dark primary-title v-text="supplierTitle" />
         <v-spacer />
       </v-toolbar>
 
-      <v-card-text>
+      <v-card-text style="max-height: 500px; overflow: auto; ">
         <v-form ref="manageForm" v-model="valid" :lazy-validation="true">
           <v-row>
             <v-col cols="12">
@@ -72,7 +72,6 @@
           </v-row>
         </v-form>
       </v-card-text>
-      <v-divider />
 
       <v-card-actions>
         <v-btn class="mr-4" text large @click="closeModal">Cancel</v-btn>

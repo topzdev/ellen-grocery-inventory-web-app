@@ -9,30 +9,11 @@ class BrandController extends QueryExtend {
 		console.log('Brand Controller');
 	}
 
-	public async searchBrand(req: Request, res: Response): Promise<any> {
-		const search = req.params.search;
-
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.brandTable}" WHERE brand_name LIKE $1`,
-			values: [`%${search}%`]
-		};
-
-		try {
-			const result = await this.client.query(query);
-
-			return res.json({
-				message: 'Brand Searched Successfully',
-				success: true,
-				data: result.rows
-			});
-		} catch (error) {
-			return console.error(error.stack);
-		}
-	}
-
 	public async getBrands(req: Request, res: Response): Promise<any> {
+		const { search } = req.query;
+		console.log(search)
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.brandTable}"`
+			text: `SELECT * FROM "${this.brandTable}" ${search ? `WHERE brand_name ILIKE '%${search}%'` : ''}`
 		};
 
 		try {
@@ -44,7 +25,11 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -65,40 +50,63 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
 	public async addBrand(req: Request, res: Response): Promise<any> {
 		const { brand_name }: IBrand = req.body;
 
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.brandTable}" (brand_name) VALUES ($1) RETURNING brand_id`,
-			values: [brand_name]
-		};
 
 		try {
+			const query: QueryConfig = {
+				text: `INSERT INTO "${this.brandTable}" (brand_name) 
+				SELECT $1 WHERE NOT EXISTS (SELECT 1 FROM "${this.brandTable}" 
+					WHERE brand_name = $2) RETURNING brand_id`,
+				values: [brand_name, brand_name]
+			};
+
 			const result = await this.client.query(query);
+
+			if (!result.rowCount) return res.json({
+				success: false,
+				message: 'Brand name is already exist '
+			});
+
 			return res.json({
-				message: 'Brand Successfully Added ',
 				success: true,
+				message: 'Brand Successfully Added ',
 				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
 	public async updateBrand(req: Request, res: Response): Promise<any> {
 		const { brand_name, brand_id }: IBrand = req.body;
 
-		const query: QueryConfig = {
-			text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE brand_id = $2`,
-			values: [brand_name, brand_id]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE brand_id = $2 
+				AND NOT EXISTS(SELECT 1 FROM "${this.brandTable}" WHERE brand_name = $3)`,
+				values: [brand_name, brand_id, brand_name]
+			};
+
 			const result = await this.client.query(query);
+
+			if (!result.rowCount) return res.json({
+				message: 'Brand name is already in used ',
+				success: false,
+			});
 
 			return res.json({
 				message: 'Brand Successfully Updated ',
@@ -106,7 +114,11 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -127,7 +139,11 @@ class BrandController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 }

@@ -39,34 +39,9 @@ import { Component, Watch } from "vue-property-decorator";
 import BrandMixin from "@/mixins/BrandMixin";
 
 @Component
-export default class DeleteModal extends BrandMixin {
+export default class BrandModal extends BrandMixin {
   created() {
     this.redirect = false;
-  }
-
-  get loading() {
-    return this.brandStore.getLoading;
-  }
-
-  get modalState() {
-    return this.frontendStore.brandModalState;
-  }
-
-  set modalState(show: boolean) {
-    this.frontendStore.setBrandModal(show);
-  }
-
-  closeModal() {
-    this.frontendStore.setBrandModal(false);
-  }
-
-  @Watch("loading")
-  isLoading() {
-    if (!this.loading) {
-      // @ts-ignore
-      this.$refs.manageForm.reset();
-      this.frontendStore.setBrandModal(false);
-    }
   }
 }
 </script>

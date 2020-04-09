@@ -1,12 +1,14 @@
 <template>
-  <v-row>
-    <v-col cols="3" v-for="link in actionLink" :key="link.title">
-      <v-card height="100%" :color="link.color" dark elevation="4" :to="link.action" :link="true">
-        <v-card-title class="headline" v-text="link.title" />
-        <v-card-subtitle v-text="link.subtitle" />
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container fluid>
+    <v-row>
+      <v-col cols="3" v-for="link in actionLink" :key="link.title">
+        <v-card height="100%" :color="link.color" dark elevation="4" :to="link.action" :link="true">
+          <v-card-title class="headline" v-text="link.title" />
+          <v-card-subtitle v-text="link.subtitle" />
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

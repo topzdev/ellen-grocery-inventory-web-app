@@ -1,57 +1,43 @@
 <template>
-  <div height="100vh">
-    <v-row>
-      <v-col class="d-flex flex-column" cols="8">
-        <v-row style="flex: 0">
-          <v-col cols="6">
-            <v-sheet>
-              <v-text-field
-                solo
-                :hide-details="true"
-                label="Search Product"
-                append-icon="mdi-magnify"
-                v-model="search"
-              ></v-text-field>
-            </v-sheet>
-          </v-col>
-        </v-row>
-
-        <div style="flex: 1 1 auto">
-          <product-list mode="cashier" />
-        </div>
-        <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
-      </v-col>
-
-      <v-col cols="4">
-        <v-sheet height="93.5vh" class="d-flex flex-column" width="100%" elevation="4">
-          <cashier-order-table style="flex: 1 1 auto;"></cashier-order-table>
-          <cashier-order-action style="flex: 0 1 auto"></cashier-order-action>
-        </v-sheet>
-      </v-col>
-    </v-row>
-    <cashier-initial></cashier-initial>
-    <cashier-payment></cashier-payment>
-  </div>
+  <v-card color="primary" dark tile max-width="100vw" height="100vh">
+    <v-container style="height: 100%">
+      <v-row no-gutters style="height: 100%">
+        <v-col cols="8">
+          <v-card-title>
+            <div class="display-1 font-weight-bold text-uppercase">Ellen's Point of Sales</div>
+          </v-card-title>
+          <v-card-text class="d-flex pd-0">
+            <div class="subtitle-1" v-text="dateTime"></div>
+            <v-spacer></v-spacer>
+            <div class="subtitle-1">Cashier: Christopher Lugod</div>
+          </v-card-text>
+          <cashier-initital-list></cashier-initital-list>
+        </v-col>
+        <v-col cols="4" height="100%">
+          <cashier-recent-transactions></cashier-recent-transactions>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import CashierOrderTable from "@/components/cashier/CashierOrderTable.vue";
-import CashierOrderAction from "@/components/cashier/CashierOrderAction.vue";
-import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
-import ProductList from "@/components/product/ProductList.vue";
-import CashierInitial from "@/components/cashier/CashierInitial.vue";
-import CashierPayment from "@/components/cashier/CashierPayment.vue";
+import { Vue, Component } from "vue-property-decorator";
 import CashierMixin from "@/mixins/CashierMixin";
+import CashierRecentTransactions from "@/components/cashier/CashierRecentTransactions.vue";
+import CashierInititalList from "@/components/cashier/CashierInitialList.vue";
+
 @Component({
-  components: {
-    CashierOrderTable,
-    CashierOrderAction,
-    CashierOtherInfo,
-    ProductList,
-    CashierPayment,
-    CashierInitial
-  }
+  components: { CashierRecentTransactions, CashierInititalList }
 })
-export default class ComponentName extends CashierMixin {}
+export default class CashierInitital extends CashierMixin {
+  show = true;
+}
 </script>
+
+<style>
+.customer-search {
+  display: flex;
+  align-items: center;
+}
+</style>

@@ -30,7 +30,11 @@ class AccountController extends QueryExtends {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -59,7 +63,11 @@ class AccountController extends QueryExtends {
 				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -115,7 +123,11 @@ class AccountController extends QueryExtends {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -153,7 +165,11 @@ class AccountController extends QueryExtends {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -174,7 +190,11 @@ class AccountController extends QueryExtends {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 }

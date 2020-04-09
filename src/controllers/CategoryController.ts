@@ -9,30 +9,12 @@ class CategoryController extends QueryExtend {
 		console.log('Category Controller');
 	}
 
-	public async searchCategory(req: Request, res: Response): Promise<any> {
-		const search = req.params.search;
-
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.categoryTable}" WHERE category_name LIKE $1`,
-			values: [`%${search}%`]
-		};
-
-		try {
-			const result = await this.client.query(query);
-
-			return res.json({
-				message: 'Category Searched Successfully',
-				success: true,
-				data: result.rows
-			});
-		} catch (error) {
-			return console.error(error.stack);
-		}
-	}
-
 	public async getCategories(req: Request, res: Response): Promise<any> {
+
+		const { search } = req.query;
+
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.categoryTable}"`
+			text: `SELECT * FROM "${this.categoryTable}" ${search ? `WHERE category_name ILIKE '%${search}%' ` : ''}`
 		};
 
 		try {
@@ -44,7 +26,11 @@ class CategoryController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -52,7 +38,7 @@ class CategoryController extends QueryExtend {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.categoryTable}" WHERE category_id = $1 FETCH FIRST 1 ROW ONLY`,
+			text: `SELECT * FROM "${this.categoryTable}" WHERE category_id = $1 LIMIT 1`,
 			values: [id]
 		};
 
@@ -64,20 +50,31 @@ class CategoryController extends QueryExtend {
 				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
 	public async addCategory(req: Request, res: Response): Promise<any> {
 		const { category_name, description }: ICategory = req.body;
 
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.categoryTable}" (category_name, description) VALUES ($1, $2) RETURNING category_id`,
-			values: [category_name, description]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `INSERT INTO "${this.categoryTable}" (category_name, description) 
+				SELECT $1,$2 WHERE NOT EXISTS( SELECT 1 FROM "${this.categoryTable}" 
+				WHERE category_name = $3 ) RETURNING category_id`,
+				values: [category_name, description, category_name]
+			};
+
 			const result = await this.client.query(query);
+
+			if (!result.rowCount) return res.json({
+				message: 'Category name has already exist',
+				success: false,
+			});
 
 			return res.json({
 				message: 'Category Successfully Added',
@@ -85,20 +82,30 @@ class CategoryController extends QueryExtend {
 				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
 	public async updateCategory(req: Request, res: Response): Promise<any> {
 		const { category_name, description, category_id }: ICategory = req.body;
 
-		const query: QueryConfig = {
-			text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 WHERE category_id = $3`,
-			values: [category_name, description, category_id]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 
+				WHERE category_id = $3 AND NOT EXISTS( SELECT 1 FROM "${this.categoryTable} WHERE category_name = $4")`,
+				values: [category_name, description, category_id, category_name]
+			};
+
 			const result = await this.client.query(query);
+
+			if (!result.rowCount) return res.json({
+				message: 'Category name is already in used',
+				success: true,
+			});
 
 			return res.json({
 				message: 'Category Successfully Updated',
@@ -106,7 +113,11 @@ class CategoryController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -127,7 +138,11 @@ class CategoryController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 }
