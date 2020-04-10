@@ -1,10 +1,11 @@
+
 interface IRedirect {
   redirect?: string | undefined;
 }
 
 interface ISnackbar extends IRedirect {
   message?: string;
-  show: boolean;
+  show?: boolean;
   success?: boolean;
 }
 
@@ -12,7 +13,7 @@ interface IDeleteModal extends IRedirect {
   title?: string;
   message?: string;
   show: boolean;
-  name?: string;
+  name?: string | any | null;
 }
 
 interface ISearchModal extends IRedirect {

@@ -6,8 +6,9 @@ import {
   Module
 } from "vuex-module-decorators";
 import { ICurrentDelete } from "~/interfaces/IProcess";
-import IProductInfo from "~/interfaces/IProductInfo";
+import IProductInfo from "~/interfaces/IProduct";
 import ISupplierInfo from "~/interfaces/ISupplier";
+import { SET_CURRENT_DELETE, SET_CURRENT_PRODUCT, SET_CURRENT_SUPPLIER } from '~/configs/types';
 
 @Module({
   name: "process",
@@ -32,32 +33,32 @@ export default class Process extends VuexModule {
   }
 
   @Mutation
-  private SET_CURRENT_DELETE(toDelete: ICurrentDelete) {
+  private [SET_CURRENT_DELETE](toDelete: ICurrentDelete) {
     this.currentDelete = toDelete;
   }
 
   @Mutation
-  private SET_CURRENT_PRODUCT(product: IProductInfo) {
+  private [SET_CURRENT_PRODUCT](product: IProductInfo) {
     this.currentProduct = product;
   }
 
   @Mutation
-  private SET_CURRENT_SUPPLIER(supplier: ISupplierInfo) {
+  private [SET_CURRENT_SUPPLIER](supplier: ISupplierInfo) {
     this.currentSupplier = supplier;
   }
 
-  @Action
+  @Action({ commit: SET_CURRENT_DELETE })
   setCurrentToDelete(toDelete: ICurrentDelete | undefined) {
-    this.context.commit("SET_CURRENT_DELETE", toDelete);
+    return toDelete;
   }
 
-  @Action
+  @Action({ commit: SET_CURRENT_PRODUCT })
   setCurrentProduct(product: IProductInfo | undefined) {
-    this.context.commit("SET_CURRENT_PRODUCT", product);
+    return product;
   }
 
-  @Action
+  @Action({ commit: SET_CURRENT_SUPPLIER })
   setCurrentSupplier(supplier: ISupplierInfo | undefined) {
-    this.context.commit("SET_CURRENT_SUPPLIER", supplier);
+    return supplier;
   }
 }

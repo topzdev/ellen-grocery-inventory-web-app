@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="headline pb-4">Search Product</v-card-title>
       <v-text-field
-        v-model="searchString"
+        v-model="search"
         append-icon="mdi-magnify"
         class="mx-4 mb-5"
         hide-details
@@ -12,14 +12,14 @@
       />
       <v-card-text class="pb-0">
         Products
-        <b>({{searched.length}})</b>
+        <b>({{ searched.length }})</b>
       </v-card-text>
       <v-card-text style="max-height: 200px;">
         <v-list-item-group v-model="selected" dense>
           <template v-for="item in searched.items">
             <v-list-item :key="item.barcode" @click="getSelectedItem(item)">
               <v-list-item-avatar color="grey lighten-3">
-                <v-img :src="item.image" />
+                <v-img :src="item.image_url" />
               </v-list-item-avatar>
 
               <v-list-item-content>
@@ -42,19 +42,19 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import IProduct from "../../interfaces/productInfoInterface";
+import IProduct from "@/interfaces/IProduct";
 import { productStore, frontendStore, processStore } from "@/store";
 
 @Component
 export default class SearchProductModal extends Vue {
   dialog: boolean = true;
-  searchString: string = "";
+  search: string = "";
   selected: number = 0;
 
   get searched() {
     return {
-      length: productStore.getSearchProducts.length,
-      items: productStore.getSearchProducts
+      length: productStore.getProducts.length,
+      items: productStore.getProducts
     };
   }
 
@@ -67,7 +67,7 @@ export default class SearchProductModal extends Vue {
   }
 
   created() {
-    productStore.fetchProducts();
+    productStore.fetchProducts({});
   }
 
   backPage() {
@@ -80,11 +80,9 @@ export default class SearchProductModal extends Vue {
     processStore.setCurrentProduct(item);
   }
 
-  @Watch("searchString")
-  search(value: string) {
-    console.log(value);
-    productStore.searchProduct(value);
-    // setTimeout(() => productStore.searchProduct(value), 3000);
+  @Watch("search")
+  searchProduct() {
+    productStore.fetchProducts({ search: this.search });
   }
 }
 </script>

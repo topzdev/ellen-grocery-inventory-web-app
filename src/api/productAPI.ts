@@ -1,20 +1,8 @@
 import express, { Request, Response } from 'express';
 import ProductController from '../controllers/ProductController';
-import { validate, rules } from './validations';
 
 const router = express.Router();
 const controller = new ProductController();
-const { productRules } = rules;
-
-/**
- * @route           POST api/product
- * @description     add brand
- * @access          private
- */
-
-router.post('/search/', (req: Request, res: Response) => {
-	controller.productSearch(req, res);
-});
 
 /**
  * @route           GET api/product
@@ -42,7 +30,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          private
  * @param			{String} barcode
  */
-router.post('/', productRules(), validate, (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
 	controller.addProduct(req, res);
 });
 
@@ -61,7 +49,7 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  * @param 			{String} id
  */
-router.delete('/:barcode', (req: Request, res: Response) => {
+router.delete('/', (req: Request, res: Response) => {
 	controller.deleteProduct(req, res);
 });
 

@@ -30,7 +30,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add single suppliers
  * @access          private
  */
-router.post('/', supplierRules(), validate, (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
 	controller.addSupplier(req, res);
 });
 

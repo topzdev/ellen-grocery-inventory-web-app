@@ -2,67 +2,97 @@ import { VuexModule, Mutation, Action, Module } from "vuex-module-decorators";
 import ISupplierInfo from "~/interfaces/ISupplier";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import { setNotification } from "~/utils/setNotification";
-
+import { frontendStore } from '~/utils/store-accessor'
+import { SET_SUPPLIERS, DELETE_SUPPLIER, UPDATE_SUPPLIER, ADD_SUPPLIER, SET_LOADING } from '~/configs/types';
 @Module({
   name: "supplier",
   namespaced: true
 })
 export default class Supplier extends VuexModule {
+  private url: string = "/api/supplier/";
   private suppliers: Array<ISupplierInfo> = [];
   public path: string = "/suppliers";
+  private loading: boolean = false;
 
-  get supplierData() {
+  get getLoading() {
+    return this.loading;
+  }
+
+  get getSupplier() {
     return this.suppliers;
   }
 
   @Mutation
-  public SET_SUPPLIERS(suppliers: Array<ISupplierInfo>) {
+  public [SET_SUPPLIERS](suppliers: Array<ISupplierInfo>) {
     this.suppliers = suppliers;
   }
 
   @Mutation
-  public DELETE_SUPPLIER(id: number) {
+  public [DELETE_SUPPLIER](supplier_id: number) {
     this.suppliers = this.suppliers.filter(
-      (item: ISupplierInfo) => item.id != id
+      (item: ISupplierInfo) => item.supplier_id != supplier_id
     );
   }
 
   @Mutation
-  public ADD_SUPPLIER(supplier: ISupplierInfo) {
-    this.suppliers = [...this.suppliers, supplier];
+  public [UPDATE_SUPPLIER](supplier: ISupplierInfo) {
+    this.suppliers = this.suppliers.map(item =>
+      item.supplier_id === supplier.supplier_id ? supplier : item
+    );
   }
 
-  @Action({ rawError: true })
+  @Mutation
+  public [ADD_SUPPLIER](supplier: ISupplierInfo) {
+    this.suppliers = [supplier, ...this.suppliers];
+  }
+
+  @Mutation
+  private [SET_LOADING](state: boolean) {
+    this.loading = state;
+  }
+
+  @Action({ commit: SET_LOADING })
+  setLoading(state: boolean) {
+    return state;
+  }
+
+  @Action({ commit: SET_SUPPLIERS })
   public async fetchSuppliers() {
-    const result = await $axios.$get("/api/supplier/");
-
-    this.context.commit("SET_SUPPLIERS", result.data);
+    const result = await $axios.$get(this.url);
+    return result.data;
   }
 
-  @Action({ rawError: true })
-  public async addSupplier(supplier: ISupplierInfo): Promise<void> {
-    const result = await $axios.$post(`/api/supplier`, supplier, config);
+  @Action({ commit: ADD_SUPPLIER })
+  public async addSupplier({ supplier, redirect }: { supplier: ISupplierInfo; redirect: boolean; }) {
 
-    this.context.commit("ADD_SUPPLIER", supplier);
+    this.setLoading(true);
+    const result = await $axios.$post(this.url, supplier, config);
 
-    setNotification(result.message, result.success, this.path);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(redirect ? this.path : undefined)
+    this.setLoading(false);
+
+    return { supplier_id: result.data.supplier_id, ...supplier };
   }
 
-  @Action({ rawError: true })
-  public async updateSupplier(supplier: ISupplierInfo): Promise<void> {
-    console.log(supplier);
-    const result = await $axios.$put("/api/supplier", supplier, config);
-    console.log(result);
-    setNotification(result.message, result.success, this.path);
+  @Action({ commit: UPDATE_SUPPLIER })
+  public async updateSupplier(supplier: ISupplierInfo) {
+    const result = await $axios.$put(this.url, supplier, config);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
+    return supplier;
   }
 
-  @Action({ rawError: true })
-  public async deleteSupplier(id: number): Promise<void> {
-    const result = await $axios.$delete(`/api/supplier/${id}`);
+  @Action({ commit: DELETE_SUPPLIER })
+  public async deleteSupplier(supplier_id: number) {
+    const result = await $axios.$delete(`${this.url}${supplier_id}`);
 
-    this.context.commit("DELETE_SUPPLIER", id);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
 
-    setNotification(result.message, result.success, this.path);
+    return supplier_id;
   }
 }

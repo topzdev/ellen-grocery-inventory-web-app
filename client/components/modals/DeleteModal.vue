@@ -42,7 +42,12 @@ export default class DeleteModal extends Vue {
   }
 
   public deleteCurrent() {
-    processStore.toDeleteItem.deleteFunction!(processStore.toDeleteItem.id);
+
+    if(processStore.toDeleteItem.others !== undefined) {
+      processStore.toDeleteItem.deleteFunction!({id: processStore.toDeleteItem.id, others: processStore.toDeleteItem.others});
+    } else{
+      processStore.toDeleteItem.deleteFunction!(processStore.toDeleteItem.id);
+    }
 
     processStore.setCurrentToDelete(undefined);
 

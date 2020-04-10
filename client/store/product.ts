@@ -1,8 +1,12 @@
 import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
 import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
-import IProduct from "~/interfaces/IProductInfo";
-import { setNotification } from "~/utils/setNotification";
+import IProduct from "~/interfaces/IProduct";
+import IResult from "~/interfaces/IResult";
+import { frontendStore } from '~/utils/store-accessor';
+import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
+import filterGenerator from '~/utils/filterGenerator';
+import IFilter from '~/interfaces/IFilter';
 
 @Module({
   name: "product",
@@ -11,13 +15,8 @@ import { setNotification } from "~/utils/setNotification";
 export default class Product extends VuexModule {
   // states
   private products: Array<IProduct> = [];
-  private search: Array<IProduct> = [];
-  public addonItems: Object = {
-    brand: ["Nestle", "Rebisco", "Febisco", "Palmovile", "M.Y San"],
-    supplier: ["Beth Corp", "Nestle Corp"],
-    category: ["Biscuit", "Dishwasing", "Crackers", "Etc."]
-  };
   private singleProduct: object = {};
+  private url: string = "api/product";
   public path = "/products";
 
   get getProducts() {
@@ -25,11 +24,7 @@ export default class Product extends VuexModule {
   }
 
   get getAddonItems() {
-    return this.addonItems;
-  }
-
-  get getSearchProducts() {
-    return this.search;
+    return [];
   }
 
   get tangina() {
@@ -38,102 +33,123 @@ export default class Product extends VuexModule {
   }
 
   @Mutation
-  public ADD_NEW_PRODUCT(product: IProduct): void {
+  public [ADD_NEW_PRODUCT](product: IProduct): void {
     this.products.unshift(product);
   }
 
   @Mutation
-  public LOW(product: IProduct): void {
+  public [SET_CURRENT](product: IProduct): void {
     this.singleProduct = product;
   }
 
   @Mutation
-  public SET_PRODUCTS(products: Array<IProduct>): void {
+  public [SET_PRODUCTS](products: Array<IProduct>): void {
     this.products = products;
   }
 
   @Mutation
-  public DELETE_PRODUCT(barcode: string) {
-    this.products = this.products.filter(prod => prod.barcode != barcode);
+  public [ADD_PRODUCT](product: IProduct): void {
+    if (!product) return;
+    this.products = [product, ...this.products];
   }
 
   @Mutation
-  public SET_SEARCH(searched: Array<IProduct>): void {
-    this.search = searched;
+  public [UPDATE_PRODUCT](product: IProduct) {
+    this.products = this.products.map(item =>
+      item.product_id === product.product_id ? product : item
+    );
+  }
+
+  @Mutation
+  public [DELETE_PRODUCT](product_id: number) {
+    this.products = this.products.filter(prod => prod.product_id != product_id);
   }
 
   //action
 
-  @Action({ rawError: true })
-  public async addProduct(product: Object): Promise<void> {
-    try {
-      const result = await $axios.$post("/api/product", product, config);
+  @Action({ commit: ADD_PRODUCT, rawError: true })
+  public async addProduct(product: IProduct) {
 
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
+    const formData = new FormData();
+
+    formData.append('product_name', product.product_name.toString())
+    formData.append('barcode', product.barcode.toString())
+    formData.append('quantity_min', product.quantity_min.toString())
+    formData.append('quantity_max', product.quantity_max.toString())
+    formData.append('quantity', product.quantity.toString())
+    formData.append('price', product.price.toString())
+    formData.append('description', product.description)
+    formData.append('brand_id', product.brand_id.toString())
+    formData.append('supplier_id', product.supplier_id.toString())
+    formData.append('category_id', product.category_id.toString())
+    formData.append('file', product.imageFile!)
+
+    const result: IResult = await $axios.$post(`${this.url}`, formData, config);
+
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
+    if (result.success) return {
+      product_id: result.data.product_id,
+      ...product
+    };
+
   }
 
-  @Action({ rawError: true })
-  public async fetchSingleProduct(barcode: string): Promise<void> {
-    try {
-      console.log(barcode);
-      const result = await $axios.$get(`/api/product/${barcode}`);
+  @Action({ commit: SET_CURRENT, rawError: true })
+  public async fetchSingleProduct(barcode: string) {
+    console.log(barcode);
+    const result: IResult = await $axios.$get(`${this.url}/${barcode}`);
 
-      this.context.commit("LOW", result.data != undefined ? result.data : null);
-    } catch (error) {
-      console.error(error.stack);
-    }
+    return result.data != undefined ? result.data : null;
   }
 
-  @Action({ rawError: true })
-  public async fetchProducts(): Promise<void> {
-    try {
-      const result = await $axios.$get("/api/product", config);
-      console.log(result);
-      this.context.commit("SET_PRODUCTS", result.data);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: SET_PRODUCTS, rawError: true })
+  public async fetchProducts(query: IFilter) {
+    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(query)}`, config);
+    return result.data;
   }
 
-  @Action({ rawError: true })
-  public async updateProduct(product: IProduct): Promise<void> {
-    try {
-      const result = await $axios.$put("/api/product", product, config);
 
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
+  @Action({ commit: UPDATE_PRODUCT, rawError: true })
+  public async updateProduct(product: IProduct) {
+    const formData = new FormData();
+
+    formData.append('product_id', product.product_id!.toString())
+    formData.append('product_name', product.product_name.toString())
+    formData.append('barcode', product.barcode.toString())
+    formData.append('quantity_min', product.quantity_min.toString())
+    formData.append('quantity_max', product.quantity_max.toString())
+    formData.append('quantity', product.quantity.toString())
+    formData.append('price', product.price.toString())
+    formData.append('description', product.description)
+    formData.append('brand_id', product.brand_id.toString())
+    formData.append('supplier_id', product.supplier_id.toString())
+    formData.append('category_id', product.category_id.toString())
+    formData.append('image', product.image!.toString())
+    formData.append('image_url', product.image_url!.toString())
+    formData.append('file', product.imageFile!)
+
+    const result: IResult = await $axios.$put(`${this.url}`, formData, config);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
+    return product;
   }
 
-  @Action({ rawError: true })
-  public async deleteProduct(barcode: string): Promise<void> {
-    try {
-      const result = await $axios.$delete(`/api/product/${barcode}`, config);
+  @Action({ commit: DELETE_PRODUCT, rawError: true })
+  public async deleteProduct({ id, others }: any) {
+    console.log('hello', others);
+    const result: IResult = await $axios.$delete(
+      `${this.url}`,
+      { ...config, data: { image: others, product_id: id } }
+    );
 
-      this.context.commit("DELETE_PRODUCT", barcode);
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
 
-      setNotification(result.message, result.success, this.path);
-    } catch (error) {
-      console.error(error.stack);
-    }
-  }
-
-  @Action({ rawError: true })
-  public async searchProduct(searchString: string): Promise<void> {
-    try {
-      const result = await $axios.$post(
-        `/api/product/search/`,
-        { searchString },
-        config
-      );
-      console.log(result);
-      this.context.commit("SET_SEARCH", result.data);
-    } catch (error) {
-      console.error(error.stack);
-    }
+    return id;
   }
 }

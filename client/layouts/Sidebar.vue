@@ -30,27 +30,30 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import EssentialsMixins from "@/mixins/AppEssentials";
+import { Component, Vue } from "vue-property-decorator";
 import { frontendStore } from "@/store";
 
 @Component
-export default class Sidebar extends EssentialsMixins {
+export default class Sidebar extends Vue {
   drawer: boolean = true;
   right: boolean = false;
   expandOnHover: boolean = true;
   items: Array<Object> = [
     { title: "Home", icon: "mdi-storefront", to: "d" },
-    { title: "Products", icon: "mdi-shopping-search", to: "/product" },
-    { title: "Manage Product", icon: "mdi-basket-fill", to: "/products" },
+    { title: "Cashier", icon: "mdi-cash-register", to: "/cashiers" },
+    { title: "Product", icon: "mdi-basket-fill", to: "/products" },
     { title: "Suppliers", icon: "mdi-truck", to: "/suppliers" },
     { title: "Addons", icon: "mdi-decagram", to: "/others" },
     { title: "Customers", icon: "mdi-account", to: "/customers" },
-    { title: "Account", icon: "mdi-account-group-outline", to: "/account" }
+    { title: "Account", icon: "mdi-account-group-outline", to: "/accounts" }
   ];
 
   get sidebarState() {
     return frontendStore.sidebarState;
+  }
+
+  set sidebarState(value: boolean) {
+    frontendStore.toggleSidebar();
   }
 }
 </script>

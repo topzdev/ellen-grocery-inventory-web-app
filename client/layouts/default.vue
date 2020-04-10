@@ -3,9 +3,7 @@
     <sidebar />
     <navbar />
     <v-content>
-      <v-container fluid>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-content>
     <snackbars />
     <modals />

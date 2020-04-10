@@ -2,7 +2,16 @@ import express, { Request, Response, Express } from 'express';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
-import { productAPI, supplierAPI } from './api/index';
+import {
+	productAPI,
+	supplierAPI,
+	categoryAPI,
+	brandAPI,
+	customerAPI,
+	accountAPI,
+	roleAPI,
+	transactionAPI
+} from './api/index';
 
 class Server {
 	public app: Express;
@@ -24,6 +33,12 @@ class Server {
 
 		router.use('/api/product', productAPI);
 		router.use('/api/supplier', supplierAPI);
+		router.use('/api/brand', brandAPI);
+		router.use('/api/category', categoryAPI);
+		router.use('/api/customer', customerAPI);
+		router.use('/api/account', accountAPI);
+		router.use('/api/role', roleAPI);
+		router.use('/api/transaction', transactionAPI)
 
 		this.app.use('/', router);
 	}

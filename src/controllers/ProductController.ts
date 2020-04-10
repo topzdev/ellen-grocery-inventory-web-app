@@ -1,8 +1,10 @@
 import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
-import { ProductInterface } from '../interfaces';
+import IProduct from '../interfaces/IProduct';
 import { QueryConfig } from 'pg';
-import { ResultFactory } from 'express-validator';
+import ImageController from './ImageController'
+
+const imageUploader = new ImageController()
 
 class ProductController extends QueryExtend {
 	constructor() {
@@ -13,12 +15,13 @@ class ProductController extends QueryExtend {
 	public async getSingleProduct(req: Request, res: Response): Promise<any> {
 		const barcode = req.params.barcode;
 
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1`,
-			values: [barcode]
-		};
-
 		try {
+
+			const query: QueryConfig = {
+				text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1`,
+				values: [barcode]
+			};
+
 			const result = await this.client.query(query);
 
 			return res.json({
@@ -32,11 +35,36 @@ class ProductController extends QueryExtend {
 	}
 
 	public async getProducts(req: Request, res: Response): Promise<any> {
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.productTable}"`
-		};
+
+		const { search, limit, offset } = req.query;
 
 		try {
+			const query: QueryConfig = {
+				text: `SELECT
+				product.product_id,
+				product.barcode,
+				product.product_name,
+				product.quantity,
+				product.quantity_max,
+				product.quantity_min,
+				product.price,
+				product.description,
+				product.brand_id,
+				product.supplier_id,
+				product.category_id,
+				product.image,
+				product.image_url,
+				brand.brand_name,
+				category.category_name,
+				supplier.supplier_name
+				FROM "${this.productTable}" product
+				INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
+				INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
+				INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id
+				${this.queryAnalyzer("product.product_name", search, limit, offset)}`,
+
+			};
+
 			const result = await this.client.query(query);
 			return res.json({
 				success: true,
@@ -53,38 +81,69 @@ class ProductController extends QueryExtend {
 			barcode,
 			product_name,
 			quantity,
+			quantity_max,
+			quantity_min,
 			price,
 			description,
-			brand,
-			supplier_name,
-			category,
-			image
-		}: ProductInterface = req.body;
+			brand_id,
+			supplier_id,
+			category_id,
+		}: IProduct = req.body;
 
-		const query: QueryConfig = {
-			text: `INSERT INTO "${this.productTable}" 
-			(barcode, product_name, quantity, price, description, brand, supplier_name, category, image)
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-			values: [
-				barcode,
-				product_name,
-				quantity,
-				price,
-				description,
-				brand,
-				supplier_name,
-				category,
-				image
-			]
+		let image = {
+			public_id: "",
+			image_url: ""
 		};
-		console.log(req.body);
+
 		try {
-			const result = await this.client.query(query);
+			// validate if already exisit
+			let query: QueryConfig = {
+				text: `SELECT 1 FROM "${this.productTable}" WHERE barcode = $1 OR product_name = $2`,
+				values: [barcode, product_name]
+			}
+
+			let result = await this.client.query(query);
+
+			if (result.rows.length) return res.json({
+				success: false,
+				message: 'Product Already Exist',
+			});
+
+			// validate if the req.files has value then upload the image
+			if (req.files && req.files['file']) {
+				// @ts-ignore
+				let uploaded = await imageUploader.uploadImage(req.files['file'])
+				image.public_id = uploaded.public_id;
+				image.image_url = uploaded.secure_url
+			}
+
+			// after the image successfully added then the rest is saved
+			query = {
+				text: `INSERT INTO "${this.productTable}" 
+				(barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image, image_url)
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING product_id`,
+				values: [
+					barcode,
+					product_name,
+					quantity,
+					quantity_max,
+					quantity_min,
+					price,
+					description,
+					brand_id,
+					supplier_id,
+					category_id,
+					image.public_id,
+					image.image_url
+				]
+			};
+
+			result = await this.client.query(query);
 
 			return res.json({
 				success: true,
 				message: 'Product Successfully Added',
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (err) {
 			console.log(req.body);
@@ -97,34 +156,54 @@ class ProductController extends QueryExtend {
 			barcode,
 			product_name,
 			quantity,
+			quantity_max,
+			quantity_min,
 			price,
 			description,
-			brand,
-			supplier_name,
-			category,
-			image
-		}: ProductInterface = req.body;
+			brand_id,
+			supplier_id,
+			category_id,
+			product_id,
+			image,
+			image_url
+		}: IProduct = req.body;
 
-		const query: QueryConfig = {
-			text: `UPDATE "${this.productTable}" SET 
-			barcode=$1, product_name=$2, 
-			quantity=$3, price=$4, description=$5, 
-			brand=$6, supplier_name=$7, category=$8, image=$9 
-			WHERE barcode = $1`,
-			values: [
-				barcode,
-				product_name,
-				quantity,
-				price,
-				description,
-				brand,
-				supplier_name,
-				category,
-				image
-			]
+		let updateImage = {
+			public_id: image,
+			image_url: image_url
 		};
 
 		try {
+			if (req.files && req.files['file']) {
+				await imageUploader.deleteImage(image!)
+
+				// @ts-ignore
+				let uploaded = await imageUploader.uploadImage(req.files['file'])
+				updateImage.public_id = uploaded.public_id;
+				updateImage.image_url = uploaded.secure_url
+			}
+
+			const query: QueryConfig = {
+				text: `UPDATE "${this.productTable}" SET 
+							barcode=$1, product_name=$2, quantity=$3, quantity_max=$4, quantity_min=$5, price=$6, 
+							description=$7, brand_id=$8, supplier_id=$9, category_id=$10, image=$11, image_url=$12 WHERE product_id=$13`,
+				values: [
+					barcode,
+					product_name,
+					quantity,
+					quantity_max,
+					quantity_min,
+					price,
+					description,
+					brand_id,
+					supplier_id,
+					category_id,
+					updateImage.public_id,
+					updateImage.image_url,
+					product_id
+				]
+			};
+
 			const result = await this.client.query(query);
 			console.log('Process');
 			res.json({
@@ -138,39 +217,20 @@ class ProductController extends QueryExtend {
 	}
 
 	public async deleteProduct(req: Request, res: Response): Promise<any> {
-		const barcode = req.params.barcode;
-
-		const query: QueryConfig = {
-			text: `DELETE FROM "${this.productTable}" WHERE barcode = $1`,
-			values: [barcode]
-		};
+		const { product_id, image } = req.body;
 
 		try {
+			const query: QueryConfig = {
+				text: `DELETE FROM "${this.productTable}" WHERE product_id = $1`,
+				values: [product_id]
+			};
+
+			if (image) imageUploader.deleteImage(image);
+
 			const result = await this.client.query(query);
-			console.log(result);
 			return res.json({
 				success: true,
 				message: 'Successfully Deleted',
-				data: result.rows
-			});
-		} catch (err) {
-			console.log('Database error', err.stack);
-		}
-	}
-
-	public async productSearch(req: Request, res: Response): Promise<any> {
-		const search = req.body.searchString;
-
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.productTable}" WHERE barcode LIKE $1`,
-			values: ['%' + search + '%']
-		};
-
-		try {
-			const result = await this.client.query(query);
-
-			return res.json({
-				message: 'Product Successfully Searched',
 				data: result.rows
 			});
 		} catch (err) {
