@@ -4,7 +4,7 @@ export default {
   generate: {
     devtools: true
   },
-  mode: "universal",
+  mode: "spa",
   /*
    ** Headers of the page
    */

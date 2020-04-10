@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-app-bar color="primary" :hidden="hidden" dark :app="app">
-      <v-app-bar-nav-icon @click="openSidebar" />
+    <v-app-bar color="primary" :hidden="!navbar" dark :app="navbar">
+      <v-app-bar-nav-icon @click="setSidebar" />
       <v-toolbar-title v-text="title" />
     </v-app-bar>
   </div>
@@ -11,29 +11,20 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { frontendStore } from "@/store";
 
-@Component({})
+@Component
 export default class Navbar extends Vue {
   title: string = "Ellen Inventory System";
-  clipped: boolean = false;
-  drawer: boolean = false;
-  fixed: boolean = false;
-  miniVariant: boolean = false;
-  right: boolean = true;
-  rightDrawer: boolean = false;
-  hidden: boolean = false;
-  app: boolean = true;
 
-  public openSidebar(): void {
-    console.log("Hello, World");
-    frontendStore.toggleSidebar();
+  setSidebar(show: boolean) {
+    frontendStore.setSidebarMini(!this.sidebar);
   }
 
-  mounted() {
-    console.log(this.$route.path);
-    if (this.$route.path.includes("/cashier")) {
-      this.hidden = true;
-      this.app = false;
-    }
+  get sidebar() {
+    return frontendStore.sidebarMiniState;
+  }
+
+  get navbar() {
+    return frontendStore.navbarState;
   }
 }
 </script>

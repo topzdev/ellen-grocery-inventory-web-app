@@ -1,11 +1,12 @@
 interface ICustomer {
     customer_id?: number,
-    firstname: string,
-    lastname: string,
-    email_address: string | null,
-    home_address: string | null,
-    cp_no: string | null,
-    tel_no: string | null,
+    firstname?: string,
+    lastname?: string,
+    email_address?: string,
+    home_address?: string,
+    cp_no?: string,
+    tel_no?: string,
+    fullname?: string
 }
 
 export default ICustomer;

@@ -3,7 +3,7 @@ interface IRedirect {
   redirect?: string | undefined;
 }
 
-interface ISnackbar extends IRedirect {
+interface ISnackbar {
   message?: string;
   show?: boolean;
   success?: boolean;
@@ -21,4 +21,9 @@ interface ISearchModal extends IRedirect {
   show: boolean;
 }
 
-export { ISnackbar, IDeleteModal, ISearchModal, IRedirect };
+interface ISidebar {
+  show: boolean;
+  mini?: boolean;
+}
+
+export { ISnackbar, IDeleteModal, ISearchModal, IRedirect, ISidebar };

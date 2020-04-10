@@ -1,5 +1,5 @@
 <template>
-  <v-card light :ripple="riffleStlye">
+  <v-card light :ripple="riffleStlye" @click="setCustomer(customer)">
     <v-card-title class="pb-2 align-center">
       <v-avatar color="grey lighten-2 mr-2" size="30">
         <v-img></v-img>
@@ -38,6 +38,7 @@ import ICustomer from "@/interfaces/ICustomer";
 @Component
 export default class CustomerCard extends Vue {
   @Prop(Object) customer!: ICustomer;
+  @Prop(Function) setCustomer!: Function;
 
   get riffleStlye() {
     return { class: "primary--text" };

@@ -1,10 +1,10 @@
 <template>
   <div class="d-flex align-center quantity-input">
-    <v-btn @click="value--" :disabled="value < 1" color="primary" depressed fab x-small dark>
+    <v-btn @click="decrement" :disabled="value < 1" color="primary" depressed fab x-small dark>
       <v-icon>mdi-minus</v-icon>
     </v-btn>
-    <v-text-field v-model.number="model" class="quantity-input" type="number"></v-text-field>
-    <v-btn @click="value++" :disabled="maxValue" color="primary" depressed fab x-small dark>
+    <v-text-field v-model.number="value" @input="input" class="quantity-input" type="number"></v-text-field>
+    <v-btn @click="increment" color="primary" depressed fab x-small dark>
       <v-icon>mdi-plus</v-icon>
     </v-btn>
   </div>
@@ -17,23 +17,25 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class CashierQuantityInput extends Vue {
   @Prop({ default: 10 }) max: number | undefined;
   @Prop(Number) min: number | undefined;
-  @Prop(Number) model: number | undefined;
-  value = 1;
-
-  get maxValue() {
-    if (this.max === undefined) return false;
-    return this.value >= this.max ? true : false;
-  }
+  @Prop(Number) value!: number;
+  @Prop(Function) input!: Function;
 
   valueValidate(value: number) {
     console.log(value);
     if (this.max === undefined) return (this.value = value);
     if (value >= this.max) return (this.value = this.max);
-    // @ts-ignore
     if (value <= 1) return (this.value = 1);
   }
 
-  rules = [];
+  increment() {
+    let value = this.value + 1;
+    this.input(value);
+  }
+
+  decrement() {
+    let value = this.value - 1;
+    this.input(value);
+  }
 }
 </script>
 

@@ -39,6 +39,7 @@ export default class CashierMixin extends Vue {
         return this.customerStore.getCustomers
     }
 
+
     get paymentTrayState() {
         return this.frontendStore.getPaymentTrayState;
     }

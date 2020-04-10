@@ -1,13 +1,13 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
-    :mini-variant.sync="sidebarState"
+    v-model="sidebar"
+    :mini-variant.sync="sidebarMini"
     :right="right"
     color="primary"
     dark
     app
   >
-    <v-list-item class="px-2 pt-2">
+    <v-list-item class="px-2 pt-2" @click="setSidebarMini(!sidebarMini)">
       <v-list-item-avatar>
         <img src="https://randomuser.me/api/portraits/men/81.jpg" />
       </v-list-item-avatar>
@@ -48,12 +48,22 @@ export default class Sidebar extends Vue {
     { title: "Account", icon: "mdi-account-group-outline", to: "/accounts" }
   ];
 
-  get sidebarState() {
+  get sidebar() {
     return frontendStore.sidebarState;
   }
+  set sidebar(show: boolean) {
+    frontendStore.setSidebar(show);
+  }
 
-  set sidebarState(value: boolean) {
-    frontendStore.toggleSidebar();
+  get sidebarMini() {
+    return frontendStore.sidebarMiniState;
+  }
+  set sidebarMini(show: boolean) {
+    frontendStore.setSidebarMini(show);
+  }
+
+  setSidebarMini(show: boolean) {
+    frontendStore.setSidebarMini(show);
   }
 }
 </script>

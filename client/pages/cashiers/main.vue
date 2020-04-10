@@ -1,36 +1,23 @@
 <template>
-  <div height="100vh">
-    <v-row>
-      <v-col class="d-flex flex-column" cols="8">
-        <v-row style="flex: 0">
-          <v-col cols="6">
-            <v-sheet>
-              <v-text-field
-                solo
-                :hide-details="true"
-                label="Search Product"
-                append-icon="mdi-magnify"
-                v-model="search"
-              ></v-text-field>
-            </v-sheet>
-          </v-col>
-        </v-row>
-
+  <v-container v-if="cashierStore.getCustomer" fluid style="height: 100vh">
+    <v-row style="height: 100%">
+      <v-col class="d-flex flex-column" style="height: inherit" cols="8">
+        <cashier-header></cashier-header>
         <div style="flex: 1 1 auto">
           <product-list mode="cashier" />
         </div>
         <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
       </v-col>
 
-      <v-col cols="4">
-        <v-sheet height="90.5vh" class="d-flex flex-column" width="100%" elevation="4">
-          <cashier-order-table style="flex: 1 1 500px;"></cashier-order-table>
-          <cashier-order-action style="flex: 0 1 auto"></cashier-order-action>
+      <v-col cols="4" style="height: inherit">
+        <v-sheet class="d-flex flex-column" min-height="100%" width="100%" elevation="4">
+          <cashier-order-table style="flex: 1 0 100%"></cashier-order-table>
+          <cashier-order-action style="flex: 1 1 auto"></cashier-order-action>
         </v-sheet>
       </v-col>
     </v-row>
     <cashier-payment></cashier-payment>
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -40,22 +27,32 @@ import CashierOrderAction from "@/components/cashier/CashierOrderAction.vue";
 import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
 import ProductList from "@/components/product/ProductList.vue";
 import CashierPayment from "@/components/cashier/CashierPayment.vue";
+import CashierHeader from "@/components/cashier/CashierHeader.vue";
 import CashierMixin from "@/mixins/CashierMixin";
+
 @Component({
   components: {
     CashierOrderTable,
     CashierOrderAction,
     CashierOtherInfo,
     ProductList,
-    CashierPayment
+    CashierPayment,
+    CashierHeader
   }
 })
 export default class CashierMain extends CashierMixin {
-  search: string = "";
-  @Watch("search")
-  searchProduct() {
-    console.log(this.search);
-    this.productStore.fetchProducts({ search: this.search });
+  created() {
+    // verify if customer is already asssigned
+    if (!this.cashierStore.getCustomer) return this.$router.push("/cashiers");
+
+    // after success vetification then the transaction marked started
+    if (!this.cashierStore.getTransactionStarted)
+      this.cashierStore.startTransaction();
+
+    // frontend configuration for main cashier view
+    this.frontendStore.setNavbar(false);
+    this.frontendStore.setSidebar(true);
   }
 }
 </script>
+

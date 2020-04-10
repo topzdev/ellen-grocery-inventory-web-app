@@ -4,14 +4,16 @@ import {
   ISearchModal
 } from "~/interfaces/IFrontEndStore";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { SET_OPEN_SIDEBAR, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_SHOW_ROLE_MODAL } from '~/configs/types';
+import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_SHOW_ROLE_MODAL, SET_NAVBAR } from '~/configs/types';
 
 @Module({
   name: "frontend",
   namespaced: true
 })
 export default class Frontend extends VuexModule {
-  private openSidebar: boolean = true;
+  private showSidebar: boolean = true;
+  private showSidebarMini: boolean = true;
+  private showNavbar: boolean = true;
   private showSnackbar: ISnackbar = { show: false };
   private showDeleteModal: IDeleteModal = { show: false };
   private showSearchModal: ISearchModal = { show: false };
@@ -24,43 +26,51 @@ export default class Frontend extends VuexModule {
   private showPaymentTray: boolean = false;
   private productViewMode: string = 'Product Table';
 
-  get sidebarState(): boolean {
-    return this.openSidebar;
+  get sidebarState() {
+    return this.showSidebar;
   }
 
-  get snackbarState(): ISnackbar {
+  get sidebarMiniState() {
+    return this.showSidebarMini
+  }
+
+  get navbarState() {
+    return this.showNavbar
+  }
+
+  get snackbarState() {
     return this.showSnackbar;
   }
 
-  get deleteModalState(): IDeleteModal {
+  get deleteModalState() {
     return this.showDeleteModal;
   }
 
-  get searchModalState(): ISearchModal {
+  get searchModalState() {
     return this.showSearchModal;
   }
 
-  get barcodeModalState(): boolean {
+  get barcodeModalState() {
     return this.showBarcodeModal;
   }
 
-  get brandModalState(): boolean {
+  get brandModalState() {
     return this.showBrandModal;
   }
 
-  get categoryModalState(): boolean {
+  get categoryModalState() {
     return this.showCategoryModal;
   }
 
-  get supplierModalState(): boolean {
+  get supplierModalState() {
     return this.showSupplierModal;
   }
 
-  get customerModalState(): boolean {
+  get customerModalState() {
     return this.showCustomerModal;
   }
 
-  get roleModalState(): boolean {
+  get roleModalState() {
     return this.showRoleModal;
   }
 
@@ -73,8 +83,18 @@ export default class Frontend extends VuexModule {
   }
 
   @Mutation
-  private [SET_OPEN_SIDEBAR](): void {
-    this.openSidebar = !this.openSidebar;
+  private [SET_SIDEBAR](show: boolean): void {
+    this.showSidebar = show;
+  }
+
+  @Mutation
+  private [SET_SIDEBAR_MINI](show: boolean): void {
+    this.showSidebarMini = show;
+  }
+
+  @Mutation
+  private [SET_NAVBAR](show: boolean): void {
+    this.showNavbar = show;
   }
 
   @Mutation
@@ -132,10 +152,19 @@ export default class Frontend extends VuexModule {
     this.productViewMode = mode;
   }
 
+  @Action({ commit: SET_SIDEBAR })
+  public setSidebar(show: boolean) {
+    return show;
+  }
 
-  @Action({ commit: SET_OPEN_SIDEBAR })
-  public toggleSidebar(): void {
-    return;
+  @Action({ commit: SET_SIDEBAR_MINI })
+  public setSidebarMini(show: boolean) {
+    return show;
+  }
+
+  @Action({ commit: SET_NAVBAR })
+  public setNavbar(show: boolean) {
+    return show;
   }
 
   @Action({ commit: SET_SHOW_SNACKBAR })

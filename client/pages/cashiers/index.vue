@@ -32,6 +32,11 @@ import CashierInititalList from "@/components/cashier/CashierInitialList.vue";
 })
 export default class CashierInitital extends CashierMixin {
   show = true;
+
+  created() {
+    this.frontendStore.setNavbar(false);
+    this.frontendStore.setSidebar(false);
+  }
 }
 </script>
 

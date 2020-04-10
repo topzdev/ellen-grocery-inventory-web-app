@@ -1,10 +1,10 @@
 <template>
-  <v-simple-table dense :fixed-header="true">
+  <v-simple-table dense :fixed-header="true" height="440px">
     <template v-slot:default>
       <thead>
         <tr>
           <th class="text-left">Name</th>
-          <th class="text-center" width="150px">Quantity</th>
+          <th class="text-center" width="120px">Quantity</th>
           <th class="text-right">Price</th>
         </tr>
       </thead>

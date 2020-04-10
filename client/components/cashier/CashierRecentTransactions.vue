@@ -15,6 +15,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import CashierRecentTransactionsCard from "./CashierRecentTransactionsCard.vue";
 import CashierMixin from "../../mixins/CashierMixin";
+import IAccount from "../../interfaces/IAccount";
+import ICustomer from "../../interfaces/ICustomer";
 @Component({
   components: { CashierRecentTransactionsCard }
 })

@@ -1,5 +1,7 @@
 // Frontend Mutations
-export const SET_OPEN_SIDEBAR = "SET_OPEN_SIDEBAR"
+export const SET_SIDEBAR = "SET_SIDEBAR"
+export const SET_SIDEBAR_MINI = "SET_SIDEBAR_MINI"
+export const SET_NAVBAR = "SET_NAVBAR"
 export const SET_SHOW_SNACKBAR = "SET_SHOW_SNACKBAR"
 export const SET_SHOW_DELETE_MODAL = "SET_SHOW_DELETE_MODAL"
 export const SET_SHOW_SEARCH_MODAL = "SET_SHOW_SEARCH_MODAL"
@@ -14,10 +16,11 @@ export const SET_PAYMENT_TRAY = "SET_PAYMENT_TRAY"
 
 
 // Cashier Mutations
-export const ADD_ORDER = "ADD_ORDER"
-export const UPDATE_ORDER = "UPDATE_ORDER"
-export const REMOVE_ORDER = "REMOVE_ORDER"
+export const SET_TRANSACTION_STARTED = "SET_TRANSACTION_STARTED"
+export const SET_ORDERS = "SET_ORDERS"
 export const CALCULATION = "CALCULATION"
+export const SET_CASHIER_ACCOUNT = "SET_CASHIER_ACCOUNT"
+export const SET_CASHIER_CUSTOMER = "SET_CASHIER_CUSTOMER"
 
 //Product Mutations
 export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT"
