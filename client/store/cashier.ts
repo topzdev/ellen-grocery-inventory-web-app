@@ -71,7 +71,7 @@ export default class Cashier extends VuexModule {
 
     @Mutation
     private [SET_TRANSACTION_STARTED](time: string) {
-        this.transaction_started = this.transaction_started;
+        this.transaction_started = time;
     }
 
     @Action

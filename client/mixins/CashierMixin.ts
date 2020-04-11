@@ -39,6 +39,14 @@ export default class CashierMixin extends Vue {
         return this.customerStore.getCustomers
     }
 
+    initPage() {
+        this.$router.push('/cashiers');
+    }
+
+    mainPage() {
+        this.$router.push('/cashier/main');
+    }
+
 
     get paymentTrayState() {
         return this.frontendStore.getPaymentTrayState;
@@ -57,7 +65,7 @@ export default class CashierMixin extends Vue {
     }
 
     realtime() {
-        this.dateTime = dayjs().format('MMMM DD, YYYY h:mm:ss')
+        this.dateTime = dayjs().format('dddd, MMMM DD, YYYY h:mm:ss A')
     }
 
     created() {

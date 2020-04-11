@@ -54,7 +54,7 @@ export default class AccountTable extends AccountMixin {
   ];
 
   created() {
-    this.accountStore.fetchAccounts();
+    this.accountStore.fetchAccounts({});
   }
 }
 </script>

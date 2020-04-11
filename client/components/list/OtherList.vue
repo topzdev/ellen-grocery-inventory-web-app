@@ -1,72 +1,79 @@
 <template>
   <v-card width="100%">
-    <v-card-title>
-      <v-text-field
-        solo
-        :label="searchLabel"
-        :hide-details="true"
-        prepend-inner-icon="mdi-magnify"
-        @input="searchItem"
-      />
-    </v-card-title>
-    <v-card-text>
-      <v-row no-gutters>
-        <v-col class="d-flex align-center">Total {{title}} {{ listItem.length }}</v-col>
-        <v-col cols="auto">
-          <v-select
-            :items="items"
-            label="Rows"
-            :hide-details="true"
-            placeholder="Select rows to show"
-            dense
-            flat
-            single-line
-            v-model="selected"
-          ></v-select>
-        </v-col>
-      </v-row>
-    </v-card-text>
-    <v-card-text style="max-height: 400px; overflow: auto;">
-      <v-list>
-        <v-list-item-group color="primary">
-          <v-list-item v-for="(item, i) in listItem.slice(0, rows)" :key="i" @click="setItem(item)">
-            <v-list-item-content>
-              <v-list-item-title v-text="item[itemName]" />
-            </v-list-item-content>
-            <v-spacer />
+    <list-toolbar
+      :list-label="listLabel"
+      :search-label="searchLabel"
+      :selected-item="selectedItem"
+      :set-selected="setSelected"
+      :reset="reset"
+      :items="items"
+      :list-item="listItem"
+    ></list-toolbar>
 
-            <v-list-item-icon>
-              <v-icon class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-card-text>
+    <v-list max-height="400px" style="overflow: auto">
+      <v-list-item-group v-model="selectedId" color="primary">
+        <v-list-item
+          v-for="item in listItem.slice(0, rows)"
+          :key="item[itemId]"
+          @click="selectedItem = item; selectedId = item[itemId]; setItem(selectedItem)"
+        >
+          <v-list-item-content>
+            <v-list-item-title v-text="item[itemName]" />
+          </v-list-item-content>
+          <v-spacer />
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import IBrand from "../../interfaces/IBrand";
+import ListToolbar from "@/components/list/other/ListToolbar.vue";
 
-@Component
+@Component({
+  components: { ListToolbar }
+})
 export default class OtherList extends Vue {
-  @Prop(String) title: String | undefined;
-  @Prop(Function) deleteItem: Function | undefined;
-  @Prop(Function) searchItem: Function | undefined;
-  @Prop(Array) listItem!: Array<IBrand>;
-  @Prop(Number) active: Number | undefined;
-  @Prop(Function) setItem: Function | undefined;
-  @Prop(String) itemName: String | undefined;
-  selected = "5";
+  @Prop(Function) deleteItem!: Function;
+  @Prop(Function) searchItem!: Function;
+  @Prop(Function) setItem!: Function;
+  @Prop(Number) active!: Number;
+  @Prop(String) title!: String;
+  @Prop(String) itemName!: string;
+  @Prop(String) itemId!: string;
+  @Prop(Array) listItem!: Array<Object>;
+
+  selectedId = null;
+  selectedItem: any = null;
+  selected = 0;
   items = ["5", "10", "25", "All"];
 
   get rows() {
-    return this.selected === "All" ? this.listItem!.length : this.selected;
+    return this.selected === 3
+      ? this.listItem.length
+      : this.items[this.selected];
+  }
+
+  reset() {
+    this.selectedItem = null;
+    this.selectedId = null;
+    this.setItem(undefined);
+  }
+
+  get listLabel() {
+    return this.selectedItem
+      ? `Selected "${this.selectedItem[this.itemName]}"`
+      : `${this.title} List (${this.listItem.length})`;
   }
 
   get searchLabel() {
     return "Search " + this.title;
+  }
+
+  setSelected(value: any) {
+    this.selected = value;
   }
 }
 </script>

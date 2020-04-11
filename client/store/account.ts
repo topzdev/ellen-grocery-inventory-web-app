@@ -5,6 +5,8 @@ import { $axios } from "~/utils/axios";
 import config from "~/configs/axiosConfig";
 import { frontendStore } from '~/utils/store-accessor';
 import { SET_ACCOUNTS, SET_CURRENT_ACCOUNT, ADD_ACCOUNT, UPDATE_ACCOUNT, DELETE_ACCOUNT } from '~/configs/types';
+import IFilter from '~/interfaces/IFilter';
+import filterGenerator from '~/utils/filterGenerator';
 
 @Module({
   name: "account",
@@ -14,14 +16,14 @@ export default class Account extends VuexModule {
   private url: string = "/api/account";
   private path: string = "/accounts";
   private accounts: Array<IAccount> = [];
-  private current: IAccount | undefined = undefined;
+  private current: IAccount | null = null;
 
-  get getAccounts(): Array<IAccount> {
+  get getAccounts() {
     return this.accounts;
   }
 
-  get getCurrentAccount(): IAccount {
-    return this.current!;
+  get getCurrentAccount() {
+    return this.current;
   }
 
   @Mutation
@@ -53,19 +55,9 @@ export default class Account extends VuexModule {
     );
   }
 
-  @Action({ commit: SET_ACCOUNTS })
-  public async searchAccounts(search: string) {
-    try {
-      const result: IResult = await $axios.$get(`${this.url}/search`);
-      return result.data;
-    } catch (error) {
-      return console.log(error.stack);
-    }
-  }
-
   @Action({ commit: SET_CURRENT_ACCOUNT })
-  public async fetchSingleAccount(account_id: number | undefined) {
-    if (account_id === undefined) return account_id;
+  public async fetchSingleAccount(account_id: number) {
+    if (account_id === undefined) return;
 
     try {
       const result: IResult = await $axios.$get(`${this.url}/${account_id}`);
@@ -76,9 +68,9 @@ export default class Account extends VuexModule {
   }
 
   @Action({ commit: SET_ACCOUNTS })
-  public async fetchAccounts() {
+  public async fetchAccounts(filter: IFilter) {
     try {
-      const result: IResult = await $axios.$get(`${this.url}`);
+      const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`);
       return result.data;
     } catch (error) {
       return console.log(error.stack);

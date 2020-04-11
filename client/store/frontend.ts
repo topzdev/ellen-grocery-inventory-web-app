@@ -4,7 +4,7 @@ import {
   ISearchModal
 } from "~/interfaces/IFrontEndStore";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_SHOW_ROLE_MODAL, SET_NAVBAR } from '~/configs/types';
+import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SHOW_SNACKBAR, SET_SHOW_DELETE_MODAL, SET_SHOW_SEARCH_MODAL, SET_SHOW_BARCODE_MODAL, SET_SHOW_BRAND_MODAL, SET_SHOW_CATEGORY_MODAL, SET_SHOW_SUPPLIER_MODAL, SET_SHOW_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_SHOW_ROLE_MODAL, SET_NAVBAR, SET_NAVBAR_FLAT } from '~/configs/types';
 
 @Module({
   name: "frontend",
@@ -14,6 +14,7 @@ export default class Frontend extends VuexModule {
   private showSidebar: boolean = true;
   private showSidebarMini: boolean = true;
   private showNavbar: boolean = true;
+  private navbarFlat: boolean = false;
   private showSnackbar: ISnackbar = { show: false };
   private showDeleteModal: IDeleteModal = { show: false };
   private showSearchModal: ISearchModal = { show: false };
@@ -80,6 +81,10 @@ export default class Frontend extends VuexModule {
 
   get getPaymentTrayState() {
     return this.showPaymentTray;
+  }
+
+  get getNavbarFlat() {
+    return this.navbarFlat;
   }
 
   @Mutation
@@ -152,6 +157,11 @@ export default class Frontend extends VuexModule {
     this.productViewMode = mode;
   }
 
+  @Mutation
+  private [SET_NAVBAR_FLAT](flat: boolean) {
+    this.navbarFlat = flat;
+  }
+
   @Action({ commit: SET_SIDEBAR })
   public setSidebar(show: boolean) {
     return show;
@@ -165,6 +175,11 @@ export default class Frontend extends VuexModule {
   @Action({ commit: SET_NAVBAR })
   public setNavbar(show: boolean) {
     return show;
+  }
+
+  @Action({ commit: SET_NAVBAR_FLAT })
+  public setNavbarFlat(flat: boolean) {
+    return flat;
   }
 
   @Action({ commit: SET_SHOW_SNACKBAR })

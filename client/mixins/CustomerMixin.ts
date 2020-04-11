@@ -22,10 +22,10 @@ export default class CustomerMixin extends Vue {
   public customer: ICustomer = {
     firstname: "",
     lastname: "",
-    email_address: null,
-    home_address: null,
-    cp_no: null,
-    tel_no: null,
+    email_address: "",
+    home_address: "",
+    cp_no: "",
+    tel_no: "",
   };
 
   constructor() {

@@ -40,6 +40,11 @@ class BrandMixin extends Vue {
   }
 
   setBrand(item: IBrand) {
+    if (!item) {
+      this.clearFields();
+      return this.isEdit = false
+    };
+
     this.isEdit = true;
     this.brand = JSON.parse(JSON.stringify(item));
   }
@@ -85,6 +90,8 @@ class BrandMixin extends Vue {
   clearFields() {
     this.brand.brand_id = undefined;
     this.brand.brand_name = ""
+    //@ts-ignore 
+    this.$refs.manageForm.resetValidation();
   }
 
   closeModal() {

@@ -50,8 +50,8 @@ class AccountMixin extends Vue {
   //     this.account = JSON.parse(JSON.stringify(item));
   //   }
 
-  setCancel() {
-    this.isEdit = false;
+
+  clearFields() {
     this.account = {
       account_id: undefined,
       firstname: "",
@@ -63,7 +63,7 @@ class AccountMixin extends Vue {
       password: ""
     };
     // @ts-ignore
-    this.$refs.manageForm.reset();
+    this.$refs.manageForm.resetValidation();
   }
 
   validate(): void {
@@ -91,18 +91,35 @@ class AccountMixin extends Vue {
     });
   }
 
-  manageItem(item: IAccount) {
-    this.accountStore.fetchSingleAccount(item.account_id!);
-    this.$router.push("accounts/update");
+  async setAccount(item: IAccount) {
+    if (!item) {
+      this.clearFields();
+      return this.isEdit = false
+    };
+
+    await this.accountStore.fetchSingleAccount(item.account_id!);
+
+    console.log(this.currentAccount)
+    if (this.currentAccount) {
+      this.isEdit = true;
+      this.account = JSON.parse(JSON.stringify(this.currentAccount));
+    }
   }
 
   searchAccount(search: string) {
-    if (search.length <= 0) this.accountStore.fetchAccounts();
-    this.accountStore.searchAccounts(search);
+    this.accountStore.fetchAccounts({ search });
   }
 
   get accountList() {
     return this.accountStore.getAccounts;
+  }
+
+  get currentAccount() {
+    return this.accountStore.getCurrentAccount;
+  }
+
+  get accountTitle() {
+    return this.isEdit ? "Edit Account" : "Add Account";
   }
 
   rules: Object = {

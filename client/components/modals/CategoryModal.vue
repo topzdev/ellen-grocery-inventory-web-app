@@ -2,7 +2,7 @@
   <v-dialog v-model="modalState" width="500">
     <v-card :loading="loading">
       <v-toolbar :flat="true">
-        <v-toolbar-title class="headline" dark primary-title v-text="categoryTitle" />
+        <v-toolbar-title dark primary-title v-text="categoryTitle" />
         <v-spacer />
       </v-toolbar>
 
@@ -58,8 +58,7 @@ export default class CategoryModal extends CategoryMixin {
   }
 
   closeModal() {
-    // @ts-ignore
-    this.$refs.manageForm.reset();
+    this.clearFields();
     this.frontendStore.setCategoryModal(false);
   }
 

@@ -11,7 +11,7 @@ import ICategory from "~/interfaces/ICategory";
 
 @Component
 class CategoryMixin extends Vue {
-  redirect: boolean = true;
+  redirect: boolean = false;
   valid: boolean = false;
   dialog: boolean = true;
   isEdit: boolean = false;
@@ -57,6 +57,11 @@ class CategoryMixin extends Vue {
   }
 
   setCategory(item: ICategory) {
+    if (!item) {
+      this.clearFields()
+      return this.isEdit = false
+    };
+
     this.isEdit = true;
     this.category = JSON.parse(JSON.stringify(item));
   }
@@ -65,6 +70,13 @@ class CategoryMixin extends Vue {
     this.categoryStore.fetchCategories({ search })
   }
 
+  clearFields() {
+    this.category.category_id = undefined;
+    this.category.category_name = "";
+    this.category.description = "";
+    //@ts-ignore 
+    this.$refs.manageForm.resetValidation();
+  }
 
   validate(): void {
     // @ts-ignore

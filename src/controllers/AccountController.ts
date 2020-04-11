@@ -12,13 +12,16 @@ class AccountController extends QueryExtends {
 	}
 
 	public async fetchAccounts(req: Request, res: Response): Promise<any> {
+		const { search, limit, offset } = req.query;
+
 		const query: QueryConfig = {
 			text: `SELECT
 			account.account_id,
 			account.firstname || ' ' || account.lastname AS fullname,
 			account.username,
 			role.role_name
-			FROM "${this.accountTable}" account INNER JOIN "${this.roleTable}" role ON role.role_id = account.role_id`
+			FROM "${this.accountTable}" account INNER JOIN "${this.roleTable}" role ON role.role_id = account.role_id
+			${search ? `WHERE account_name ILIKE '%${search}%'` : ''}`
 		};
 
 		try {

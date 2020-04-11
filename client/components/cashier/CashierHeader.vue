@@ -17,7 +17,7 @@
         <v-spacer></v-spacer>
         <div class="text-right">
           <div class="subtitle-1 text-right font-weight-bold" v-text="fullname" />
-          <v-btn text x-small style="text-decoration: underline">Change Customer</v-btn>
+          <v-btn text x-small style="text-decoration: underline" @click="initPage()">Change Customer</v-btn>
         </div>
       </div>
     </v-col>
