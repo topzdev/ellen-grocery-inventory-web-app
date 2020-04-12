@@ -25,16 +25,10 @@ export default class Index extends Vue {
   parentPath: string = "accounts";
   actionLink: Array<Object> = [
     {
-      title: "Add Account",
-      subtitle: "Add New Account",
+      title: "Manage Account",
+      subtitle: "Add amd edit account info and password",
       color: "blue darken-1",
       to: `/${this.parentPath}/account_add`
-    },
-    {
-      title: "Update Account",
-      subtitle: "Update or Remove Existing Account Information",
-      color: "orange darken-1",
-      to: `/${this.parentPath}/account_manage`
     },
     {
       title: "Transactions",

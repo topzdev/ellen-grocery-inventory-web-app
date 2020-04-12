@@ -68,7 +68,6 @@ export default class Brand extends VuexModule {
   @Action({ rawError: true })
   public async addBrand({ brand_name, redirect }: any) {
 
-    console.log('Processed Mehh')
     this.setLoading(true);
     const result: IResult = await $axios.$post(
       this.url,

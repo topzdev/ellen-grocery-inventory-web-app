@@ -42,6 +42,15 @@ router.put('/', (req: Request, res: Response) => {
 });
 
 /**
+ * @route           PUT api/account/password
+ * @description     update account password
+ * @access          private
+ */
+router.put('/password', (req: Request, res: Response) => {
+	controller.updateAccountPassword(req, res);
+});
+
+/**
  * @route           DELETE api/account
  * @description     delete account
  * @access          private

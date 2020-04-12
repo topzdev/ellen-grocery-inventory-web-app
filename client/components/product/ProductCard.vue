@@ -85,22 +85,27 @@ export default class ProductCard extends ProductMixin {
   }
 
   get badgeContent() {
-    let content = cashierStore.getOrders.filter(
-      item => item.product_id === this.item.product_id
-    );
+    if (this.isCashier) {
+      let content = cashierStore.getOrders.filter(
+        item => item.product_id === this.item.product_id
+      );
 
-    if (content.length) return content[0].quantity;
+      if (content.length) return content[0].quantity;
+
+      return false;
+    }
 
     return false;
   }
 
   createOrder() {
-    cashierStore.addOrder({
-      product_id: this.item.product_id,
-      name: this.item.product_name,
-      quantity: 1,
-      price: this.item.price
-    });
+    if (this.isCashier)
+      cashierStore.addOrder({
+        product_id: this.item.product_id,
+        name: this.item.product_name,
+        quantity: 1,
+        price: this.item.price
+      });
   }
 }
 </script>

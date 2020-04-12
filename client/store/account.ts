@@ -7,6 +7,7 @@ import { frontendStore } from '~/utils/store-accessor';
 import { SET_ACCOUNTS, SET_CURRENT_ACCOUNT, ADD_ACCOUNT, UPDATE_ACCOUNT, DELETE_ACCOUNT } from '~/configs/types';
 import IFilter from '~/interfaces/IFilter';
 import filterGenerator from '~/utils/filterGenerator';
+import IPasswords from '~/interfaces/IPasswords';
 
 @Module({
   name: "account",
@@ -59,57 +60,52 @@ export default class Account extends VuexModule {
   public async fetchSingleAccount(account_id: number) {
     if (account_id === undefined) return;
 
-    try {
-      const result: IResult = await $axios.$get(`${this.url}/${account_id}`);
-      return result.data;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+    const result: IResult = await $axios.$get(`${this.url}/${account_id}`);
+    return result.data;
+
   }
 
   @Action({ commit: SET_ACCOUNTS })
   public async fetchAccounts(filter: IFilter) {
-    try {
-      const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`);
-      return result.data;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`);
+    return result.data;
   }
 
-  @Action({ commit: ADD_ACCOUNT })
+  @Action({ rawError: true })
   public async addAccount(account: IAccount) {
-    try {
-      const result: IResult = await $axios.$post(
-        `${this.url}`,
-        account,
-        config
-      );
+    const result: IResult = await $axios.$post(
+      `${this.url}`,
+      account,
+      config
+    );
 
-      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
-      frontendStore.setRedirect(this.path)
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
 
-      return {
-        account_id: result.data.account_id,
-        ...account
-      };
-    } catch (error) {
-      return console.log(error.stack);
-    }
+    if (result.success) this.context.commit(ADD_ACCOUNT, {
+      account_id: result.data.account_id,
+      ...account
+    })
   }
 
-  @Action({ commit: UPDATE_ACCOUNT })
+  @Action({ rawError: true })
   public async updateAccount(account: IAccount) {
-    try {
-      const result: IResult = await $axios.$put(`${this.url}`, account, config);
 
-      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
-      frontendStore.setRedirect(this.path)
+    const result: IResult = await $axios.$put(`${this.url}`, account, config);
 
-      return account;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
+
+    if (result.success) return this.context.commit(UPDATE_ACCOUNT, account);
+
+  }
+
+  @Action
+  public async updatePassword(passwords: IPasswords) {
+    const result: IResult = await $axios.$put(`${this.url}/password`, passwords, config);
+
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
   }
 
   @Action({ commit: DELETE_ACCOUNT })

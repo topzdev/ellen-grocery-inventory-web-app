@@ -58,6 +58,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class ListToolBar extends Vue {
+  @Prop() deleteItem!: Function;
   @Prop() selectedItem!: object;
   @Prop() searchLabel!: string;
   @Prop() listLabel!: string;

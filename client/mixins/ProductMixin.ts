@@ -1,15 +1,15 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import IProduct from "~/interfaces/IProduct";
 import {
-  productStore,
-  IProductModule,
-  frontendStore,
-  IFrontendModule,
-  processStore,
-  IProcessModule
+  productStore, IProductModule, frontendStore, IFrontendModule,
+  processStore, IProcessModule, brandStore, IBrandModule, categoryStore,
+  ICategoryModule, supplierStore, ISupplierModule, roleStore, IRoleModule
 } from "@/store";
+import ProductImageUploader from '@/components/product/ProductImageUploader.vue'
 
-@Component
+@Component({
+  components: { ProductImageUploader }
+})
 export default class ProductMixin extends Vue {
   productStore: IProductModule;
   frontendStore: IFrontendModule;
@@ -20,7 +20,7 @@ export default class ProductMixin extends Vue {
     super();
     this.productStore = productStore;
     this.frontendStore = frontendStore;
-    this.processStore = processStore;
+    this.processStore = processStore
   }
 
   // product state
@@ -71,8 +71,11 @@ export default class ProductMixin extends Vue {
     });
   }
 
-  uploadImage(image: File) {
-    if (!image) return this.product.image = undefined;
+
+
+
+  uploadImage(image: any) {
+    if (!image.target.files.length) return this.product.image = undefined;
 
     let self = this;
     const reader = new FileReader();
@@ -82,11 +85,23 @@ export default class ProductMixin extends Vue {
       self.product.imageFile = image;
     }
 
-    reader.readAsDataURL(image);
+    reader.readAsDataURL(image.target.files[0]);
   }
 
   get setUrlImage() {
     return this.product.image_url ? this.product.image_url : require('~/assets/img/noimg.jpg')
+  }
+
+  get categories() {
+    return categoryStore.getCategories;
+  }
+
+  get suppliers() {
+    return supplierStore.getSupplier;
+  }
+
+  get brands() {
+    return brandStore.getBrands;
   }
 
   // Rules
@@ -121,9 +136,11 @@ export default class ProductMixin extends Vue {
     category_id: [(v: any) => !!v || "Category is required"]
   };
 
-
   @Watch("search")
   searchProduct() {
     this.productStore.fetchProducts({ search: this.search })
   };
 }
+
+
+

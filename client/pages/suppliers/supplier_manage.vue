@@ -2,12 +2,13 @@
   <v-card flat tile>
     <v-toolbar color="primary" dark extended flat>
       <v-card-actions>
-        <back-btn title="Manage Supplier" />
+        <back-btn />
+        <v-toolbar-title>Add Supplier</v-toolbar-title>
       </v-card-actions>
     </v-toolbar>
     <v-container>
       <v-form ref="supplierForm" v-model="valid" :lazy-validation="true">
-        <v-card style="margin-top: -65px;">
+        <v-card style="margin-top: -60px;">
           <v-card-text>
             <v-row class="px-4">
               <v-col>
@@ -83,7 +84,8 @@
             <v-btn
               :disabled="!valid"
               color="error"
-              class="mr-4 d-flex ml-auto"
+              class="d-flex ml-auto"
+              text
               large
               @click="deleteItem(supplier)"
             >Delete</v-btn>

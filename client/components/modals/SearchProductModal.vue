@@ -76,7 +76,7 @@ export default class SearchProductModal extends Vue {
   }
 
   getSelectedItem(item: IProduct) {
-    console.log("Selected item", item);
+    console.log(item);
     processStore.setCurrentProduct(item);
   }
 

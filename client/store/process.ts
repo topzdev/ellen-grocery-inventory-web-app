@@ -17,18 +17,18 @@ import { SET_CURRENT_DELETE, SET_CURRENT_PRODUCT, SET_CURRENT_SUPPLIER } from '~
 })
 export default class Process extends VuexModule {
   private currentDelete: ICurrentDelete = {};
-  private currentProduct: IProductInfo | undefined = undefined;
-  private currentSupplier: ISupplierInfo | undefined = undefined;
+  private currentProduct: IProductInfo | null = null;
+  private currentSupplier: ISupplierInfo | null = null;
 
-  get toDeleteItem(): ICurrentDelete {
+  get toDeleteItem() {
     return this.currentDelete;
   }
 
-  get toManageProduct(): IProductInfo | undefined {
+  get toManageProduct() {
     return this.currentProduct;
   }
 
-  get toManageSupplier(): ISupplierInfo | undefined {
+  get toManageSupplier() {
     return this.currentSupplier;
   }
 

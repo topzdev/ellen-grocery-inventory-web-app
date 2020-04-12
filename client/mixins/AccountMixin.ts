@@ -3,6 +3,7 @@ import {
   accountStore,
   frontendStore,
   processStore,
+  roleStore,
   IFrontendModule,
   IProcessModule,
   IAccountModule
@@ -44,12 +45,6 @@ class AccountMixin extends Vue {
     this.isEdit = false;
     this.accountStore.updateAccount(this.account);
   }
-
-  //   setAccount(item: IAccount) {
-  //     this.isEdit = true;
-  //     this.account = JSON.parse(JSON.stringify(item));
-  //   }
-
 
   clearFields() {
     this.account = {
@@ -110,6 +105,10 @@ class AccountMixin extends Vue {
     this.accountStore.fetchAccounts({ search });
   }
 
+  get roles() {
+    return roleStore.getRoles;
+  }
+
   get accountList() {
     return this.accountStore.getAccounts;
   }
@@ -119,7 +118,7 @@ class AccountMixin extends Vue {
   }
 
   get accountTitle() {
-    return this.isEdit ? "Edit Account" : "Add Account";
+    return this.isEdit ? "Change Account Info" : "Add Account";
   }
 
   rules: Object = {
@@ -130,8 +129,8 @@ class AccountMixin extends Vue {
     email_address: [(v: any) => !!v || "Email Address is required"],
     password: [
       (v: any) => !!v || "Password is required",
-      (v: any) => v.length > 6 || "Password length must longer than 6",
-      (v: any) => v.length < 50 || "Password is too long"
+      (v: any) => !!v && v.length > 6 || "Password length must longer than 6",
+      (v: any) => !!v && v.length < 50 || "Password is too long"
     ],
     role_id: [(v: any) => v !== -1 || "Role is required"]
   };

@@ -12,6 +12,6 @@ export default interface IProduct {
   category_id: number;
   image: string | ArrayBuffer | null | undefined;
   image_url: string | ArrayBuffer | null | undefined;
-  imageFile: File | undefined; 
+  imageFile: File | undefined;
   created_at?: string;
 }

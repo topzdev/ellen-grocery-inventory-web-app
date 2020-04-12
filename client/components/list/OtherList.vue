@@ -8,6 +8,7 @@
       :reset="reset"
       :items="items"
       :list-item="listItem"
+      :delete-item="deleteItem"
     ></list-toolbar>
 
     <v-list max-height="400px" style="overflow: auto">

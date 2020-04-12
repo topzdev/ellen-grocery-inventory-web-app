@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar color="primary" :hidden="!navbar" dark :app="navbar" :flat="flat">
-      <v-app-bar-nav-icon v-if="!sidebarMiniState" @click="setSidebar" />
+      <v-app-bar-nav-icon @click="setSidebar" />
       <v-toolbar-title v-text="title" />
     </v-app-bar>
   </div>
@@ -16,7 +16,7 @@ export default class Navbar extends Vue {
   title: string = "Ellen Inventory System";
 
   setSidebar(show: boolean) {
-    frontendStore.setSidebarMini(!this.sidebarState);
+    frontendStore.setSidebarMini(!this.sidebarMiniState);
   }
 
   get sidebarState() {

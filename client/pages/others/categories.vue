@@ -5,7 +5,7 @@
       <v-toolbar-title class="pl-2">Manage Category</v-toolbar-title>
     </v-toolbar>
     <v-container>
-      <v-row class="px-3" style="margin-top: -65px;">
+      <v-row class="px-3" style="margin-top: -60px;">
         <v-col cols="6">
           <v-form ref="manageForm" v-model="valid" lazy-validation>
             <v-card>

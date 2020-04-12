@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import QueryExtends from '../extends/QueryExtend';
 import IAccount from '../interfaces/IAccount';
 import bcrypt from 'bcryptjs';
+import { query } from 'express-validator';
 require('dotenv').config();
 
 class AccountController extends QueryExtends {
@@ -11,7 +12,7 @@ class AccountController extends QueryExtends {
 		console.log('Account Controller');
 	}
 
-	public async fetchAccounts(req: Request, res: Response): Promise<any> {
+	public async fetchAccounts(req: Request, res: Response) {
 		const { search, limit, offset } = req.query;
 
 		const query: QueryConfig = {
@@ -41,7 +42,7 @@ class AccountController extends QueryExtends {
 		}
 	}
 
-	public async fetchSingleAccount(req: Request, res: Response): Promise<any> {
+	public async fetchSingleAccount(req: Request, res: Response) {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
@@ -74,7 +75,7 @@ class AccountController extends QueryExtends {
 		}
 	}
 
-	public async addAccount(req: Request, res: Response): Promise<any> {
+	public async addAccount(req: Request, res: Response) {
 		const {
 			firstname,
 			lastname,
@@ -85,26 +86,13 @@ class AccountController extends QueryExtends {
 			password
 		}: IAccount = req.body;
 
-		let hashPassword = await bcrypt.hash(password, 10);
-
-
 		try {
-			let query: QueryConfig = {
-				text: `SELECT account_id FROM "${this.accountTable}" WHERE username = $1`,
-				values: [username]
-			}
+			let hashPassword = await bcrypt.hash(password, 10);
 
-			let result = await this.client.query(query);
-
-			if (result.rows.length) return res.json({
-				success: false,
-				message: 'Username Already Exist',
-			});
-
-			query = {
+			const query: QueryConfig = {
 				text: `INSERT INTO "${this.accountTable}" (firstname,
 					lastname,  middlename, username,  email_address, role_id, password)
-					VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING account_id`,
+					SELECT $1, $2, $3, $4, $5, $6, $7 WHERE NOT EXISTS (SELECT 1 FROM "${this.accountTable}" WHERE username = $8 ) RETURNING account_id`,
 				values: [
 					firstname,
 					lastname,
@@ -112,13 +100,19 @@ class AccountController extends QueryExtends {
 					username,
 					email_address,
 					role_id,
-					hashPassword
+					hashPassword,
+					username
 				]
 			};
 
+			const result = await this.client.query(query);
 
+			console.log(result)
 
-			result = await this.client.query(query);
+			if (!result.rowCount) return res.json({
+				success: false,
+				message: 'Username Already Exist',
+			});
 
 			return res.json({
 				message: 'Account Successfully Added',
@@ -134,7 +128,7 @@ class AccountController extends QueryExtends {
 		}
 	}
 
-	public async updateAccount(req: Request, res: Response): Promise<any> {
+	public async updateAccount(req: Request, res: Response) {
 		const {
 			account_id,
 			firstname,
@@ -145,22 +139,31 @@ class AccountController extends QueryExtends {
 			role_id
 		}: IAccount = req.body;
 
-		const query: QueryConfig = {
-			text: `UPDATE "${this.accountTable}" SET firstname = $1,
-                lastname = $2, middlename = $3, username = $4, email_address = $5, role_id = $6 WHERE account_id = $7`,
-			values: [
-				firstname,
-				lastname,
-				middlename,
-				username,
-				email_address,
-				role_id,
-				account_id
-			]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `UPDATE "${this.accountTable}"
+				 	SET firstname = $1, lastname = $2, middlename = $3, username = $4, email_address = $5, role_id = $6 
+					WHERE account_id = $7 AND NOT EXISTS(SELECT 1 FROM "${this.accountTable}" WHERE username = $8)`,
+				values: [
+					firstname,
+					lastname,
+					middlename,
+					username,
+					email_address,
+					role_id,
+					account_id,
+					username
+				]
+			};
+
 			const result = await this.client.query(query);
+
+			console.log(result, query);
+
+			if (!result.rowCount) return res.json({
+				message: 'Username is already in used ',
+				success: false,
+			});
 
 			return res.json({
 				message: 'Account Successfully Updated',
@@ -176,15 +179,68 @@ class AccountController extends QueryExtends {
 		}
 	}
 
-	public async deleteAccount(req: Request, res: Response): Promise<any> {
+
+	public async updateAccountPassword(req: Request, res: Response) {
+		const { account_id, current_password, new_password } = req.body;
+		try {
+			let query: QueryConfig = {
+				text: `SELECT password from "${this.accountTable}" WHERE account_id = $1`,
+				values: [account_id]
+			}
+
+			let result = await this.client.query(query);
+
+			// Check if account_id provided is exisiting in database
+			if (!result.rowCount) return res.json({
+				message: 'Account not found',
+				success: false,
+			});
+
+			// Check if current password match the old password
+			if (!await bcrypt.compare(current_password, result.rows[0].password)) return res.json({
+				message: 'Current Password not match',
+				success: false,
+			});
+
+			// Check if new password is not identical to old password 
+			if (await bcrypt.compare(new_password, result.rows[0].password)) return res.json({
+				message: 'You cannot use the previous password',
+				success: false,
+			});
+
+			// After a bunch of validations hash the new password
+			let hashedPassword = await bcrypt.hash(new_password, 10);
+
+			query = {
+				text: `UPDATE "${this.accountTable}" SET password = $1`,
+				values: [hashedPassword]
+			}
+
+			result = await this.client.query(query);
+
+			return res.json({
+				message: 'Password Successfully Updated',
+				success: true,
+				data: result.rows
+			});
+		} catch (error) {
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
+		}
+	}
+
+	public async deleteAccount(req: Request, res: Response) {
 		const id = req.params.id;
 
-		const query: QueryConfig = {
-			text: `DELETE FROM "${this.accountTable}" WHERE account_id = $1`,
-			values: [id]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `DELETE FROM "${this.accountTable}" WHERE account_id = $1`,
+				values: [id]
+			};
+
 			const result = await this.client.query(query);
 
 			return res.json({
