@@ -8,11 +8,10 @@
       </div>
     </v-card-text>
     <v-card-actions>
-      <v-row no-gutters>
-        <v-col cols="12">
-          <v-btn color="success" x-large block @click="openPaymentTray(true)">Pay</v-btn>
-        </v-col>
-      </v-row>
+      <v-btn color="success" x-large block>
+        <v-icon>mdi-cash-register</v-icon>&nbsp;Payment
+        <span class="overline">(F1)</span>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

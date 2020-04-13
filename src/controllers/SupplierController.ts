@@ -10,11 +10,12 @@ class SupplierController extends QueryExtend {
 	}
 
 	public async getSuppliers(req: Request, res: Response): Promise<any> {
+		const { search, limit, offset } = req.query;
 
 		try {
-
 			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.supplierTable}"`
+				text: `SELECT * FROM "${this.supplierTable}" 
+				${search ? `WHERE supplier_name ILIKE '%${search}%'` : ''}`
 			};
 
 			const result = await this.client.query(query);

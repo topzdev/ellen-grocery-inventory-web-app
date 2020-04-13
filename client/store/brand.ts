@@ -1,18 +1,11 @@
+import BrandAPI from '~/api/Brand'
+import { frontendStore } from "~/utils/store-accessor";
 import { VuexModule, Mutation, Action, Module } from "vuex-module-decorators";
-import { $axios } from "~/utils/axios";
-import config from "~/configs/axiosConfig";
+import { SET_BRANDS, ADD_BRAND, UPDATE_BRAND, DELETE_BRAND, SET_LOADING, } from "~/configs/types";
+import { IBrand, IFilter, IDeleteConfig } from "~/interfaces";
 
-import IBrand from "~/interfaces/IBrand";
-import IResult from "~/interfaces/IResult";
-import { IDeleteConfig } from '~/interfaces/IUniversal';
-import { frontendStore } from '~/utils/store-accessor';
-import { SET_BRANDS, ADD_BRAND, UPDATE_BRAND, DELETE_BRAND, SET_LOADING, ADD_TRANSACTION } from '~/configs/types';
-import IFilter from '~/interfaces/IFilter';
-import filterGenerator from '~/utils/filterGenerator';
+const brandAPI = new BrandAPI;
 
-/**
- * ? TASK: retun the id of the added product, updated product ...
- */
 @Module({ name: "brand", namespaced: true })
 export default class Brand extends VuexModule {
   private url: string = "/api/brand";
@@ -24,7 +17,6 @@ export default class Brand extends VuexModule {
   get getLoading() {
     return this.loading;
   }
-
 
   get getBrands() {
     return this.brands;
@@ -61,22 +53,20 @@ export default class Brand extends VuexModule {
 
   @Action({ commit: SET_BRANDS, rawError: true })
   public async fetchBrands(filter: IFilter) {
-    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
-    return result.data;
+    const result = await brandAPI.fetchBrands(filter);
+
+    if (result.success) return result.data;
   }
 
   @Action({ rawError: true })
   public async addBrand({ brand_name, redirect }: any) {
 
     this.setLoading(true);
-    const result: IResult = await $axios.$post(
-      this.url,
-      { brand_name },
-      config
-    );
+    const result = await brandAPI.addBrand(brand_name)
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
+
     this.setLoading(false);
 
     if (result.success) return this.context.commit(ADD_BRAND, { brand_name, brand_id: result.data.brand_id });
@@ -84,25 +74,22 @@ export default class Brand extends VuexModule {
   }
 
   @Action({ commit: UPDATE_BRAND, rawError: true })
-  public async updateBrand({ brand_name, brand_id }: IBrand) {
-    const result: IResult = await $axios.$put(
-      this.url,
-      { brand_name, brand_id },
-      config
-    );
+  public async updateBrand(brand: IBrand) {
+    const result = await brandAPI.updateBrand(brand)
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
-    return { brand_name, brand_id };
+
+    if (result.success) return brand;
   }
 
   @Action({ commit: DELETE_BRAND, rawError: true })
   public async deleteBrand({ id, redirect }: IDeleteConfig) {
-    const result: IResult = await $axios.$delete(`${this.url}/${id}`);
-
+    const result = await brandAPI.deleteBrand(id);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect);
-    return id;
+
+    if (result.success) return id;
   }
 }

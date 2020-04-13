@@ -1,29 +1,22 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import ITransaction from '~/interfaces/ITransaction'
-import { SET_TRANSACTION, ADD_TRANSACTION } from '~/configs/types';
-import IFilter from '~/interfaces/IFilter';
-import { $axios } from '~/utils/axios';
-import filterGenerator from '~/utils/filterGenerator';
-import config from '~/configs/axiosConfig';
+import TransactionAPI from '~/api/Transaction';
 import { frontendStore } from '~/utils/store-accessor';
-import IResult from '~/interfaces/IResult';
+import { ITransaction, IFilter } from '~/interfaces';
+import { SET_TRANSACTION, ADD_TRANSACTION } from '~/configs/types';
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 
+const transactionApi = new TransactionAPI;
 
-@Module({
-    name: 'transaction',
-    namespaced: true
-})
+@Module({ name: 'transaction', namespaced: true })
 export default class Transaction extends VuexModule {
-    private url: string = "/api/transaction";
     private path: string = "/transactions";
-    private transactions: Array<ITransaction> = [];
+    private transactions: ITransaction[] = [];
 
     get getTransactions() {
         return this.transactions;
     }
 
     @Mutation
-    [SET_TRANSACTION](transactions: Array<ITransaction>) {
+    [SET_TRANSACTION](transactions: ITransaction[]) {
         this.transactions = transactions;
     }
     @Mutation
@@ -33,24 +26,16 @@ export default class Transaction extends VuexModule {
 
     @Action({ commit: SET_TRANSACTION })
     async fetchTransactions(filter: IFilter) {
-        try {
-            const result: IResult = await $axios.$get(this.url + filterGenerator(filter), config);
-            return result.data;
-        } catch (error) {
-            console.log(error);
-            frontendStore.setSnackbar({ message: error.response.data.message, success: false });
-        }
+        const result = await transactionApi.fetchTransactions(filter);
+        return result.data;
     }
 
     @Action({ commit: ADD_TRANSACTION })
     async addTransaction(transaction: ITransaction) {
-        try {
-            const result: IResult = await $axios.$post(this.url, transaction, config);
-            frontendStore.setSnackbar({ message: result.message, success: result.success });
-            return { ...transaction, transact_id: result.data.transact_id };
-        } catch (error) {
-            console.log(error);
-            frontendStore.setSnackbar({ message: error.response.data.message, success: false });
-        }
+        const result = await transactionApi.addTransaction(transaction);
+
+        frontendStore.setSnackbar({ message: result.message, success: result.success });
+
+        return { ...transaction, transact_id: result.data.transact_id };
     }
 }

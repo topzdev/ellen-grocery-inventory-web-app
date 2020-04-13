@@ -1,12 +1,11 @@
 import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
-import { $axios } from "~/utils/axios";
-import config from "~/configs/axiosConfig";
 import IProduct from "~/interfaces/IProduct";
-import IResult from "~/interfaces/IResult";
 import { frontendStore } from '~/utils/store-accessor';
 import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
-import filterGenerator from '~/utils/filterGenerator';
 import IFilter from '~/interfaces/IFilter';
+import ProductAPI from '@/api/Product'
+
+const productAPI = new ProductAPI;
 
 @Module({
   name: "product",
@@ -16,7 +15,6 @@ export default class Product extends VuexModule {
   // states
   private products: Array<IProduct> = [];
   private singleProduct: object = {};
-  private url: string = "api/product";
   public path = "/products";
 
   get getProducts() {
@@ -28,7 +26,6 @@ export default class Product extends VuexModule {
   }
 
   get tangina() {
-    console.log("Passing the way");
     return this.singleProduct;
   }
 
@@ -66,49 +63,27 @@ export default class Product extends VuexModule {
   }
 
   //action
-
   @Action({ commit: ADD_PRODUCT, rawError: true })
   public async addProduct(product: IProduct) {
 
-    const formData = new FormData();
-
-    formData.append('product_name', product.product_name.toString())
-    formData.append('barcode', product.barcode.toString())
-    formData.append('quantity_min', product.quantity_min.toString())
-    formData.append('quantity_max', product.quantity_max.toString())
-    formData.append('quantity', product.quantity.toString())
-    formData.append('price', product.price.toString())
-    formData.append('description', product.description)
-    formData.append('brand_id', product.brand_id.toString())
-    formData.append('supplier_id', product.supplier_id.toString())
-    formData.append('category_id', product.category_id.toString())
-    formData.append('file', product.imageFile!)
-
-    const result: IResult = await $axios.$post(`${this.url}`, formData, config);
-
+    const result = await productAPI.addProduct(product);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    if (result.success) return {
-      product_id: result.data.product_id,
-      ...product
-    };
-
+    if (result.success) return { product_id: result.data.product_id, ...product };
   }
 
   @Action({ commit: SET_CURRENT, rawError: true })
   public async fetchSingleProduct(barcode: string) {
-    console.log(barcode);
-    const result: IResult = await $axios.$get(`${this.url}/${barcode}`);
-
+    const result = await productAPI.fetchSingleProduct(barcode);
     return result.data != undefined ? result.data : null;
   }
 
   @Action({ commit: SET_PRODUCTS, rawError: true })
-  public async fetchProducts(query: IFilter) {
-    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(query)}`, config);
-    return result.data;
+  public async fetchProducts(filter: IFilter) {
+    const result = await productAPI.fetchProducts(filter);
+    if (result.success) return result.data;
   }
 
 
@@ -116,40 +91,21 @@ export default class Product extends VuexModule {
   public async updateProduct(product: IProduct) {
     const formData = new FormData();
 
-    formData.append('product_id', product.product_id!.toString())
-    formData.append('product_name', product.product_name.toString())
-    formData.append('barcode', product.barcode.toString())
-    formData.append('quantity_min', product.quantity_min.toString())
-    formData.append('quantity_max', product.quantity_max.toString())
-    formData.append('quantity', product.quantity.toString())
-    formData.append('price', product.price.toString())
-    formData.append('description', product.description)
-    formData.append('brand_id', product.brand_id.toString())
-    formData.append('supplier_id', product.supplier_id.toString())
-    formData.append('category_id', product.category_id.toString())
-    formData.append('image', product.image!.toString())
-    formData.append('image_url', product.image_url!.toString())
-    formData.append('file', product.imageFile!)
-
-    const result: IResult = await $axios.$put(`${this.url}`, formData, config);
+    const result = await productAPI.updateProduct(product);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    return product;
+    if (result.success) return product;
   }
 
   @Action({ commit: DELETE_PRODUCT, rawError: true })
-  public async deleteProduct({ id, others }: any) {
-    console.log('hello', others);
-    const result: IResult = await $axios.$delete(
-      `${this.url}`,
-      { ...config, data: { image: others, product_id: id } }
-    );
+  public async deleteProduct(payload: any) {
+    const result = await productAPI.deleteProduct(payload);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    return id;
+    if (result.success) return payload.id;
   }
 }

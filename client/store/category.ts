@@ -1,19 +1,13 @@
-import { Module, Mutation, Action, VuexModule } from "vuex-module-decorators";
-
-import { $axios } from "~/utils/axios";
-import config from "~/configs/axiosConfig";
-
-import ICategory from "~/interfaces/ICategory";
-import IResult from "~/interfaces/IResult";
+import CategoryAPI from '@/api/Category'
 import { frontendStore } from '~/utils/store-accessor';
+import { ICategory, IFilter } from '~/interfaces';
+import { Module, Mutation, Action, VuexModule } from "vuex-module-decorators";
 import { SET_LOADING, SET_CATEGORIES, ADD_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY } from '~/configs/types';
-import IFilter from '~/interfaces/IFilter';
-import filterGenerator from '~/utils/filterGenerator';
 
+const categoryAPI = new CategoryAPI;
 
 @Module({ name: "category", namespaced: true })
 export default class Category extends VuexModule {
-  private url: string = "/api/category";
   private path: string = "/others";
   private categories: Array<ICategory> = [];
   private loading: boolean = false;
@@ -61,16 +55,16 @@ export default class Category extends VuexModule {
   }
 
   @Action({ commit: SET_CATEGORIES })
-  public async fetchCategories(filter: IFilter) {
-    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
+  async fetchCategories(filter: IFilter) {
+    const result = await categoryAPI.fetchCategories(filter);
     return result.data;
   }
 
   @Action({ rawError: true })
-  public async addCategory({ category, redirect }: { category: ICategory, redirect: boolean }) {
+  async addCategory({ category, redirect }: { category: ICategory, redirect: boolean }) {
 
     this.setLoading(true);
-    const result: IResult = await $axios.$post(this.url, category, config);
+    const result = await categoryAPI.addCategory(category);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
@@ -80,8 +74,8 @@ export default class Category extends VuexModule {
   }
 
   @Action({ commit: UPDATE_CATEGORY })
-  public async updateCategory(category: ICategory) {
-    const result: IResult = await $axios.$put(this.url, category, config);
+  async updateCategory(category: ICategory) {
+    const result = await categoryAPI.updateCategory(category);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
@@ -90,13 +84,13 @@ export default class Category extends VuexModule {
   }
 
   @Action({ commit: DELETE_CATEGORY })
-  public async deleteCategory(category_id: number) {
-    const result: IResult = await $axios.$delete(`${this.url}/${category_id}`);
-
+  async deleteCategory(category_id: number) {
+    const result = await categoryAPI.deleteCategory(category_id)
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
+    return category_id
 
   }
 }

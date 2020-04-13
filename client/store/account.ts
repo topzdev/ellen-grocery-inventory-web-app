@@ -1,20 +1,22 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import IAccount from "~/interfaces/IAccount";
-import IResult from "~/interfaces/IResult";
-import { $axios } from "~/utils/axios";
-import config from "~/configs/axiosConfig";
-import { frontendStore } from '~/utils/store-accessor';
-import { SET_ACCOUNTS, SET_CURRENT_ACCOUNT, ADD_ACCOUNT, UPDATE_ACCOUNT, DELETE_ACCOUNT } from '~/configs/types';
-import IFilter from '~/interfaces/IFilter';
-import filterGenerator from '~/utils/filterGenerator';
-import IPasswords from '~/interfaces/IPasswords';
+import { frontendStore } from "~/utils/store-accessor";
+import {
+  SET_ACCOUNTS,
+  SET_CURRENT_ACCOUNT,
+  ADD_ACCOUNT,
+  UPDATE_ACCOUNT,
+  DELETE_ACCOUNT
+} from "~/configs/types";
+import { IAccount, IFilter, IPasswords } from '~/interfaces';
+import AccountAPI from '~/api/Account'
+
+const accountAPI = new AccountAPI;
 
 @Module({
   name: "account",
   namespaced: true
 })
 export default class Account extends VuexModule {
-  private url: string = "/api/account";
   private path: string = "/accounts";
   private accounts: Array<IAccount> = [];
   private current: IAccount | null = null;
@@ -50,34 +52,28 @@ export default class Account extends VuexModule {
   }
 
   @Mutation
-  private [DELETE_ACCOUNT](account_id: number) {
+  private [DELETE_ACCOUNT](account_id: IAccount['account_id']) {
     this.accounts = this.accounts.filter(
       item => item.account_id !== account_id
     );
   }
 
   @Action({ commit: SET_CURRENT_ACCOUNT })
-  public async fetchSingleAccount(account_id: number) {
+  async fetchSingleAccount(account_id: IAccount['account_id']) {
     if (account_id === undefined) return;
-
-    const result: IResult = await $axios.$get(`${this.url}/${account_id}`);
+    const result = await accountAPI.fetchSingleAccount(account_id)
     return result.data;
-
   }
 
   @Action({ commit: SET_ACCOUNTS })
-  public async fetchAccounts(filter: IFilter) {
-    const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`);
+  async fetchAccounts(filter: IFilter) {
+    const result = await accountAPI.fetchAccounts(filter);
     return result.data;
   }
 
   @Action({ rawError: true })
-  public async addAccount(account: IAccount) {
-    const result: IResult = await $axios.$post(
-      `${this.url}`,
-      account,
-      config
-    );
+  async addAccount(account: IAccount) {
+    const result = await accountAPI.addAccount(account);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
@@ -89,36 +85,30 @@ export default class Account extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async updateAccount(account: IAccount) {
-
-    const result: IResult = await $axios.$put(`${this.url}`, account, config);
+  async updateAccount(account: IAccount) {
+    const result = await accountAPI.updateAccount(account);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
     if (result.success) return this.context.commit(UPDATE_ACCOUNT, account);
-
   }
 
   @Action
-  public async updatePassword(passwords: IPasswords) {
-    const result: IResult = await $axios.$put(`${this.url}/password`, passwords, config);
+  async updatePassword(passwords: IPasswords) {
+    const result = await accountAPI.updatePassword(passwords);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
   }
 
   @Action({ commit: DELETE_ACCOUNT })
-  public async deleteAccount(account_id: number) {
-    try {
-      const result: IResult = await $axios.$delete(`${this.url}/${account_id}`);
+  async deleteAccount(account_id: number) {
+    const result = await accountAPI.deleteAccount(account_id);
 
-      frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
-      frontendStore.setRedirect(this.path)
+    frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
+    frontendStore.setRedirect(this.path)
 
-      return account_id;
-    } catch (error) {
-      return console.log(error.stack);
-    }
+    return account_id;
   }
 }

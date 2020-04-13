@@ -1,4 +1,4 @@
-export default interface ISupplierInfo {
+export default interface ISupplier {
   supplier_id?: number;
   supplier_name: string;
   company_address: string;

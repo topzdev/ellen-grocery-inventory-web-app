@@ -51,17 +51,17 @@ export default class BarcodeDialog extends Vue {
     return frontendStore.barcodeModalState;
   }
 
-  @Watch("searched")
-  verifyBarcode() {
-    if (this.searched !== null) {
-      return frontendStore.setSnackbar({
-        show: true,
-        message: "The Barcode you entering is already existing",
-        success: false
-      });
-    }
-    frontendStore.setBarcodeModal(false);
-  }
+  // @Watch("searched")
+  // verifyBarcode() {
+  //   if (this.searched !== null) {
+  //     return frontendStore.setSnackbar({
+  //       show: true,
+  //       message: "The Barcode you entering is already existing",
+  //       success: false
+  //     });
+  //   }
+  //   frontendStore.setBarcodeModal(false);
+  // }
 
   searchBarcode() {
     if (this.barcode === "") {

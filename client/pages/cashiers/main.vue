@@ -9,15 +9,13 @@
           </div>
           <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
         </v-col>
-
         <v-col cols="4" style="height: inherit">
           <v-sheet class="d-flex flex-column" min-height="100%" width="100%" elevation="4">
             <cashier-order-table style="flex: 1 0 100%"></cashier-order-table>
-            <cashier-order-action style="flex: 1 1 auto"></cashier-order-action>
+            <cashier-order-action style="flex: 0 1 auto"></cashier-order-action>
           </v-sheet>
         </v-col>
       </v-row>
-      <cashier-payment></cashier-payment>
     </v-container>
     <v-system-bar color="primary" height="30" dark>
       <span class="overline">Transaction Hold :</span>
@@ -37,7 +35,6 @@ import CashierOrderTable from "@/components/cashier/CashierOrderTable.vue";
 import CashierOrderAction from "@/components/cashier/CashierOrderAction.vue";
 import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
 import ProductList from "@/components/product/ProductList.vue";
-import CashierPayment from "@/components/cashier/CashierPayment.vue";
 import CashierHeader from "@/components/cashier/CashierHeader.vue";
 import CashierMixin from "@/mixins/CashierMixin";
 
@@ -47,7 +44,6 @@ import CashierMixin from "@/mixins/CashierMixin";
     CashierOrderAction,
     CashierOtherInfo,
     ProductList,
-    CashierPayment,
     CashierHeader
   }
 })

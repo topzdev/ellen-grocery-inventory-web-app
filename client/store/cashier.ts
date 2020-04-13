@@ -1,8 +1,9 @@
+
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators'
 import ICustomer from '~/interfaces/ICustomer';
 import IOrder from '~/interfaces/IOrder';
 import { SET_TRANSACTION_STARTED, CALCULATION, SET_ACCOUNTS, SET_CASHIER_ACCOUNT, SET_CASHIER_CUSTOMER, SET_ORDERS } from '~/configs/types';
-import IAccount from '~/interfaces/IAccount';
+import IAccount from '~/interfaces/IAccount';;
 
 interface ICalculation {
     grandTotal: number;
@@ -12,12 +13,12 @@ interface ICalculation {
 
 @Module({
     name: 'cashier',
-    namespaced: true
+    namespaced: true,
 })
 export default class Cashier extends VuexModule {
     account: IAccount | undefined = undefined;
     customer: ICustomer | undefined = undefined;
-    orders: Array<IOrder> = []
+    orders: Array<IOrder> = [];
     net_price: number = 0.00;
     tax_total: number = 0.00;
     grand_total: number = 0.00;

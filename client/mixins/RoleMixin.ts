@@ -77,8 +77,7 @@ class RoleMixin extends Vue {
   }
 
   searchRole(search: string) {
-    if (search.length <= 0) this.roleStore.fetchRoles();
-    this.roleStore.searchRoles(search);
+    this.roleStore.fetchRoles({ search });
   }
 
   get roleList() {

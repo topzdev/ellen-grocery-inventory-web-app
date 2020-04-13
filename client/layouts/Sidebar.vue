@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="sidebar"
-    :mini-variant.sync="sidebarMini"
+    :mini-variant="sidebarMini"
     :right="right"
     color="primary"
     dark

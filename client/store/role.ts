@@ -1,19 +1,15 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import IRole from "~/interfaces/IRole";
-import { $axios } from "~/utils/axios";
-import config from "~/configs/axiosConfig";
-import IResult from "~/interfaces/IResult";
+import RoleAPI from '~/api/Role';
+import { IFilter, IRole } from '~/interfaces';
 import { frontendStore } from '@/utils/store-accessor'
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { SET_ROLE, ADD_ROLE, UPDATE_ROLE, DELETE_ROLE, SET_LOADING } from '~/configs/types';
 
-@Module({
-  name: "role",
-  namespaced: true
-})
+const roleApi = new RoleAPI;
+
+@Module({ name: "role", namespaced: true })
 export default class Role extends VuexModule {
-  private url: string = "/api/role";
   private path: string = "/accounts";
-  private roles: Array<IRole> = [];
+  private roles: IRole[] = [];
   private loading: boolean = false;
 
   get getLoading() {
@@ -57,56 +53,48 @@ export default class Role extends VuexModule {
   }
 
   @Action({ commit: SET_ROLE })
-  public async searchRoles(search: string) {
+  async fetchRoles(filter: IFilter) {
+    const result = await roleApi.fetchRoles(filter);
 
-    const result: IResult = await $axios.$get(`${this.url}/search`);
-    return result.data;
-
-  }
-
-  @Action({ commit: SET_ROLE })
-  public async fetchRoles() {
-
-    const result: IResult = await $axios.$post(`${this.url}`);
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
-    return result.data;
+
+    if (result.success) return result.data;
 
   }
 
   @Action({ commit: ADD_ROLE })
-  public async addRole({ role, redirect }: { role: IRole, redirect: boolean }) {
+  async addRole({ role, redirect }: { role: IRole, redirect: boolean }) {
 
     this.setLoading(true);
-    const result: IResult = await $axios.$post(`${this.url}`, role, config);
+
+    const result = await roleApi.addRole(role);
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    return {
-      role_id: result.data.role_id,
-      ...role
-    };
-
+    if (result.success) return { role_id: result.data.role_id, ...role };
   }
 
   @Action({ commit: UPDATE_ROLE })
-  public async updateRole(role: IRole) {
+  async updateRole(role: IRole) {
 
-    const result: IResult = await $axios.$put(`${this.url}`, role, config);
+    const result = await roleApi.updateRole(role);
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
-    return role;
+
+    if (result.success) return role;
 
   }
 
   @Action({ commit: DELETE_ROLE })
-  public async deleteRole(role_id: number) {
+  async deleteRole(role_id: IRole['role_id']) {
 
-    const result: IResult = await $axios.$delete(`${this.url}/${role_id}`);
+    const result = await roleApi.deleteRole(role_id)
+
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
-    return role_id;
 
+    if (result.success) return role_id;
   }
 }

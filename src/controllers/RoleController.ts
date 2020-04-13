@@ -10,8 +10,11 @@ class RoleController extends QueryExtend {
 	}
 
 	public async fetchRoles(req: Request, res: Response): Promise<any> {
+		const { search, limit, offset } = req.query;
+
 		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.roleTable}"`
+			text: `SELECT * FROM "${this.roleTable}"
+			${search ? `WHERE role_name ILIKE '%${search}%'` : ''}`
 		};
 
 		try {
@@ -33,7 +36,6 @@ class RoleController extends QueryExtend {
 
 	public async fetchSingleRole(req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
-
 
 		try {
 			const query: QueryConfig = {

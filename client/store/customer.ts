@@ -1,21 +1,15 @@
-import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import ICustomer from "~/interfaces/ICustomer";
-import config from "~/configs/axiosConfig";
-import { $axios } from "~/utils/axios";
-import IResult from "~/interfaces/IResult";
+import CustomerAPI from '~/api/Customer'
 import { frontendStore } from '~/utils/store-accessor';
+import { ICustomer, IFilter } from '~/interfaces';
+import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
 import { SET_CURRENT_CUSTOMER, SET_CUSTOMERS, ADD_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, SET_LOADING } from '~/configs/types';
-import IFilter from '~/interfaces/IFilter';
-import filterGenerator from '~/utils/filterGenerator';
 
-@Module({
-  name: "customer",
-  namespaced: true
-})
+const customerAPI = new CustomerAPI
+
+@Module({ name: "customer", namespaced: true })
 export default class Customer extends VuexModule {
-  private url: string = "/api/customer";
   private path: string = "/customers";
-  private customers: Array<ICustomer> = [];
+  private customers: ICustomer[] = [];
   private customer: ICustomer | undefined = undefined;
   private loading: boolean = false;
 
@@ -69,31 +63,25 @@ export default class Customer extends VuexModule {
 
 
   @Action({ commit: SET_CURRENT_CUSTOMER })
-  public async fetchSingleCustomer(id: number | undefined) {
-    if (id === undefined) return undefined;
-
-    const result: IResult = await $axios.$get(`${this.url}/${id}`);
-    console.log(result.data);
+  async fetchSingleCustomer(customer_id: ICustomer['customer_id']) {
+    if (customer_id === undefined) return undefined;
+    const result = await customerAPI.fetchSingleCustomer(customer_id)
     return result.data;
   }
 
   @Action({ commit: SET_CUSTOMERS })
-  public async fetchCustomers(filter: IFilter) {
-    const result: IResult = await $axios.$get(this.url + filterGenerator(filter));
-    return result.data;
-  }
-
-  @Action({ commit: SET_CUSTOMERS })
-  public async searchCustomers(search: string) {
-    const result: IResult = await $axios.$get(`${this.url}/search/${search}`);
+  async fetchCustomers(filter: IFilter) {
+    const result = await customerAPI.fetchCustomers(filter)
     return result.data;
   }
 
   @Action({ commit: ADD_CUSTOMER })
-  public async addCustomer({ customer, redirect }: { customer: ICustomer, redirect: boolean }) {
+  async addCustomer({ customer, redirect }: { customer: ICustomer, redirect: boolean }) {
 
     this.setLoading(true);
-    const result: IResult = await $axios.$post(this.url, customer, config);
+
+    const result = await customerAPI.addCustomer(customer);
+
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
@@ -102,17 +90,18 @@ export default class Customer extends VuexModule {
   }
 
   @Action({ commit: UPDATE_CUSTOMER })
-  public async updateCustomer(customer: ICustomer) {
-    const result: IResult = await $axios.$put(this.url, customer, config);
+  async updateCustomer(customer: ICustomer) {
+    const result = await customerAPI.updateCustomer(customer);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
+
     return customer;
   }
 
   @Action({ commit: DELETE_CUSTOMER })
-  public async deleteCustomer(customer_id: number) {
-    const result: IResult = await $axios.$delete(`${this.url}/${customer_id}`);
+  async deleteCustomer(customer_id: ICustomer['customer_id']) {
+    const result = await customerAPI.deleteCustomer(customer_id);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)

@@ -1,19 +1,33 @@
 import { ActionTree, MutationTree, Store } from "vuex";
 import { initialiseStores, categoryStore } from "~/utils/store-accessor";
-import { RootState } from "~/interfaces/IRoot";
+import { IRootState } from "~/interfaces";
+import VuexPersistence from 'vuex-persist'
 import config from "~/configs/axiosConfig";
 import { $axios } from "~/utils/axios";
 import IResult from "~/interfaces/IResult";
-import ICategory from "~/interfaces/ICategory";
-import IRole from "~/interfaces/IRole";
 
-const initializer = (store: Store<any>) => initialiseStores(store);
+function getPlugins() {
+  let plugins = []
 
-export const plugins = [initializer];
+  if (process.browser) {
+    const vuexLocal = new VuexPersistence<IRootState>({
+      storage: window.localStorage
+    })
 
-export const mutation: MutationTree<RootState> = {};
+    plugins.push(vuexLocal.plugin)
+  }
 
-export const actions: ActionTree<RootState, RootState> = {
+  const initializer = (store: Store<any>) => initialiseStores(store);
+  plugins.push(initializer);
+
+  return plugins;
+}
+
+export const plugins = getPlugins();
+
+export const mutation: MutationTree<IRootState> = {};
+
+export const actions: ActionTree<IRootState, IRootState> = {
   async nuxtServerInit({ commit, dispatch }, context) {
     // Fetch Categories
     const category: IResult = await $axios.$get("/api/category", config);
