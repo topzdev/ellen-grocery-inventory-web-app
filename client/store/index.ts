@@ -5,6 +5,11 @@ import VuexPersistence from 'vuex-persist'
 import config from "~/configs/axiosConfig";
 import { $axios } from "~/utils/axios";
 import IResult from "~/interfaces/IResult";
+import CategoryAPI from '~/api/Category';
+import BrandAPI from '~/api/Brand';
+import SupplierAPI from '~/api/Supplier';
+import RoleAPI from '~/api/Role';
+
 
 function getPlugins() {
   let plugins = []
@@ -30,24 +35,16 @@ export const mutation: MutationTree<IRootState> = {};
 export const actions: ActionTree<IRootState, IRootState> = {
   async nuxtServerInit({ commit, dispatch }, context) {
     // Fetch Categories
-    const category: IResult = await $axios.$get("/api/category", config);
-
-    commit("category/SET_CATEGORIES", category.data);
+    commit("category/SET_CATEGORIES", (await new CategoryAPI().fetchCategories({})).data);
 
     // Fetch Brands
-    const brand: IResult = await $axios.$get("/api/brand", config);
-
-    commit("brand/SET_BRANDS", brand.data);
+    commit("brand/SET_BRANDS", (await new BrandAPI().fetchBrands({})).data);
 
     // Fetch Suppliers
-    const supplier: IResult = await $axios.$get("/api/supplier");
-
-    commit("supplier/SET_SUPPLIERS", supplier.data);
+    commit("supplier/SET_SUPPLIERS", (await new SupplierAPI().fetchSuppliers({})).data);
 
     //Fetch Roles
-    const roles: IResult = await $axios.$get("/api/role");
-
-    commit("role/SET_ROLE", roles.data);
+    commit("role/SET_ROLE", (await new RoleAPI().fetchRoles({})).data);
   }
 };
 

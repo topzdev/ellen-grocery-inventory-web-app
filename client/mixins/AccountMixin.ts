@@ -14,11 +14,11 @@ import IAccount from "~/interfaces/IAccount";
 class AccountMixin extends Vue {
   valid: boolean = false;
   dialog: boolean = true;
-  public isEdit: boolean = false;
-  public accountStore: IAccountModule;
-  public frontendStore: IFrontendModule;
-  public processStore: IProcessModule;
-
+  isEdit: boolean = false;
+  accountStore: IAccountModule;
+  frontendStore: IFrontendModule;
+  processStore: IProcessModule;
+  $refs!: { form: any }
   public account: IAccount = {
     account_id: undefined,
     firstname: "",
@@ -57,13 +57,13 @@ class AccountMixin extends Vue {
       role_id: -1,
       password: ""
     };
-    // @ts-ignore
-    this.$refs.manageForm.resetValidation();
+
+    this.$refs.form.resetForm();
   }
 
   validate(): void {
-    // @ts-ignore
-    if (this.$refs.manageForm.validate()) {
+
+    if (this.$refs.form.validateForm()) {
       if (this.isEdit) {
         this.updateAccount();
       } else {
@@ -92,9 +92,8 @@ class AccountMixin extends Vue {
       return this.isEdit = false
     };
 
-    await this.accountStore.fetchSingleAccount(item.account_id!);
+    await this.accountStore.fetchSingleAccount(item.account_id);
 
-    console.log(this.currentAccount)
     if (this.currentAccount) {
       this.isEdit = true;
       this.account = JSON.parse(JSON.stringify(this.currentAccount));
@@ -132,7 +131,7 @@ class AccountMixin extends Vue {
       (v: any) => !!v && v.length > 6 || "Password length must longer than 6",
       (v: any) => !!v && v.length < 50 || "Password is too long"
     ],
-    role_id: [(v: any) => v !== -1 || "Role is required"]
+    role_id: [(v: any) => (v !== -1 && v === "") || "Role is required"]
   };
 }
 

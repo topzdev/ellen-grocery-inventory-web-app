@@ -11,13 +11,12 @@ import IBrand from "~/interfaces/IBrand";
 
 @Component
 class BrandMixin extends Vue {
-  valid: boolean = false;
   redirect: boolean = true;
   isEdit: boolean = false;
   brandStore: IBrandModule;
   frontendStore: IFrontendModule;
   processStore: IProcessModule;
-
+  $refs!: { form: any }
   brand: IBrand = {
     brand_id: undefined,
     brand_name: ""
@@ -52,13 +51,11 @@ class BrandMixin extends Vue {
   setCancel() {
     this.isEdit = false;
     this.brand = { brand_name: "", brand_id: undefined };
-    // @ts-ignore
-    this.$refs.manageForm.reset();
+    this.$refs.form.reset();
   }
 
-  validate(): void {
-    // @ts-ignore
-    if (this.$refs.manageForm.validate()) {
+  validate() {
+    if (this.$refs.form.validateForm()) {
       if (this.isEdit) {
         this.updateBrand();
       } else {
@@ -88,16 +85,17 @@ class BrandMixin extends Vue {
 
 
   clearFields() {
-    this.brand.brand_id = undefined;
-    this.brand.brand_name = ""
-    //@ts-ignore 
-    this.$refs.manageForm.resetValidation();
+    this.brand = {
+      brand_id: undefined,
+      brand_name: "",
+    }
+    this.$refs.form.resetForm();
   }
 
   closeModal() {
+    this.clearFields();
     this.frontendStore.setBrandModal(false);
   }
-
 
   get brandList() {
     return this.brandStore.getBrands;
@@ -107,8 +105,9 @@ class BrandMixin extends Vue {
     return this.isEdit ? "Edit Brand" : "Add Brand";
   }
 
-  get loading() {
+  get isLoading() {
     if (this.brandStore.getLoading) {
+      this.clearFields();
       this.frontendStore.setBrandModal(false);
     }
     return this.brandStore.getLoading;

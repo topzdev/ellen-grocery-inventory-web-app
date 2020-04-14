@@ -1,6 +1,5 @@
 <template>
   <v-select
-    v-bind="$attrs"
     :items="items"
     :item-value="itemValue"
     :item-text="itemText"
@@ -25,7 +24,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import SelectMixin from "@/mixins/SelectMixin";
 import { frontendStore } from "@/store";
 
-@Component({ inheritAttrs: false })
+@Component({ inheritAttrs: true })
 export default class BaseSelect extends Vue {
   @Prop(Array) items!: Array<Object>;
   @Prop(String) itemValue!: string;
@@ -35,7 +34,6 @@ export default class BaseSelect extends Vue {
   @Prop(Number) value: number | undefined;
 
   set selected(value: any) {
-    console.log(value);
     this.$emit("input", value);
   }
 

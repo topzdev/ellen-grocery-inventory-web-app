@@ -24,16 +24,10 @@ export default class index extends Vue {
   supplierPath: string = "suppliers";
   actionLink: Array<Object> = [
     {
-      title: "Add Supplier",
-      subtitle: "Add New Supplier",
+      title: "Manage Supplier",
+      subtitle: "Add New and Edit Supplier ",
       color: "blue darken-1",
-      to: `/${this.supplierPath}/supplier_add`
-    },
-    {
-      title: "Update Supplier",
-      subtitle: "Update Supplier Information",
-      color: "orange darken-1",
-      to: `/${this.supplierPath}/supplier_manage`
+      to: `/${this.supplierPath}/supplier`
     }
   ];
 

@@ -1,8 +1,8 @@
 import SupplierAPI from '~/api/Supplier'
 import { frontendStore } from '~/utils/store-accessor'
 import { ISupplier, IFilter } from '~/interfaces';
-import { VuexModule, Mutation, Action, Module } from "vuex-module-decorators";
-import { SET_SUPPLIERS, DELETE_SUPPLIER, UPDATE_SUPPLIER, ADD_SUPPLIER, SET_LOADING } from '~/configs/types';
+import { VuexModule, Mutation, Action, Module, MutationAction } from "vuex-module-decorators";
+import { SET_SUPPLIERS, DELETE_SUPPLIER, UPDATE_SUPPLIER, ADD_SUPPLIER, SET_LOADING, SET_CURRENT } from '~/configs/types';
 
 const supplierAPI = new SupplierAPI;
 
@@ -10,43 +10,53 @@ const supplierAPI = new SupplierAPI;
 export default class Supplier extends VuexModule {
   path: string = "/suppliers";
   private suppliers: ISupplier[] = [];
+  private supplier: ISupplier | null = null;
   private loading: boolean = false;
 
   get getLoading() {
     return this.loading;
   }
 
-  get getSupplier() {
+  get getSuppliers() {
     return this.suppliers;
   }
 
+  get getCurrent() {
+    return this.supplier;
+  }
+
   @Mutation
-  [SET_SUPPLIERS](suppliers: Array<ISupplier>) {
+  private [SET_SUPPLIERS](suppliers: Array<ISupplier>) {
     this.suppliers = suppliers;
   }
 
   @Mutation
-  [DELETE_SUPPLIER](supplier_id: number) {
+  private [DELETE_SUPPLIER](supplier_id: number) {
     this.suppliers = this.suppliers.filter(
       (item: ISupplier) => item.supplier_id != supplier_id
     );
   }
 
   @Mutation
-  [UPDATE_SUPPLIER](supplier: ISupplier) {
+  private [UPDATE_SUPPLIER](supplier: ISupplier) {
     this.suppliers = this.suppliers.map(item =>
       item.supplier_id === supplier.supplier_id ? supplier : item
     );
   }
 
   @Mutation
-  [ADD_SUPPLIER](supplier: ISupplier) {
+  private [ADD_SUPPLIER](supplier: ISupplier) {
     this.suppliers = [supplier, ...this.suppliers];
   }
 
   @Mutation
   private [SET_LOADING](state: boolean) {
     this.loading = state;
+  }
+
+  @Mutation
+  private [SET_CURRENT](supplier: ISupplier) {
+    this.supplier = supplier
   }
 
   @Action({ commit: SET_LOADING })
@@ -57,7 +67,13 @@ export default class Supplier extends VuexModule {
   @Action({ commit: SET_SUPPLIERS })
   async fetchSuppliers(filter: IFilter) {
     const result = await supplierAPI.fetchSuppliers(filter);
-    if (result.success) return result.data;
+    return result.data;
+  }
+
+  @Action({ commit: SET_CURRENT })
+  async fetchSingleSupplier(supplier_id: ISupplier['supplier_id']) {
+    const result = await supplierAPI.fetchSingleSupplier(supplier_id);
+    return result.data;
   }
 
   @Action({ commit: ADD_SUPPLIER })

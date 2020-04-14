@@ -6,7 +6,7 @@ import { IFilter, IResult, IBrand } from '~/interfaces';
 export default class BrandAPI {
     private url: string = "/api/brand";
 
-    async  fetchBrands(filter: IFilter) {
+    async fetchBrands(filter: IFilter) {
         const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
         return result;
     }

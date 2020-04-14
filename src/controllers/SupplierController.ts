@@ -36,7 +36,7 @@ class SupplierController extends QueryExtend {
 		try {
 
 			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.supplierTable}" WHERE supplier_id = $1`,
+				text: `SELECT * FROM "${this.supplierTable}" WHERE supplier_id = $1 LIMIT 1`,
 				values: [id]
 			};
 
@@ -102,12 +102,13 @@ class SupplierController extends QueryExtend {
 			fax,
 			website,
 			description,
-			id
+			supplier_id
 		}: ISupplier = req.body;
 
 		const query: QueryConfig = {
 			text: `UPDATE "${this.supplierTable}" 
-			SET supplier_name=$1, email_address=$2, company_address=$3, cp_no = $4, tel_no = $5, fax = $6, website = $7, description = $8 WHERE supplier_id = $9`,
+			SET supplier_name=$1, email_address=$2, company_address=$3, cp_no = $4, tel_no = $5, 
+			fax = $6, website = $7, description = $8 WHERE supplier_id = $9`,
 			values: [
 				supplier_name,
 				email_address,
@@ -117,7 +118,7 @@ class SupplierController extends QueryExtend {
 				fax,
 				website,
 				description,
-				id
+				supplier_id
 			]
 		};
 

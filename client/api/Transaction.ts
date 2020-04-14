@@ -15,6 +15,5 @@ export default class TransactionAPI {
     async addTransaction(transaction: ITransaction) {
         const result: IResult = await $axios.$post(this.url, transaction, config);
         return result;
-
     }
 }

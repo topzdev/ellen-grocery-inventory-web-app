@@ -62,13 +62,13 @@ export default class Account extends VuexModule {
   async fetchSingleAccount(account_id: IAccount['account_id']) {
     if (account_id === undefined) return;
     const result = await accountAPI.fetchSingleAccount(account_id)
-    return result.data;
+    if (result.success) return result.data;
   }
 
   @Action({ commit: SET_ACCOUNTS })
   async fetchAccounts(filter: IFilter) {
     const result = await accountAPI.fetchAccounts(filter);
-    return result.data;
+    if (result.success) return result.data;
   }
 
   @Action({ rawError: true })

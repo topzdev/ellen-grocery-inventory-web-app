@@ -96,11 +96,13 @@ class CategoryController extends QueryExtend {
 		try {
 			const query: QueryConfig = {
 				text: `UPDATE "${this.categoryTable}" SET category_name = $1, description = $2 
-				WHERE category_id = $3 AND NOT EXISTS( SELECT 1 FROM "${this.categoryTable} WHERE category_name = $4")`,
+				WHERE category_id = $3 AND NOT EXISTS( SELECT 1 FROM "${this.categoryTable}" WHERE category_name = $4)`,
 				values: [category_name, description, category_id, category_name]
 			};
 
 			const result = await this.client.query(query);
+
+			console.log(result);
 
 			if (!result.rowCount) return res.json({
 				message: 'Category name is already in used',

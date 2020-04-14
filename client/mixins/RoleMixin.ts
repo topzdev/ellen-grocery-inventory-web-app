@@ -17,7 +17,7 @@ class RoleMixin extends Vue {
   roleStore: IRoleModule;
   frontendStore: IFrontendModule;
   processStore: IProcessModule;
-
+  $refs!: { form: any }
   role: IRole = {
     role_id: undefined,
     role_name: ""
@@ -44,26 +44,20 @@ class RoleMixin extends Vue {
     this.role = JSON.parse(JSON.stringify(item));
   }
 
-  setCancel() {
+  clearFields() {
     this.isEdit = false;
     this.role = { role_name: "", role_id: undefined };
-    // @ts-ignore
-    this.$refs.manageForm.reset();
+    // this.$refs.form.resetForm();
   }
 
-  validate(): void {
-    // @ts-ignore
-    if (this.$refs.manageForm.validate()) {
-      if (this.isEdit) {
-        this.updateRole();
-      } else {
-        this.addRole();
-      }
+  validate() {
+    if (this.$refs.form.validateForm()) {
+      if (this.isEdit) return this.updateRole();
+      else this.addRole();
     }
   }
 
-  showDelete(item: IRole) {
-    this.role = item;
+  deleteRole(item: IRole) {
     this.frontendStore.setDeleteModal({
       show: true,
       name: this.role.role_name,
@@ -86,6 +80,27 @@ class RoleMixin extends Vue {
 
   get roleTitle() {
     return this.isEdit ? "Edit Role" : "Add Role";
+  }
+
+  get isLoading() {
+    if (this.roleStore.getLoading) {
+      this.clearFields();
+      this.frontendStore.setRoleModal(false);
+    }
+    return this.roleStore.getLoading;
+  }
+
+  get modalState() {
+    return this.frontendStore.roleModalState;
+  }
+
+  set modalState(show: boolean) {
+    this.frontendStore.setRoleModal(show);
+  }
+
+  closeModal() {
+    this.clearFields();
+    this.frontendStore.setRoleModal(false);
   }
 
   rules: Object = {

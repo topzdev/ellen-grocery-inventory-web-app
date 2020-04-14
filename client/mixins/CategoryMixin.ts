@@ -12,14 +12,13 @@ import ICategory from "~/interfaces/ICategory";
 @Component
 class CategoryMixin extends Vue {
   redirect: boolean = false;
-  valid: boolean = false;
   dialog: boolean = true;
   isEdit: boolean = false;
   active: number = -1;
   categoryStore: ICategoryModule;
   frontendStore: IFrontendModule;
   processStore: IProcessModule;
-
+  $refs!: { form: any }
   category: ICategory = {
     category_id: undefined,
     category_name: "",
@@ -74,13 +73,11 @@ class CategoryMixin extends Vue {
     this.category.category_id = undefined;
     this.category.category_name = "";
     this.category.description = "";
-    //@ts-ignore 
-    this.$refs.manageForm.resetValidation();
+    this.$refs.form.resetForm();
   }
 
-  validate(): void {
-    // @ts-ignore
-    if (this.$refs.manageForm.validate()) {
+  validate() {
+    if (this.$refs.form.validateForm()) {
       if (this.isEdit) {
         this.updateCategory();
       } else {
@@ -89,12 +86,33 @@ class CategoryMixin extends Vue {
     }
   }
 
+  get isLoading() {
+    if (this.categoryStore.getLoading) {
+      this.clearFields();
+      this.frontendStore.setCategoryModal(false);
+    }
+    return this.categoryStore.getLoading;
+  }
+
+  get modalState() {
+    return this.frontendStore.categoryModalState;
+  }
+
+  set modalState(show: boolean) {
+    this.frontendStore.setCategoryModal(show);
+  }
+
+  closeModal() {
+    this.clearFields();
+    this.frontendStore.setCategoryModal(false);
+  }
+
   get categoryList() {
     return this.categoryStore.getCategories;
   }
 
   get categoryTitle() {
-    return this.isEdit ? "Edit Category" : "Add Category";
+    return this.isEdit ? "Update Category" : "Add Category";
   }
 
   rules: Object = {

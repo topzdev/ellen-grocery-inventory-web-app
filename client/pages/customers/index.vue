@@ -22,17 +22,10 @@ export default class index extends Vue {
   parentPath: string = "customers";
   actionLink: Array<Object> = [
     {
-      title: "Add Customer",
-      subtitle: "Create Customer Information",
-      color: "primary",
-      action: `/${this.parentPath}/customer_add`,
-      icon: "ticket-percent"
-    },
-    {
       title: "Manage Customer",
-      subtitle: "Create Customer Information",
-      color: "warning",
-      action: `/${this.parentPath}/customer_manage`,
+      subtitle: "Add New and Edit Customer",
+      color: "primary",
+      action: `/${this.parentPath}/customer`,
       icon: "ticket-percent"
     }
   ];

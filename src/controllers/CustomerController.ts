@@ -32,7 +32,11 @@ class CustomerController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.log(error.stack);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -53,7 +57,11 @@ class CustomerController extends QueryExtend {
 				data: result.rows[0]
 			});
 		} catch (error) {
-			return console.error(error);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -65,9 +73,7 @@ class CustomerController extends QueryExtend {
 			home_address,
 			cp_no,
 			tel_no,
-			points,
 		}: ICustomer = req.body;
-
 
 		try {
 
@@ -91,7 +97,11 @@ class CustomerController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -130,7 +140,11 @@ class CustomerController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 
@@ -138,7 +152,7 @@ class CustomerController extends QueryExtend {
 		const id = req.params.id;
 
 		const query: QueryConfig = {
-			text: `DELETE INTO "${this.customerTable} WHERE customer_id = $1"`,
+			text: `DELETE FROM "${this.customerTable}" WHERE customer_id = $1`,
 			values: [id]
 		};
 
@@ -151,7 +165,11 @@ class CustomerController extends QueryExtend {
 				data: result.rows
 			});
 		} catch (error) {
-			return console.error(error);
+			return res.json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
 		}
 	}
 }

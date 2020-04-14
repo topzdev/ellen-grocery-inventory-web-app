@@ -22,7 +22,7 @@ class AccountController extends QueryExtends {
 			account.username,
 			role.role_name
 			FROM "${this.accountTable}" account INNER JOIN "${this.roleTable}" role ON role.role_id = account.role_id
-			${search ? `WHERE account_name ILIKE '%${search}%'` : ''}`
+			${search ? `WHERE account.firstname || ' ' || account.lastname ILIKE '%${search}%'` : ''}`
 		};
 
 		try {

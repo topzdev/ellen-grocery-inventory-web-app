@@ -25,7 +25,6 @@ export const SET_CASHIER_CUSTOMER = "SET_CASHIER_CUSTOMER"
 
 //Product Mutations
 export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT"
-export const SET_CURRENT = "SET_CURRENT"
 export const SET_PRODUCTS = "SET_PRODUCTS"
 export const ADD_PRODUCT = "ADD_PRODUCT"
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT"
@@ -85,3 +84,4 @@ export const ADD_TRANSACTION = "ADD_TRANSACTION"
 
 // Utility Mutations
 export const SET_LOADING = "SET_LOADING"
+export const SET_CURRENT = "SET_CURRENT";

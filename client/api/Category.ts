@@ -8,7 +8,7 @@ export default class Category {
 
     async fetchCategories(filter: IFilter) {
         const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
-        return result.data;
+        return result;
     }
 
     async addCategory(category: ICategory) {

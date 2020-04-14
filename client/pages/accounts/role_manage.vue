@@ -1,64 +1,47 @@
 <template>
-  <v-container fluid>
-    <v-form ref="manageForm" v-model="valid" lazy-validation>
-      <v-card flat>
-        <v-card-actions>
-          <back-btn to="/others" title="Manage Role" />
-        </v-card-actions>
-
-        <v-row class="px-3">
-          <v-col cols="7">
-            <v-card>
-              <v-card-title v-text="roleTitle" />
-              <v-card-text>
-                <v-row>
-                  <v-col cols="12" class="pb-0">
-                    <v-text-field
-                      v-model="role.role_name"
-                      :rules="rules.role_name"
-                      label="Role Name"
-                      required
-                    />
-                  </v-col>
-                </v-row>
-              </v-card-text>
-              <!-- <v-divider /> -->
-              <v-card-actions>
-                <v-btn v-if="isEdit" text large @click="setCancel">Cancel</v-btn>
-                <v-spacer />
-                <v-btn
-                  v-if="!isEdit"
-                  :disabled="!valid"
-                  color="success"
-                  class="d-flex"
-                  large
-                  @click="validate"
-                >Add Role</v-btn>
-                <v-btn v-if="isEdit" color="warning" large @click="validate">Update Role</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="5" class="d-flex">
-            <role-list
-              :show-delete="showDelete"
-              :search="searchRole"
-              :list="roleList"
-              :set-item="setRole"
-            />
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-form>
-  </v-container>
+  <v-card flat tile>
+    <v-toolbar color="primary" dark extended flat>
+      <back-btn />
+      <v-toolbar-title class="pl-2">Manage Brand</v-toolbar-title>
+    </v-toolbar>
+    <v-container>
+      <v-row class="px-3" style="margin-top: -60px;">
+        <v-col cols="7">
+          <role-form
+            ref="form"
+            :validate="validate"
+            :data="role"
+            :isEdit="isEdit"
+            :title="roleTitle"
+            :rules="rules"
+            :isLoading="isLoading"
+            :closeModal="closeModal"
+          ></role-form>
+        </v-col>
+        <v-col cols="5">
+          <other-list
+            title="Role"
+            :delete-item="deleteRole"
+            :search-item="searchRole"
+            :list-item="roleList"
+            :set-item="setRole"
+            item-name="role_name"
+            item-id="role_id"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
 import { Component } from "vue-property-decorator";
 import RoleMixin from "@/mixins/RoleMixin";
-import RoleList from "@/components/role/RoleList.vue";
+import OtherList from "@/components/list/OtherList.vue";
+import RoleForm from "@/components/forms/RoleForm.vue";
 
 @Component({
-  components: { RoleList }
+  components: { OtherList, RoleForm }
 })
 export default class Role extends RoleMixin {}
 </script>

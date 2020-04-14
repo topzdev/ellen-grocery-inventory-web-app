@@ -70,7 +70,7 @@ class RoleController extends QueryExtend {
 
 			let result = await this.client.query(query);
 
-			if (result.rows.length) return res.json({
+			if (result.rowCount) return res.json({
 				success: false,
 				message: 'Role Already Exist',
 			});
@@ -99,12 +99,12 @@ class RoleController extends QueryExtend {
 	public async updateRole(req: Request, res: Response): Promise<any> {
 		const { role_id, role_name }: IRole = req.body;
 
-		const query: QueryConfig = {
-			text: `UPDATE "${this.roleTable}" SET role_name = $1 WHERE role_id = $2`,
-			values: [role_name, role_id]
-		};
-
 		try {
+			const query: QueryConfig = {
+				text: `UPDATE "${this.roleTable}" SET role_name = $1 WHERE role_id = $2`,
+				values: [role_name, role_id]
+			};
+
 			const result = await this.client.query(query);
 
 			return res.json({

@@ -7,7 +7,7 @@ export default class RoleAPI {
     private url: string = "/api/role";
 
     async fetchRoles(filter: IFilter) {
-        const result: IResult = await $axios.$post(`${this.url}${filterGenerator(filter)}`, config);
+        const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);
         return result;
     }
 
@@ -24,6 +24,5 @@ export default class RoleAPI {
     async deleteRole(role_id: IRole['role_id']) {
         const result: IResult = await $axios.$delete(`${this.url}/${role_id}`);
         return result;
-
     }
 }

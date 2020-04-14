@@ -73,7 +73,9 @@ export default class Role extends VuexModule {
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    if (result.success) return { role_id: result.data.role_id, ...role };
+    console.log(result)
+
+    if (result.success) return { ...role, role_id: result.data.role_id };
   }
 
   @Action({ commit: UPDATE_ROLE })

@@ -71,9 +71,6 @@ export default class ProductMixin extends Vue {
     });
   }
 
-
-
-
   uploadImage(image: any) {
     if (!image.target.files.length) return this.product.image = undefined;
 
@@ -97,7 +94,7 @@ export default class ProductMixin extends Vue {
   }
 
   get suppliers() {
-    return supplierStore.getSupplier;
+    return supplierStore.getSuppliers;
   }
 
   get brands() {

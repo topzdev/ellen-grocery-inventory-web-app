@@ -16,7 +16,7 @@
         <v-data-table
           :headers="headers"
           :items-per-page="5"
-          :items="suppliersData"
+          :items="supplierList"
           :search="search"
           item-key="name"
           class="elevation-1"
@@ -52,9 +52,5 @@ export default class SupplierTable extends SupplierMixin {
     { text: "Contact", value: "cp_no" },
     { text: "Actions", value: "action", sortable: false }
   ];
-
-  get suppliersData() {
-    return this.supplierStore.getSupplier;
-  }
 }
 </script>

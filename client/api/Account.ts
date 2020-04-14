@@ -14,7 +14,7 @@ export default class AccountAPI {
 
     async fetchSingleAccount(account_id: IAccount['account_id']) {
         const result: IResult = await $axios.$get(`${this.url}/${account_id}`);
-        return result.data;
+        return result;
     }
 
     async addAccount(account: IAccount) {

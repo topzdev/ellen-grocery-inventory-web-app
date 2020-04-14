@@ -91,6 +91,5 @@ export default class Category extends VuexModule {
     frontendStore.setRedirect(this.path)
 
     return category_id
-
   }
 }

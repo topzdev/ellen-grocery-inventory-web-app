@@ -2,7 +2,7 @@ import CustomerAPI from '~/api/Customer'
 import { frontendStore } from '~/utils/store-accessor';
 import { ICustomer, IFilter } from '~/interfaces';
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import { SET_CURRENT_CUSTOMER, SET_CUSTOMERS, ADD_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, SET_LOADING } from '~/configs/types';
+import { SET_CURRENT, SET_CUSTOMERS, ADD_CUSTOMER, UPDATE_CUSTOMER, DELETE_CUSTOMER, SET_LOADING } from '~/configs/types';
 
 const customerAPI = new CustomerAPI
 
@@ -26,7 +26,7 @@ export default class Customer extends VuexModule {
   }
 
   @Mutation
-  private [SET_CURRENT_CUSTOMER](customer: ICustomer): void {
+  private [SET_CURRENT](customer: ICustomer): void {
     this.customer = customer;
   }
 
@@ -62,7 +62,7 @@ export default class Customer extends VuexModule {
   }
 
 
-  @Action({ commit: SET_CURRENT_CUSTOMER })
+  @Action({ commit: SET_CURRENT })
   async fetchSingleCustomer(customer_id: ICustomer['customer_id']) {
     if (customer_id === undefined) return undefined;
     const result = await customerAPI.fetchSingleCustomer(customer_id)
@@ -86,7 +86,7 @@ export default class Customer extends VuexModule {
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    return { customer_id: result.data.customer_id, ...customer };
+    if (result.success) return { customer_id: result.data.customer_id, ...customer };
   }
 
   @Action({ commit: UPDATE_CUSTOMER })
@@ -96,7 +96,7 @@ export default class Customer extends VuexModule {
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    return customer;
+    if (result.success) return customer;
   }
 
   @Action({ commit: DELETE_CUSTOMER })
@@ -105,6 +105,7 @@ export default class Customer extends VuexModule {
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
-    return customer_id;
+
+    if (result.success) return customer_id;
   }
 }
