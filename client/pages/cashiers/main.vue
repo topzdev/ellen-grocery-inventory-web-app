@@ -1,50 +1,43 @@
 <template>
   <div class="d-flex flex-column" style="height: 100vh">
-    <v-container v-if="cashierStore.getCustomer" class="pb-0" fluid style="flex: 1 0 auto;">
-      <v-row style="height: 100%">
-        <v-col class="d-flex flex-column" style="height: inherit" cols="8">
-          <cashier-header></cashier-header>
-          <div style="flex: 1 1 auto">
-            <product-list mode="cashier" />
-          </div>
-          <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
-        </v-col>
-        <v-col cols="4" style="height: inherit">
-          <v-sheet class="d-flex flex-column" min-height="100%" width="100%" elevation="4">
-            <cashier-order-table style="flex: 1 0 100%"></cashier-order-table>
-            <cashier-order-action style="flex: 0 1 auto"></cashier-order-action>
-          </v-sheet>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-system-bar color="primary" height="30" dark>
-      <span class="overline">Transaction Hold :</span>
-      &nbsp;
-      <span>2</span>
-      <v-spacer></v-spacer>
-      <v-divider vertical></v-divider>
-      <v-icon class="ml-3 mr-2">mdi-clock</v-icon>
-      <span v-text="dateTime"></span>
-    </v-system-bar>
+    <v-row style="height: 100%" no-gutters>
+      <v-col cols="4" style="height: inherit">
+        <cashier-order></cashier-order>
+      </v-col>
+      <v-col class="d-flex flex-column px-5" style="height: inherit" cols="8">
+        <cashier-header></cashier-header>
+        <div style="flex: 1 1 auto">
+          <product-list mode="cashier" />
+        </div>
+        <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
+      </v-col>
+    </v-row>
+    <cashier-system-bar></cashier-system-bar>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Watch } from "vue-property-decorator";
-import CashierOrderTable from "@/components/cashier/CashierOrderTable.vue";
-import CashierOrderAction from "@/components/cashier/CashierOrderAction.vue";
-import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
 import ProductList from "@/components/product/ProductList.vue";
+import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
+import CashierOrder from "@/components/cashier/CashierOrder.vue";
 import CashierHeader from "@/components/cashier/CashierHeader.vue";
+import CashierSystemBar from "@/components/cashier/CashierSystemBar.vue";
 import CashierMixin from "@/mixins/CashierMixin";
 
 @Component({
   components: {
-    CashierOrderTable,
-    CashierOrderAction,
+    CashierOrder,
     CashierOtherInfo,
     ProductList,
-    CashierHeader
+    CashierHeader,
+    CashierSystemBar
+  },
+  head: {
+    title: "Hello World",
+    htmlAttrs: {
+      style: "overflow: hidden !important;"
+    }
   }
 })
 export default class CashierMain extends CashierMixin {
@@ -53,7 +46,6 @@ export default class CashierMain extends CashierMixin {
     if (!this.cashierStore.getCustomer) return this.initPage();
 
     // after success vetification then the transaction marked started
-    console.log(this.cashierStore.getTransactionStarted);
     if (!this.cashierStore.getTransactionStarted)
       this.cashierStore.startTransaction();
 

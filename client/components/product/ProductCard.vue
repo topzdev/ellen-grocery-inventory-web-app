@@ -10,7 +10,7 @@
       <v-row no-gutters>
         <v-col cols="auto">
           <v-avatar class="ma-3" :size="imageSize" tile>
-            <v-img :src="setUrlImage" draggable="false"></v-img>
+            <v-img :src="setUrlImage" height="100%" draggable="false"></v-img>
           </v-avatar>
         </v-col>
         <v-col class="d-flex flex-column justify-space-between">
@@ -77,7 +77,7 @@ export default class ProductCard extends ProductMixin {
   }
 
   get imageSize() {
-    return this.isCashier ? "70px" : "100px";
+    return this.isCashier ? "80px" : "100px";
   }
 
   get cardTextDisbled() {
@@ -104,7 +104,9 @@ export default class ProductCard extends ProductMixin {
         product_id: this.item.product_id,
         name: this.item.product_name,
         quantity: 1,
-        price: this.item.price
+        maxQuantity: this.item.quantity,
+        price: this.item.price,
+        image: this.item.image_url
       });
   }
 }

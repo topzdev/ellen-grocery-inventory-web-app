@@ -23,5 +23,14 @@ import Snackbars from "./Snackbars";
     Snackbars
   }
 })
-export default class Default extends Vue {}
+export default class Default extends Vue {
+  head() {
+    return {
+      title: "Hello World",
+      htmlAttrs: {
+        style: "overflow: hidden !important;"
+      }
+    };
+  }
+}
 </script>

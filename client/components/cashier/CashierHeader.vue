@@ -3,10 +3,11 @@
     <v-col cols="6">
       <v-sheet>
         <v-text-field
-          solo
+          rounded
+          filled
           :hide-details="true"
-          label="Search Product"
           append-icon="mdi-magnify"
+          placeholder="Search Product by Name or Barcode"
           v-model="search"
         ></v-text-field>
       </v-sheet>

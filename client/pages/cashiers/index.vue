@@ -36,6 +36,10 @@ export default class CashierInitital extends CashierMixin {
   created() {
     this.frontendStore.setNavbar(false);
     this.frontendStore.setSidebar(false);
+
+    const { getTransactionStarted, getCustomer } = this.cashierStore;
+
+    if (getCustomer && getTransactionStarted) this.mainPage();
   }
 }
 </script>

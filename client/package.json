@@ -22,6 +22,7 @@
     "ts-vue-plugin": "^0.1.2",
     "vue-class-component": "^7.2.2",
     "vue-property-decorator": "^8.3.0",
+    "vue2-perfect-scrollbar": "^1.5.0",
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {

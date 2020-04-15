@@ -44,7 +44,11 @@ export default class CashierMixin extends Vue {
     }
 
     mainPage() {
-        this.$router.push('/cashier/main');
+        this.$router.push('/cashiers/main');
+    }
+
+    paymentPage() {
+        this.$router.push('/cashiers/payment');
     }
 
 
