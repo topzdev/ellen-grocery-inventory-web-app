@@ -16,13 +16,12 @@ class ProductController extends QueryExtend {
 		const barcode = req.params.barcode;
 
 		try {
-
 			const query: QueryConfig = {
 				text: `SELECT * FROM "${this.productTable}" WHERE barcode = $1`,
 				values: [barcode]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				success: true,
@@ -65,7 +64,7 @@ class ProductController extends QueryExtend {
 
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 			return res.json({
 				success: true,
 				message: 'Successfully fetched',
@@ -102,7 +101,7 @@ class ProductController extends QueryExtend {
 				values: [barcode, product_name]
 			}
 
-			let result = await this.client.query(query);
+			let result = await this.executeQuery(query);
 
 			if (result.rows.length) return res.json({
 				success: false,
@@ -138,7 +137,7 @@ class ProductController extends QueryExtend {
 				]
 			};
 
-			result = await this.client.query(query);
+			result = await this.executeQuery(query);
 
 			return res.json({
 				success: true,
@@ -204,7 +203,7 @@ class ProductController extends QueryExtend {
 				]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 			console.log('Process');
 			res.json({
 				success: true,
@@ -227,7 +226,7 @@ class ProductController extends QueryExtend {
 
 			if (image) imageUploader.deleteImage(image);
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 			return res.json({
 				success: true,
 				message: 'Successfully Deleted',
@@ -237,6 +236,7 @@ class ProductController extends QueryExtend {
 			console.log('Database error', err.stack);
 		}
 	}
+
 }
 
 export default ProductController;

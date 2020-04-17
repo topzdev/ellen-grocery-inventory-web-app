@@ -1,5 +1,5 @@
 import QueryExtend from '../extends/QueryExtend';
-import { QueryConfig } from 'pg';
+import { QueryConfig, Pool } from 'pg';
 import { Request, Response } from 'express';
 import IBrand from '../interfaces/IBrand';
 
@@ -11,38 +11,38 @@ class BrandController extends QueryExtend {
 
 	public async getBrands(req: Request, res: Response): Promise<any> {
 		const { search } = req.query;
-		console.log(search)
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.brandTable}" ${search ? `WHERE brand_name ILIKE '%${search}%'` : ''}`
-		};
 
 		try {
-			const result = await this.client.query(query);
+			const query: QueryConfig = {
+				text: `SELECT * FROM "${this.brandTable}" ${search ? `WHERE brand_name ILIKE '%${search}%'` : ''}`
+			};
+			const result = await this.executeQuery(query);
 
-			return res.json({
+			res.json({
 				message: 'Supplier Successfully Updated ',
 				success: true,
 				data: result.rows
 			});
+
 		} catch (error) {
-			return res.json({
+			res.json({
 				success: false,
 				message: 'Something went wrong, Please try again later ',
 				data: error.stack
 			});
 		}
+
 	}
 
 	public async getSingleBrand(req: Request, res: Response): Promise<any> {
 		const id = req.params.id;
 
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.brandTable}" WHERE brand_id = $1 FETCH FIRST 1 ROW ONLY`,
-			values: [id]
-		};
-
 		try {
-			const result = await this.client.query(query);
+			const query: QueryConfig = {
+				text: `SELECT * FROM "${this.brandTable}" WHERE brand_id = $1 FETCH FIRST 1 ROW ONLY`,
+				values: [id]
+			};
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Fetched Single Brand Successfully ',
@@ -70,7 +70,7 @@ class BrandController extends QueryExtend {
 				values: [brand_name, brand_name]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			if (!result.rowCount) return res.json({
 				success: false,
@@ -101,7 +101,7 @@ class BrandController extends QueryExtend {
 				values: [brand_name, brand_id, brand_name]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			if (!result.rowCount) return res.json({
 				message: 'Brand name is already in used ',
@@ -131,7 +131,7 @@ class BrandController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Brand Successfully Deleted ',

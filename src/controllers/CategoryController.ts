@@ -18,7 +18,7 @@ class CategoryController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Categories Fetched Successfully ',
@@ -43,7 +43,7 @@ class CategoryController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 			return res.json({
 				message: 'Single Category Successfully Fetched',
 				success: true,
@@ -69,7 +69,7 @@ class CategoryController extends QueryExtend {
 				values: [category_name, description, category_name]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			if (!result.rowCount) return res.json({
 				message: 'Category name has already exist',
@@ -100,7 +100,7 @@ class CategoryController extends QueryExtend {
 				values: [category_name, description, category_id, category_name]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			console.log(result);
 
@@ -132,7 +132,7 @@ class CategoryController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Category Successfully Deleted',

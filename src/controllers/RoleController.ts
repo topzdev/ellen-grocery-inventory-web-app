@@ -18,7 +18,7 @@ class RoleController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Roles Successfully Fetched',
@@ -43,7 +43,7 @@ class RoleController extends QueryExtend {
 				values: [id]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Role Successfully Fetched',
@@ -68,7 +68,7 @@ class RoleController extends QueryExtend {
 				values: [role_name]
 			}
 
-			let result = await this.client.query(query);
+			let result = await this.executeQuery(query);
 
 			if (result.rowCount) return res.json({
 				success: false,
@@ -80,7 +80,7 @@ class RoleController extends QueryExtend {
 				values: [role_name]
 			};
 
-			result = await this.client.query(query);
+			result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Role Successfully Added',
@@ -105,7 +105,7 @@ class RoleController extends QueryExtend {
 				values: [role_name, role_id]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Role Successfully Updated',
@@ -130,7 +130,7 @@ class RoleController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Role Successfully Deleted',

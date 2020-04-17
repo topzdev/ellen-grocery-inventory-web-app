@@ -3,10 +3,10 @@
     class="d-flex product-card"
     :class="cardTextDisbled"
     height="100%"
-    :ripple="riffleStlye"
+    :ripple="ripple"
     @click="createOrder"
   >
-    <v-badge :content="badgeContent" overlap :value="badgeContent">
+    <v-badge :content="quantity" :color="color" overlap :value="quantity">
       <v-row no-gutters>
         <v-col cols="auto">
           <v-avatar class="ma-3" :size="imageSize" tile>
@@ -51,7 +51,9 @@ import { cashierStore, frontendStore } from "~/store";
 @Component
 export default class ProductCard extends ProductMixin {
   @Prop(Object) item!: IProduct;
-  @Prop(String) mode: string | undefined;
+  @Prop(String) mode!: string;
+
+  color = "primary";
 
   get setUrlImage() {
     return this.item.image_url
@@ -72,8 +74,8 @@ export default class ProductCard extends ProductMixin {
     return this.isCashier || "padding-bottom:0 !important";
   }
 
-  get riffleStlye() {
-    return this.isCashier ? { class: "primary--text" } : false;
+  get ripple() {
+    return this.isCashier ? { class: this.color + "--text" } : false;
   }
 
   get imageSize() {
@@ -84,30 +86,44 @@ export default class ProductCard extends ProductMixin {
     return this.isCashier ? "user-select-disabled" : "";
   }
 
-  get badgeContent() {
+  get quantity() {
     if (this.isCashier) {
       let content = cashierStore.getOrders.filter(
         item => item.product_id === this.item.product_id
       );
-
       if (content.length) return content[0].quantity;
-
-      return false;
+      return 0;
     }
-
-    return false;
+    return 0;
   }
 
-  createOrder() {
-    if (this.isCashier)
-      cashierStore.addOrder({
+  createOrder(event: any) {
+    if (this.isCashier) {
+      let order = {
         product_id: this.item.product_id,
         name: this.item.product_name,
-        quantity: 1,
         maxQuantity: this.item.quantity,
         price: this.item.price,
         image: this.item.image_url
-      });
+      };
+      // when ctrl key and click pushed then -1 to quantity
+      if (event.ctrlKey) {
+        this.color = "error";
+
+        setTimeout(() => {
+          this.color = "primary";
+        }, 300);
+
+        return cashierStore.updateOrder({
+          ...order,
+          quantity: this.quantity - 1
+        });
+      }
+
+      /* only click is pushed execute add product */
+      this.color = "primary";
+      cashierStore.addOrder({ ...order, quantity: 1 });
+    }
   }
 }
 </script>

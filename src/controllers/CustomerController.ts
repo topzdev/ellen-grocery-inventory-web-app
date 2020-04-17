@@ -24,7 +24,7 @@ class CustomerController extends QueryExtend {
 
 		console.log(req.query, query);
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Customers Successfully Fetched',
@@ -49,7 +49,7 @@ class CustomerController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Customer Successfully Fetched',
@@ -89,7 +89,7 @@ class CustomerController extends QueryExtend {
 					tel_no,
 				]
 			};
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Customer Successfully Added',
@@ -132,7 +132,7 @@ class CustomerController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Customers Successfully Updated',
@@ -157,7 +157,7 @@ class CustomerController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Customers Successfully Deleted',

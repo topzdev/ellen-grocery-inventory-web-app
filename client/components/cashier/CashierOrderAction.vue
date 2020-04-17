@@ -1,10 +1,12 @@
 <template>
   <v-card color="primary" dark flat title>
     <v-card-text style="color: #fff;">
-      <div v-for="(item, idx) in summary" :key="idx" class="d-flex mb-1">
-        <p class="subtitle-1" v-text="item.title" />
+      <div v-for="(item, idx) in summary" :key="idx" class="d-flex mb-2">
+        <div class="subtitle-1" v-text="item.title" />
         <v-spacer />
-        <h1 class="headline font-weight-bold">₱ {{numeral(item.value).format('0,0.00')}}</h1>
+        <h1
+          class="headline font-weight-bold"
+        >{{!item.exclude ? `₱ ${numeral(item.value).format('0,0.00')}`: item.value}}</h1>
       </div>
     </v-card-text>
     <v-card-actions v-if="!readonly">
@@ -39,6 +41,11 @@ export default class CashierOrderAction extends CashierMixin {
       {
         title: "Total Amount",
         value: this.calculations.grand_total
+      },
+      {
+        title: "Total Quantity",
+        value: this.calculations.quantity_total,
+        exclude: true
       }
     ];
   }

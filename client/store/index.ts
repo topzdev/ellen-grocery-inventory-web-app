@@ -16,7 +16,8 @@ function getPlugins() {
 
   if (process.browser) {
     const vuexLocal = new VuexPersistence<IRootState>({
-      storage: window.localStorage
+      storage: window.localStorage,
+      modules: ['cashier']
     })
 
     plugins.push(vuexLocal.plugin)

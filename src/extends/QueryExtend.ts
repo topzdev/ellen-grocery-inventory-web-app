@@ -1,5 +1,5 @@
-import { Pool } from 'pg';
-
+import { Pool, QueryConfig } from 'pg';
+import databaseConfig from '../configs/database';
 require('dotenv').config();
 
 class QueryExtend {
@@ -12,10 +12,22 @@ class QueryExtend {
 	protected readonly roleTable: string = 'role_table';
 	protected readonly transactionTable: string = 'transaction_table';
 
-	protected client: Pool;
+	protected pool: Pool;
 
 	constructor() {
-		this.client = new Pool();
+		this.pool = new Pool;
+	}
+
+	public async executeQuery(query: QueryConfig) {
+		const client = new Pool(databaseConfig);
+		try {
+			const result = await client.query(query)
+			return result;
+		} catch (error) {
+			throw error;
+		} finally {
+			await client.end();
+		}
 	}
 
 	public queryAnalyzer(searchString: string, search?: string, limit?: string, offset?: string) {

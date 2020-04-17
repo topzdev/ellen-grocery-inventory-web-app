@@ -28,6 +28,7 @@ export default class CashierQuantityInput extends Vue {
   @Prop(Function) input!: Function;
 
   validate(value: any) {
+    console.log(this.value, this.max);
     if (!value) this.input(0);
 
     let parse = parseInt(value);

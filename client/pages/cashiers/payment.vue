@@ -58,7 +58,7 @@
                     <v-btn x-large block @click="mainPage">Cancel</v-btn>
                   </v-col>
                   <v-col cols="8">
-                    <v-btn x-large color="success" block>Finish</v-btn>
+                    <v-btn x-large color="success" block @click="checkout">Finish</v-btn>
                   </v-col>
                 </v-row>
               </v-card>
@@ -83,6 +83,27 @@ import numeral from "numeral";
 export default class CashierPaymentPage extends CashierMixin {
   amountPaid: number = 0.0;
   change: number = 0.0;
+
+  checkout() {
+    this.cashierStore.finishTransaction({ amount_paid: this.amountPaid });
+  }
+
+  mounted() {
+    if (!this.cashierStore.getCustomer) {
+      this.frontendStore.setSnackbar({
+        show: true,
+        message: "Please choose customer first"
+      });
+      return this.initPage();
+    }
+    if (!this.cashierStore.getCalculation.quantity_total) {
+      this.frontendStore.setSnackbar({
+        show: true,
+        message: "Please add something on your cart"
+      });
+      return this.mainPage();
+    }
+  }
 
   get quickCash() {
     return [

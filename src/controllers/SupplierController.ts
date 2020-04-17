@@ -18,7 +18,7 @@ class SupplierController extends QueryExtend {
 				${search ? `WHERE supplier_name ILIKE '%${search}%'` : ''}`
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: "Supplier Successfuly Fetched",
@@ -40,7 +40,7 @@ class SupplierController extends QueryExtend {
 				values: [id]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: "Supplier Successfully fetched",
@@ -80,7 +80,7 @@ class SupplierController extends QueryExtend {
 					description
 				]
 			};
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: "Supplier Successfully Added",
@@ -123,7 +123,7 @@ class SupplierController extends QueryExtend {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 			console.log(req.body);
 			return res.json({
 				message: "Supplier Successfully Updated ",
@@ -147,7 +147,7 @@ class SupplierController extends QueryExtend {
 				values: [id]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: "Supplier Successfully Deleted",

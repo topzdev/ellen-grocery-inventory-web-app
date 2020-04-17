@@ -26,7 +26,7 @@ class AccountController extends QueryExtends {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Accounts Successfully Fetched',
@@ -59,7 +59,7 @@ class AccountController extends QueryExtends {
 		};
 
 		try {
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Account Successfully Fetched',
@@ -105,7 +105,7 @@ class AccountController extends QueryExtends {
 				]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			console.log(result)
 
@@ -156,7 +156,7 @@ class AccountController extends QueryExtends {
 				]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			console.log(result, query);
 
@@ -188,7 +188,7 @@ class AccountController extends QueryExtends {
 				values: [account_id]
 			}
 
-			let result = await this.client.query(query);
+			let result = await this.executeQuery(query);
 
 			// Check if account_id provided is exisiting in database
 			if (!result.rowCount) return res.json({
@@ -216,7 +216,7 @@ class AccountController extends QueryExtends {
 				values: [hashedPassword]
 			}
 
-			result = await this.client.query(query);
+			result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Password Successfully Updated',
@@ -241,7 +241,7 @@ class AccountController extends QueryExtends {
 				values: [id]
 			};
 
-			const result = await this.client.query(query);
+			const result = await this.executeQuery(query);
 
 			return res.json({
 				message: 'Account Successfully Deleted',

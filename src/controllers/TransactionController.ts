@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { QueryConfig } from 'pg'
 import QueryExtend from "../extends/QueryExtend";
+import ITransaction from '../interfaces/ITransaction';
 
 
 export default class TransactionController extends QueryExtend {
@@ -34,7 +35,7 @@ export default class TransactionController extends QueryExtend {
                 values: [transact_id]
             }
 
-            const result = await this.client.query(query);
+            const result = await this.executeQuery(query);
 
             return res.json({
                 success: true,
@@ -49,6 +50,8 @@ export default class TransactionController extends QueryExtend {
                 success: false,
                 message: 'Something went wrong, Please try again later',
             });
+        } finally {
+            this.pool.end()
         }
     }
 
@@ -70,7 +73,7 @@ export default class TransactionController extends QueryExtend {
                 `,
             }
 
-            const result = await this.client.query(query);
+            const result = await this.executeQuery(query);
 
             return res.json({
                 success: true,
@@ -89,23 +92,39 @@ export default class TransactionController extends QueryExtend {
     }
 
     async addTransaction(req: Request, res: Response) {
-        const { customer_id, account_id, started_at, ended_at, total_amount, amount_paid } = req.body;
+        const { customer_id, account_id, started_at, ended_at, total_amount, amount_paid, orders }: ITransaction = req.body;
         try {
-            const query: QueryConfig = {
+
+            await this.executeQuery({ text: 'BEGIN' })
+
+            if (orders.length) {
+                for (const { product_id, quantity } of orders) {
+                    await this.executeQuery({
+                        text: `UPDATE "${this.productTable}" SET quantity = quantity - $1 WHERE product_id = $2`,
+                        values: [quantity, product_id]
+                    })
+
+                    console.log(product_id, quantity)
+                }
+            }
+
+            const transactResult = await this.executeQuery({
                 text: `INSERT INTO "${this.transactionTable}" 
                 (customer_id, account_id, started_at, ended_at, total_amount, amount_paid)
                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING transact_id`,
                 values: [customer_id, account_id, started_at, ended_at, total_amount, amount_paid]
-            }
+            });
 
-            const result = await this.client.query(query);
+
+            await this.executeQuery({ text: 'COMMIT' });
 
             return res.json({
                 success: true,
                 message: 'Transaction Added',
-                data: result.rows[0]
+                data: transactResult.rows[0]
             });
         } catch (error) {
+            await this.executeQuery({ text: 'ROLLBACK' })
             console.error(error.stack);
             return res.json({
                 success: false,
@@ -127,7 +146,7 @@ export default class TransactionController extends QueryExtend {
                 values: [customer_id, account_id, started_at, ended_at, total_amount, amount_paid, transact_id]
             }
 
-            const result = await this.client.query(query);
+            const result = await this.executeQuery(query);
 
             return res.json({
                 success: true,
@@ -140,6 +159,8 @@ export default class TransactionController extends QueryExtend {
                 success: false,
                 message: 'Something went wrong, Please try again later',
             });
+        } finally {
+            this.pool.end()
         }
 
     }
@@ -153,7 +174,7 @@ export default class TransactionController extends QueryExtend {
                 values: [transact_id]
             }
 
-            const result = await this.client.query(query);
+            const result = await this.executeQuery(query);
 
             return res.json({
                 success: true,
@@ -166,6 +187,8 @@ export default class TransactionController extends QueryExtend {
                 success: false,
                 message: 'Something went wrong, Please try again later',
             });
+        } finally {
+            this.pool.end()
         }
     }
 
