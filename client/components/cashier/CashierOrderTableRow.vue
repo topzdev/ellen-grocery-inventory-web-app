@@ -1,6 +1,12 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card tile flat class="d-flex" :color="hover? 'light-blue darken-1': 'transparent'">
+    <v-card
+      tile
+      flat
+      class="d-flex"
+      :color="hover ? 'light-blue darken-1' : 'transparent'"
+      @click.ctrl="removeItem"
+    >
       <v-row no-gutters>
         <v-col cols="6" class="td td--name">
           <v-card class="td--name__image" light elevation="1" tile>
@@ -22,7 +28,7 @@
             v-else
             class="text-center title-1 font-weight-bold"
             style="width: 100%"
-          >{{order.quantity}}</div>
+          >{{ order.quantity }}</div>
         </v-col>
         <v-col class="td td--total">
           <div v-text="totalPrice" />
@@ -36,7 +42,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import CashierQuantityInput from "./CashierQuantityInput.vue";
 import IOrder from "@/interfaces/IOrder";
-import { cashierStore } from "../../store";
+import { cashierStore, frontendStore } from "../../store";
 import numeral from "numeral";
 
 @Component({
@@ -48,6 +54,16 @@ export default class CashierOrderTableRow extends Vue {
 
   input(quantity: any) {
     cashierStore.updateOrder({ ...this.order, quantity });
+  }
+
+  removeItem() {
+    frontendStore.setMessageModal({
+      title: "Remove Item",
+      show: true,
+      mode: "question",
+      message: `Are you sure to remove this item ${this.order.name} ?`,
+      yesFunction: cashierStore.removeOrder.bind(this, this.order.product_id)
+    });
   }
 
   get totalPrice() {

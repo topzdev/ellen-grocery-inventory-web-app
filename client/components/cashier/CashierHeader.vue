@@ -18,7 +18,12 @@
         <v-spacer></v-spacer>
         <div class="text-right">
           <div class="subtitle-1 text-right font-weight-bold" v-text="fullname" />
-          <v-btn text x-small style="text-decoration: underline" @click="initPage()">Change Customer</v-btn>
+          <v-btn
+            text
+            x-small
+            style="text-decoration: underline"
+            @click="changeCustomer()"
+          >Change Customer</v-btn>
         </div>
       </div>
     </v-col>
@@ -39,8 +44,13 @@ export default class ComponentName extends CashierMixin {
     this.productStore.fetchProducts({ search: this.search });
   }
 
+  changeCustomer() {
+    this.cashierStore.setCustomer(null);
+    this.initPage();
+  }
+
   get fullname() {
-    return this.cashierStore.getCustomer?.fullname;
+    if (this.cashierStore.customer) return this.cashierStore.customer.fullname;
   }
 }
 </script>

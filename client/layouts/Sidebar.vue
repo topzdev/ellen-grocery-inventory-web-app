@@ -49,14 +49,14 @@ export default class Sidebar extends Vue {
   ];
 
   get sidebar() {
-    return frontendStore.sidebarState;
+    return frontendStore.showSidebar;
   }
   set sidebar(show: boolean) {
     frontendStore.setSidebar(show);
   }
 
   get sidebarMini() {
-    return frontendStore.sidebarMiniState;
+    return frontendStore.showSidebarMini;
   }
   set sidebarMini(show: boolean) {
     frontendStore.setSidebarMini(show);

@@ -7,6 +7,7 @@
     </v-content>
     <snackbars />
     <modals />
+    <speed-dial />
   </v-app>
 </template>
 <script>
@@ -15,12 +16,15 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Modals from "./Modals";
 import Snackbars from "./Snackbars";
+import SpeedDial from "./SpeedDial";
+
 @Component({
   components: {
     Navbar,
     Sidebar,
     Modals,
-    Snackbars
+    Snackbars,
+    SpeedDial
   }
 })
 export default class Default extends Vue {

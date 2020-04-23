@@ -18,6 +18,7 @@ export default class CustomerAPI {
 
     async addCustomer(customer: ICustomer) {
         const result: IResult = await $axios.$post(this.url, customer, config);
+        console.log(result);
         return result;
     }
 

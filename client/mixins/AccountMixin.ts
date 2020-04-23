@@ -105,15 +105,15 @@ class AccountMixin extends Vue {
   }
 
   get roles() {
-    return roleStore.getRoles;
+    return roleStore.roles;
   }
 
   get accountList() {
-    return this.accountStore.getAccounts;
+    return this.accountStore.accounts;
   }
 
   get currentAccount() {
-    return this.accountStore.getCurrentAccount;
+    return this.accountStore.account;
   }
 
   get accountTitle() {

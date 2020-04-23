@@ -1,9 +1,8 @@
 <template>
   <div>
     <v-card-text>
-      <div class="customer-search" style="width: 700px;">
+      <div class="customer-search" style="width: 100%">
         <v-text-field
-          class="mr-3"
           solo
           label="Search Customer"
           light
@@ -12,9 +11,6 @@
           hide-details
           v-model="search"
         ></v-text-field>
-        <v-btn fab color="success" large @click="openCustomerModal(true)">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
       </div>
     </v-card-text>
     <v-card-text>
@@ -39,13 +35,22 @@ import ICustomer from "../../interfaces/ICustomer";
 export default class CashierInitialList extends CashierMixin {
   search: string = "";
   created() {
-    this.customerStore.fetchCustomers({ search: this.search });
+    this.customerStore.fetchCustomers({
+      limit: 6,
+      transact_count: true,
+      last_transact: true
+    });
   }
 
   @Watch("search")
   searchCustomer() {
     console.log(this.search);
-    this.customerStore.fetchCustomers({ search: this.search });
+    this.customerStore.fetchCustomers({
+      search: this.search,
+      limit: 6,
+      transact_count: true,
+      last_transact: true
+    });
   }
 
   setCustomer(customer: ICustomer) {

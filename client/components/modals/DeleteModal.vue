@@ -26,11 +26,11 @@ import { frontendStore, processStore } from "@/store";
 @Component
 export default class DeleteModal extends Vue {
   get modalInfo() {
-    return frontendStore.deleteModalState;
+    return frontendStore.showDeleteModal;
   }
 
   get modalOpen() {
-    return frontendStore.deleteModalState.show;
+    return frontendStore.showDeleteModal.show;
   }
 
   set modalOpen(show: boolean) {
@@ -42,10 +42,12 @@ export default class DeleteModal extends Vue {
   }
 
   public deleteCurrent() {
-
-    if(processStore.toDeleteItem.others !== undefined) {
-      processStore.toDeleteItem.deleteFunction!({id: processStore.toDeleteItem.id, others: processStore.toDeleteItem.others});
-    } else{
+    if (processStore.toDeleteItem.others !== undefined) {
+      processStore.toDeleteItem.deleteFunction!({
+        id: processStore.toDeleteItem.id,
+        others: processStore.toDeleteItem.others
+      });
+    } else {
       processStore.toDeleteItem.deleteFunction!(processStore.toDeleteItem.id);
     }
 

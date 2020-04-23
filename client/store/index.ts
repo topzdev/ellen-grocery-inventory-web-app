@@ -1,10 +1,7 @@
 import { ActionTree, MutationTree, Store } from "vuex";
-import { initialiseStores, categoryStore } from "~/utils/store-accessor";
+import { initialiseStores } from "~/utils/store-accessor";
 import { IRootState } from "~/interfaces";
 import VuexPersistence from 'vuex-persist'
-import config from "~/configs/axiosConfig";
-import { $axios } from "~/utils/axios";
-import IResult from "~/interfaces/IResult";
 import CategoryAPI from '~/api/Category';
 import BrandAPI from '~/api/Brand';
 import SupplierAPI from '~/api/Supplier';

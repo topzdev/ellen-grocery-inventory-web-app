@@ -10,7 +10,7 @@ export default class SelectMixin extends Vue {
 
 
   get roles() {
-    return roleStore.getRoles;
+    return roleStore.roles;
   }
 
 

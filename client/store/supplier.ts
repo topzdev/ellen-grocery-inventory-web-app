@@ -9,21 +9,9 @@ const supplierAPI = new SupplierAPI;
 @Module({ name: "supplier", namespaced: true })
 export default class Supplier extends VuexModule {
   path: string = "/suppliers";
-  private suppliers: ISupplier[] = [];
-  private supplier: ISupplier | null = null;
-  private loading: boolean = false;
-
-  get getLoading() {
-    return this.loading;
-  }
-
-  get getSuppliers() {
-    return this.suppliers;
-  }
-
-  get getCurrent() {
-    return this.supplier;
-  }
+  suppliers: ISupplier[] = [];
+  supplier: ISupplier | null = null;
+  loading: boolean = false;
 
   @Mutation
   private [SET_SUPPLIERS](suppliers: Array<ISupplier>) {

@@ -38,6 +38,7 @@ export default {
     "@/plugins/axios-accessor",
     "@/utils/store-accessor",
     "@/plugins/global-components",
+    "@/plugins/perfect-scrollbar",
     { src: "@/plugins/vuex-persist", ssr: false }
   ],
   /*

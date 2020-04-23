@@ -85,7 +85,17 @@ export default class CashierPaymentPage extends CashierMixin {
   change: number = 0.0;
 
   checkout() {
-    this.cashierStore.finishTransaction({ amount_paid: this.amountPaid });
+    if (this.amountPaid >= this.calculations.grand_total) {
+      return this.cashierStore.finishTransaction({
+        amount_paid: this.amountPaid
+      });
+    }
+
+    this.frontendStore.setMessageModal({
+      show: true,
+      message: "Insufficient Paid Amount",
+      title: "Cashier Message"
+    });
   }
 
   mounted() {

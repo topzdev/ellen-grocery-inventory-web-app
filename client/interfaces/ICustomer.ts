@@ -6,7 +6,9 @@ interface ICustomer {
     home_address?: string,
     cp_no?: string,
     tel_no?: string,
-    fullname?: string
+    fullname?: string,
+    transact_count?: string,
+    last_transact?: string
 }
 
 export default ICustomer;

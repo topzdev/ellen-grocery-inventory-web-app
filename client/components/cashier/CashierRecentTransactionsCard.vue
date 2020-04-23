@@ -1,27 +1,23 @@
 <template>
   <v-card light elevation="5">
-    <v-card-title class="d-flex align-center">
-      <h1 class="title mr-2" title="Customer Name">{{transaction.account_name}}</h1>
+    <v-card-title class="d-flex align-center pb-1">
+      <h1 class="title mr-2" title="Customer Name">{{transaction.customer_name}}</h1>
       <div class="subtitle-1" title="Transaction Number">#{{transaction.transact_id}}</div>
       <v-spacer></v-spacer>
-      <p class="caption" :title="time.exact" v-text="time.suffixed"></p>
+      <div class="caption" :title="time.exact" v-text="time.suffixed"></div>
     </v-card-title>
 
     <v-card-text class="d-flex">
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-column mr-5">
         <div class="overline">Total Amount</div>
         <div class="subtitle-2">₱ {{transaction.total_amount.toFixed(2)}}</div>
       </div>
-      <v-spacer></v-spacer>
+
       <div class="d-flex flex-column">
         <div class="overline">Amount Paid</div>
         <div class="subtitle-2">₱ {{transaction.amount_paid.toFixed(2)}}</div>
       </div>
       <v-spacer></v-spacer>
-      <div class="d-flex flex-column">
-        <div class="overline">Quantity</div>
-        <div class="subtitle-2">180</div>
-      </div>
     </v-card-text>
   </v-card>
 </template>

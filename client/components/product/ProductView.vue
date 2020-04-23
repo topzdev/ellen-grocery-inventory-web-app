@@ -33,7 +33,7 @@ export default class ProductView extends ProductMixin {
   views = ["Product Table", "Product List"];
 
   get selected() {
-    return frontendStore.getProductView;
+    return frontendStore.productViewMode;
   }
 
   set selected(mode: string) {

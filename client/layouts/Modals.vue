@@ -8,6 +8,7 @@
     <supplier-modal />
     <customer-modal />
     <role-modal />
+    <message-modal />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import CategoryModal from "@/components/modals/CategoryModal.vue";
 import SupplierModal from "@/components/modals/SupplierModal.vue";
 import CustomerModal from "@/components/modals/CustomerModal.vue";
 import RoleModal from "@/components/modals/RoleModal.vue";
+import MessageModal from "@/components/modals/MessageModal.vue";
 
 @Component({
   components: {
@@ -31,7 +33,8 @@ import RoleModal from "@/components/modals/RoleModal.vue";
     CategoryModal,
     SupplierModal,
     CustomerModal,
-    RoleModal
+    RoleModal,
+    MessageModal
   }
 })
 export default class Modals extends Vue {}

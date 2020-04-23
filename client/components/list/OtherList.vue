@@ -101,11 +101,11 @@ export default class OtherList extends Vue {
   @Prop(String) overLine!: string;
   @Prop(Array) listItem!: Array<Object>;
 
-  selectedId = null;
   selected = 0;
   items = ["5", "10", "25", "All"];
-  selectedItem: any = null;
   searchShow = false;
+  selectedId: any = null;
+  selectedItem: any = null;
 
   get rows() {
     return this.selected === 3

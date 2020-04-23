@@ -14,7 +14,7 @@
           </v-avatar>
         </v-col>
         <v-col class="d-flex flex-column justify-space-between">
-          <v-card-text :style="cardStyle" height="100%">
+          <v-card-text :style="cardStyle" height="100%" class="px-1">
             <div class="overline" v-if="!isCashier" title="category">{{item.category_name}}</div>
             <p
               class="mb-0"
@@ -36,6 +36,13 @@
             <v-btn text @click="manageItem(item)">Manage</v-btn>
             <v-btn text color="error" @click="deleteItem(item)">Delete</v-btn>
           </v-card-actions>
+          <v-sheet
+            v-if="isOutOfStock"
+            color="error"
+            class="out-of-stocks text-center py-1"
+            dark
+            tile
+          >Out of Stocks</v-sheet>
         </v-col>
       </v-row>
     </v-badge>
@@ -66,6 +73,10 @@ export default class ProductCard extends ProductMixin {
     return true;
   }
 
+  get isOutOfStock() {
+    return this.item.quantity - this.quantity <= 0;
+  }
+
   get titleStyle() {
     return this.isCashier ? "subtitle-1 font-weight-bold" : "title";
   }
@@ -79,7 +90,7 @@ export default class ProductCard extends ProductMixin {
   }
 
   get imageSize() {
-    return this.isCashier ? "80px" : "100px";
+    return this.isCashier ? "65px" : "100px";
   }
 
   get cardTextDisbled() {
@@ -120,9 +131,13 @@ export default class ProductCard extends ProductMixin {
         });
       }
 
-      /* only click is pushed execute add product */
-      this.color = "primary";
-      cashierStore.addOrder({ ...order, quantity: 1 });
+      if (!this.isOutOfStock) {
+        /* only click is pushed execute add product */
+        this.color = "primary";
+        cashierStore.addOrder({ ...order, quantity: 1 });
+      }
+    } else {
+      this.color = "error";
     }
   }
 }
@@ -138,5 +153,13 @@ export default class ProductCard extends ProductMixin {
 
 .user-select-disabled {
   user-select: none;
+}
+
+.out-of-stocks {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 12px;
 }
 </style>

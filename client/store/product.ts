@@ -12,22 +12,9 @@ const productAPI = new ProductAPI;
   namespaced: true
 })
 export default class Product extends VuexModule {
-  // states
-  private products: Array<IProduct> = [];
-  private singleProduct: object = {};
+  products: Array<IProduct> = [];
+  singleProduct: object = {};
   public path = "/products";
-
-  get getProducts() {
-    return this.products;
-  }
-
-  get getAddonItems() {
-    return [];
-  }
-
-  get tangina() {
-    return this.singleProduct;
-  }
 
   @Mutation
   public [ADD_NEW_PRODUCT](product: IProduct): void {

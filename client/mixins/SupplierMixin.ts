@@ -110,23 +110,23 @@ export default class SupplierMixin extends Vue {
   }
 
   get supplierList() {
-    return this.supplierStore.getSuppliers;
+    return this.supplierStore.suppliers;
   }
 
   get currentSupplier() {
-    return this.supplierStore.getCurrent;
+    return this.supplierStore.supplier;
   }
 
   get isLoading() {
-    if (this.supplierStore.getLoading) {
+    if (this.supplierStore.loading) {
       this.clearFields();
       this.frontendStore.setSupplierModal(false);
     }
-    return this.supplierStore.getLoading;
+    return this.supplierStore.loading;
   }
 
   get modalState() {
-    return this.frontendStore.supplierModalState;
+    return this.frontendStore.showSupplierModal;
   }
 
   set modalState(show: boolean) {

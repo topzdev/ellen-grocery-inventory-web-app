@@ -1,19 +1,27 @@
 <template>
-  <div class="d-flex flex-column" style="height: 100vh">
-    <v-row style="height: 100%" no-gutters>
-      <v-col cols="4" style="height: inherit">
-        <cashier-order></cashier-order>
-      </v-col>
-      <v-col class="d-flex flex-column px-5" style="height: inherit" cols="8">
-        <cashier-header></cashier-header>
-        <div style="flex: 1 1 auto">
-          <product-list mode="cashier" />
-        </div>
-        <cashier-other-info style="flex: 0 1 auto"></cashier-other-info>
-      </v-col>
-    </v-row>
-    <cashier-system-bar></cashier-system-bar>
-  </div>
+  <keypress key-event="keyup" @pressed="shortcut">
+    <form class="d-flex flex-column" style="height: 100vh" @keypress.capture="shortcut">
+      <v-row style="height: 100%" no-gutters>
+        <v-col cols="5" style="height: inherit">
+          <v-row no-gutters style="height: inherit">
+            <v-col style="height: inherit" cols="2">
+              <cashier-controls></cashier-controls>
+            </v-col>
+            <v-col style="height: inherit">
+              <cashier-order></cashier-order>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col class="d-flex flex-column px-5" style="height: inherit">
+          <cashier-header></cashier-header>
+          <div style="flex: 1 1 auto">
+            <product-list mode="cashier" />
+          </div>
+        </v-col>
+      </v-row>
+      <cashier-system-bar></cashier-system-bar>
+    </form>
+  </keypress>
 </template>
 
 <script lang="ts">
@@ -23,7 +31,9 @@ import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
 import CashierOrder from "@/components/cashier/CashierOrder.vue";
 import CashierHeader from "@/components/cashier/CashierHeader.vue";
 import CashierSystemBar from "@/components/cashier/CashierSystemBar.vue";
+import CashierControls from "@/components/cashier/CashierControls.vue";
 import CashierMixin from "@/mixins/CashierMixin";
+import Keypress from "@/components/misc/Keypress.vue";
 
 @Component({
   components: {
@@ -31,7 +41,9 @@ import CashierMixin from "@/mixins/CashierMixin";
     CashierOtherInfo,
     ProductList,
     CashierHeader,
-    CashierSystemBar
+    CashierSystemBar,
+    CashierControls,
+    Keypress
   },
   head: {
     title: "Hello World",
@@ -43,15 +55,19 @@ import CashierMixin from "@/mixins/CashierMixin";
 export default class CashierMain extends CashierMixin {
   created() {
     // verify if customer is already asssigned
-    if (!this.cashierStore.getCustomer) return this.initPage();
+    if (!this.cashierStore.customer) return this.initPage();
 
     // after success vetification then the transaction marked started
-    if (!this.cashierStore.getTransactionStarted)
+    if (!this.cashierStore.transaction_started)
       this.cashierStore.startTransaction();
 
     // frontend configuration for main cashier view
     this.frontendStore.setNavbar(false);
     this.frontendStore.setSidebar(true);
+  }
+
+  shortcut(event: any) {
+    console.log(event);
   }
 }
 </script>

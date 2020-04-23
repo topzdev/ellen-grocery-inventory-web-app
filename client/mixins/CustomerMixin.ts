@@ -96,11 +96,11 @@ export default class CustomerMixin extends Vue {
   }
 
   get customerList() {
-    return this.customerStore.getCustomers;
+    return this.customerStore.customers;
   }
 
   get currentCustomer() {
-    return this.customerStore.getCurrentCustomer
+    return this.customerStore.customer
   }
 
   get customerTitle() {
@@ -108,15 +108,15 @@ export default class CustomerMixin extends Vue {
   }
 
   get isLoading() {
-    if (this.customerStore.getLoading) {
+    if (this.customerStore.loading) {
       this.clearFields();
       this.frontendStore.setCustomerModal(false);
     }
-    return this.customerStore.getLoading;
+    return this.customerStore.loading;
   }
 
   get modalState() {
-    return this.frontendStore.customerModalState;
+    return this.frontendStore.showCustomerModal;
   }
 
   set modalState(show: boolean) {

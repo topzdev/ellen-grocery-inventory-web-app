@@ -42,12 +42,9 @@ export default class ProductMixin extends Vue {
   };
 
   // computed property
-  get items() {
-    return this.productStore.getAddonItems;
-  }
 
   get productList() {
-    return this.productStore.getProducts;
+    return this.productStore.products;
   }
 
   manageItem(item: IProduct) {
@@ -71,7 +68,7 @@ export default class ProductMixin extends Vue {
     });
   }
 
-  uploadImage(image: any) {
+  uploadImage(image: any): any {
     if (!image.target.files.length) return this.product.image = undefined;
 
     let self = this;
@@ -90,15 +87,15 @@ export default class ProductMixin extends Vue {
   }
 
   get categories() {
-    return categoryStore.getCategories;
+    return categoryStore.categories;
   }
 
   get suppliers() {
-    return supplierStore.getSuppliers;
+    return supplierStore.suppliers;
   }
 
   get brands() {
-    return brandStore.getBrands;
+    return brandStore.brands;
   }
 
   // Rules

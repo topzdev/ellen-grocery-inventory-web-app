@@ -8,7 +8,6 @@ const transactionApi = new TransactionAPI;
 
 @Module({ name: 'transaction', namespaced: true })
 export default class Transaction extends VuexModule {
-    private path: string = "/transactions";
     private transactions: ITransaction[] = [];
 
     get getTransactions() {

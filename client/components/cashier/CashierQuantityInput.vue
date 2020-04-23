@@ -1,18 +1,18 @@
 <template>
   <div class="d-flex align-center quantity-input">
-    <v-btn @click="decrement" :disabled="value < 1" color="primary" depressed fab x-small dark>
+    <v-btn :disabled="isMin" @click="decrement" color="primary" depressed fab x-small dark>
       <v-icon>mdi-minus</v-icon>
     </v-btn>
     <v-text-field
+      :disabled="isMax"
       ref="input"
       :value="value"
       @input="validate"
-      @click.native="select"
       hide-details
       class="quantity-input"
       type="number"
     ></v-text-field>
-    <v-btn @click="increment" color="primary" depressed fab x-small dark>
+    <v-btn :disabled="isMax" @click="increment" color="primary" depressed fab x-small dark>
       <v-icon>mdi-plus</v-icon>
     </v-btn>
   </div>
@@ -27,8 +27,15 @@ export default class CashierQuantityInput extends Vue {
   @Prop(Number) value!: number;
   @Prop(Function) input!: Function;
 
+  get isMax() {
+    return this.value >= this.max ? true : false;
+  }
+
+  get isMin() {
+    return this.value <= 1;
+  }
+
   validate(value: any) {
-    console.log(this.value, this.max);
     if (!value) this.input(0);
 
     let parse = parseInt(value);

@@ -75,7 +75,7 @@ class RoleMixin extends Vue {
   }
 
   get roleList() {
-    return this.roleStore.getRoles;
+    return this.roleStore.roles;
   }
 
   get roleTitle() {
@@ -83,15 +83,15 @@ class RoleMixin extends Vue {
   }
 
   get isLoading() {
-    if (this.roleStore.getLoading) {
+    if (this.roleStore.loading) {
       this.clearFields();
       this.frontendStore.setRoleModal(false);
     }
-    return this.roleStore.getLoading;
+    return this.roleStore.loading;
   }
 
   get modalState() {
-    return this.frontendStore.roleModalState;
+    return this.frontendStore.showRoleModal;
   }
 
   set modalState(show: boolean) {

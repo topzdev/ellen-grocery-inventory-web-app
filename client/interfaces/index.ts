@@ -12,6 +12,7 @@ import IRole from './IRole'
 import IRootState from './IRootState'
 import ISupplier from './ISupplier'
 import ITransaction from './ITransaction'
+import IHoldTransact from './IHoldTransact'
 import { IDeleteConfig } from './IUniversal'
 import {
     IDeleteModal,
@@ -41,5 +42,6 @@ export {
     ISidebar,
     ISnackbar,
     IDeleteConfig,
-    ICurrentDelete
+    ICurrentDelete,
+    IHoldTransact
 };

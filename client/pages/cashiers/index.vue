@@ -11,7 +11,7 @@
             <v-spacer></v-spacer>
             <div class="subtitle-1">Cashier: Christopher Lugod</div>
           </v-card-text>
-          <cashier-initital-list></cashier-initital-list>
+          <cashier-customer-list></cashier-customer-list>
         </v-col>
         <v-col cols="4" height="100%">
           <cashier-recent-transactions></cashier-recent-transactions>
@@ -25,10 +25,10 @@
 import { Vue, Component } from "vue-property-decorator";
 import CashierMixin from "@/mixins/CashierMixin";
 import CashierRecentTransactions from "@/components/cashier/CashierRecentTransactions.vue";
-import CashierInititalList from "@/components/cashier/CashierInitialList.vue";
+import CashierCustomerList from "@/components/cashier/CashierCustomerList.vue";
 
 @Component({
-  components: { CashierRecentTransactions, CashierInititalList }
+  components: { CashierRecentTransactions, CashierCustomerList }
 })
 export default class CashierInitital extends CashierMixin {
   show = true;
@@ -37,9 +37,9 @@ export default class CashierInitital extends CashierMixin {
     this.frontendStore.setNavbar(false);
     this.frontendStore.setSidebar(false);
 
-    const { getTransactionStarted, getCustomer } = this.cashierStore;
+    const { transaction_started, customer } = this.cashierStore;
 
-    if (getCustomer && getTransactionStarted) this.mainPage();
+    if (customer && transaction_started) this.mainPage();
   }
 }
 </script>

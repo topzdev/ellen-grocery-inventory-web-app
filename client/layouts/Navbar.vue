@@ -16,23 +16,23 @@ export default class Navbar extends Vue {
   title: string = "Ellen Inventory System";
 
   setSidebar(show: boolean) {
-    frontendStore.setSidebarMini(!this.sidebarMiniState);
+    frontendStore.setSidebarMini(!this.showSidebarMini);
   }
 
-  get sidebarState() {
-    return frontendStore.sidebarState;
+  get showSidebar() {
+    return frontendStore.showSidebar;
   }
 
-  get sidebarMiniState() {
-    return frontendStore.sidebarMiniState;
+  get showSidebarMini() {
+    return frontendStore.showSidebarMini;
   }
 
   get flat() {
-    return frontendStore.getNavbarFlat;
+    return frontendStore.navbarFlat;
   }
 
   get navbar() {
-    return frontendStore.navbarState;
+    return frontendStore.showNavbar;
   }
 }
 </script>

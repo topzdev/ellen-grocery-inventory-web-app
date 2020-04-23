@@ -36,7 +36,7 @@ export default class CashierMixin extends Vue {
     }
 
     get customers() {
-        return this.customerStore.getCustomers
+        return this.customerStore.customers
     }
 
     initPage() {
@@ -53,7 +53,7 @@ export default class CashierMixin extends Vue {
 
 
     get paymentTrayState() {
-        return this.frontendStore.getPaymentTrayState;
+        return this.frontendStore.showPaymentTray;
     }
 
     set paymentTrayState(show) {
@@ -66,6 +66,20 @@ export default class CashierMixin extends Vue {
 
     openPaymentTray(show: boolean) {
         this.frontendStore.setPaymentTray(show);
+    }
+
+    cancelTransaction() {
+        this.frontendStore.setMessageModal({
+            title: 'Cancel Transaction',
+            show: true,
+            message: 'Are you sure to cancel this transaction?',
+            mode: 'question',
+            yesFunction: () => {
+                this.cashierStore.cancelTransaction()
+                this.initPage();
+            }
+        })
+
     }
 
     realtime() {

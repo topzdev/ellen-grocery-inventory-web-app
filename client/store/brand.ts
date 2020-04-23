@@ -8,19 +8,10 @@ const brandAPI = new BrandAPI;
 
 @Module({ name: "brand", namespaced: true })
 export default class Brand extends VuexModule {
-  private url: string = "/api/brand";
-  private path: string = "/others";
-  private brands: Array<IBrand> = [];
-
-  private loading: boolean = false;
-
-  get getLoading() {
-    return this.loading;
-  }
-
-  get getBrands() {
-    return this.brands;
-  }
+  url: string = "/api/brand";
+  path: string = "/others";
+  brands: Array<IBrand> = [];
+  loading: boolean = false;
 
   @Mutation
   private [SET_BRANDS](brands: Array<IBrand>): void {

@@ -8,7 +8,7 @@ import { frontendStore } from "@/store";
 @Component
 export default class SuccessSnackbars extends Vue {
   get snackbar() {
-    return frontendStore.snackbarState;
+    return frontendStore.showSnackbar;
   }
 
   @Watch("snackbar")

@@ -87,15 +87,15 @@ class CategoryMixin extends Vue {
   }
 
   get isLoading() {
-    if (this.categoryStore.getLoading) {
+    if (this.categoryStore.loading) {
       this.clearFields();
       this.frontendStore.setCategoryModal(false);
     }
-    return this.categoryStore.getLoading;
+    return this.categoryStore.loading;
   }
 
   get modalState() {
-    return this.frontendStore.categoryModalState;
+    return this.frontendStore.showCategoryModal;
   }
 
   set modalState(show: boolean) {
@@ -108,7 +108,7 @@ class CategoryMixin extends Vue {
   }
 
   get categoryList() {
-    return this.categoryStore.getCategories;
+    return this.categoryStore.categories;
   }
 
   get categoryTitle() {

@@ -53,13 +53,13 @@ export default class SearchProductModal extends Vue {
 
   get searched() {
     return {
-      length: productStore.getProducts.length,
-      items: productStore.getProducts
+      length: productStore.products.length,
+      items: productStore.products
     };
   }
 
   get modalShow() {
-    return frontendStore.searchModalState.show;
+    return frontendStore.showSearchModal.show;
   }
 
   set modalShow(show: boolean) {

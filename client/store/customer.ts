@@ -8,22 +8,10 @@ const customerAPI = new CustomerAPI
 
 @Module({ name: "customer", namespaced: true })
 export default class Customer extends VuexModule {
-  private path: string = "/customers";
-  private customers: ICustomer[] = [];
-  private customer: ICustomer | undefined = undefined;
-  private loading: boolean = false;
-
-  get getLoading() {
-    return this.loading;
-  }
-
-  get getCustomers() {
-    return this.customers;
-  }
-
-  get getCurrentCustomer() {
-    return this.customer;
-  }
+  path: string = "/customers";
+  customers: ICustomer[] = [];
+  customer: ICustomer | undefined = undefined;
+  loading: boolean = false;
 
   @Mutation
   private [SET_CURRENT](customer: ICustomer): void {
@@ -86,7 +74,7 @@ export default class Customer extends VuexModule {
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    if (result.success) return { customer_id: result.data.customer_id, ...customer };
+    if (result.success) return { ...customer, customer_id: result.data.customer_id, fullname: result.data.fullname };
   }
 
   @Action({ commit: UPDATE_CUSTOMER })

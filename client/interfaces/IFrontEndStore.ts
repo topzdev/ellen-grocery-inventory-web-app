@@ -9,14 +9,26 @@ interface ISnackbar {
   success?: boolean;
 }
 
-interface IDeleteModal extends IRedirect {
+interface IMessageModal {
+  show: boolean;
+  message?: string;
+  type?: string;
+  title?: string;
+  mode?: string,
+  yesLabel?: string,
+  noLabel?: string,
+  yesFunction?: Function
+  noFunction?: Function
+}
+
+interface IDeleteModal {
   title?: string;
   message?: string;
   show: boolean;
   name?: string | any | null;
 }
 
-interface ISearchModal extends IRedirect {
+interface ISearchModal {
   message?: string;
   show: boolean;
 }
@@ -26,4 +38,4 @@ interface ISidebar {
   mini?: boolean;
 }
 
-export { ISnackbar, IDeleteModal, ISearchModal, IRedirect, ISidebar };
+export { ISnackbar, IDeleteModal, ISearchModal, IRedirect, IMessageModal, ISidebar };

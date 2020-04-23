@@ -98,7 +98,7 @@ class BrandMixin extends Vue {
   }
 
   get brandList() {
-    return this.brandStore.getBrands;
+    return this.brandStore.brands;
   }
 
   get brandTitle() {
@@ -106,15 +106,15 @@ class BrandMixin extends Vue {
   }
 
   get isLoading() {
-    if (this.brandStore.getLoading) {
+    if (this.brandStore.loading) {
       this.clearFields();
       this.frontendStore.setBrandModal(false);
     }
-    return this.brandStore.getLoading;
+    return this.brandStore.loading;
   }
 
   get modalState() {
-    return this.frontendStore.brandModalState;
+    return this.frontendStore.showBrandModal;
   }
 
   set modalState(show: boolean) {

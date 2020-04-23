@@ -44,11 +44,11 @@ export default class BarcodeDialog extends Vue {
   autofocus: boolean = true;
 
   get searched() {
-    return productStore.tangina;
+    return productStore.singleProduct;
   }
 
   get showModal() {
-    return frontendStore.barcodeModalState;
+    return frontendStore.showBarcodeModal;
   }
 
   // @Watch("searched")

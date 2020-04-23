@@ -8,17 +8,9 @@ const roleApi = new RoleAPI;
 
 @Module({ name: "role", namespaced: true })
 export default class Role extends VuexModule {
-  private path: string = "/accounts";
-  private roles: IRole[] = [];
-  private loading: boolean = false;
-
-  get getLoading() {
-    return this.loading;
-  }
-
-  get getRoles(): Array<IRole> {
-    return this.roles;
-  }
+  path: string = "/accounts";
+  roles: IRole[] = [];
+  loading: boolean = false;
 
   @Mutation
   private [SET_ROLE](roles: Array<IRole>) {
@@ -72,8 +64,6 @@ export default class Role extends VuexModule {
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
-
-    console.log(result)
 
     if (result.success) return { ...role, role_id: result.data.role_id };
   }

@@ -8,17 +8,9 @@ const categoryAPI = new CategoryAPI;
 
 @Module({ name: "category", namespaced: true })
 export default class Category extends VuexModule {
-  private path: string = "/others";
-  private categories: Array<ICategory> = [];
-  private loading: boolean = false;
-
-  get getLoading() {
-    return this.loading;
-  }
-
-  get getCategories() {
-    return this.categories;
-  }
+  path: string = "/others";
+  categories: Array<ICategory> = [];
+  loading: boolean = false;
 
   @Mutation
   private [SET_CATEGORIES](categories: Array<ICategory>): void {

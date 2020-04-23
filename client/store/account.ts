@@ -17,17 +17,9 @@ const accountAPI = new AccountAPI;
   namespaced: true
 })
 export default class Account extends VuexModule {
-  private path: string = "/accounts";
-  private accounts: Array<IAccount> = [];
-  private current: IAccount | null = null;
-
-  get getAccounts() {
-    return this.accounts;
-  }
-
-  get getCurrentAccount() {
-    return this.current;
-  }
+  path: string = "/accounts";
+  accounts: Array<IAccount> = [];
+  account: IAccount | null = null;
 
   @Mutation
   private [SET_ACCOUNTS](accounts: Array<IAccount>) {
@@ -36,7 +28,7 @@ export default class Account extends VuexModule {
 
   @Mutation
   private [SET_CURRENT_ACCOUNT](account: IAccount) {
-    this.current = account;
+    this.account = account;
   }
 
   @Mutation
