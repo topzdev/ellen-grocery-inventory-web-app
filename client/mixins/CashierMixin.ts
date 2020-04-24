@@ -79,7 +79,19 @@ export default class CashierMixin extends Vue {
                 this.initPage();
             }
         })
+    }
 
+    holdTransaction() {
+        this.frontendStore.setMessageModal({
+            title: 'Hold Transaction',
+            show: true,
+            message: 'Are you sure to hold this transaction?',
+            mode: 'question',
+            yesFunction: () => {
+                this.cashierStore.addHold()
+                this.initPage();
+            }
+        })
     }
 
     realtime() {

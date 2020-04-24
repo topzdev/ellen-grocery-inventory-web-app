@@ -36,7 +36,7 @@
                 <div class="d-flex mb-2">
                   <p class="title">Grand Total</p>
                   <v-spacer />
-                  <h1 class="display-2 font-weight-bold">₱ {{calculations.grand_total.toFixed(2)}}</h1>
+                  <h1 class="display-2 font-weight-bold">₱ {{calculations.total_amount.toFixed(2)}}</h1>
                 </div>
               </v-col>
               <v-col cols="6"></v-col>

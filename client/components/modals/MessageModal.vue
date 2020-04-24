@@ -68,5 +68,8 @@ export default class MessangeModal extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
+.v-card__title {
+  word-break: unset;
+}
 </style>

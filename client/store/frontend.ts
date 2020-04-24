@@ -5,7 +5,7 @@ import {
   IMessageModal
 } from "~/interfaces/IFrontEndStore";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SNACKBAR, SET_DELETE_MODAL, SET_SEARCH_MODAL, SET_BARCODE_MODAL, SET_BRAND_MODAL, SET_CATEGORY_MODAL, SET_SUPPLIER_MODAL, SET_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_ROLE_MODAL, SET_NAVBAR, SET_NAVBAR_FLAT, SET_MESSAGE_MODAL } from '~/configs/types';
+import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SNACKBAR, SET_DELETE_MODAL, SET_SEARCH_MODAL, SET_BARCODE_MODAL, SET_BRAND_MODAL, SET_CATEGORY_MODAL, SET_SUPPLIER_MODAL, SET_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_ROLE_MODAL, SET_NAVBAR, SET_NAVBAR_FLAT, SET_MESSAGE_MODAL, SET_HOLD_SIDEBAR } from '~/configs/types';
 
 @Module({
   name: "frontend",
@@ -15,6 +15,7 @@ export default class Frontend extends VuexModule {
   showSidebar: boolean = true;
   showSidebarMini: boolean = true;
   showNavbar: boolean = true;
+  showHoldSidebar: boolean = true;
   navbarFlat: boolean = false;
   showSnackbar: ISnackbar = { show: false };
   showDeleteModal: IDeleteModal = { show: false };
@@ -109,6 +110,11 @@ export default class Frontend extends VuexModule {
     this.navbarFlat = flat;
   }
 
+  @Mutation
+  private [SET_HOLD_SIDEBAR](show: boolean) {
+    this.showHoldSidebar = show;
+  }
+
   @Action({ commit: SET_SIDEBAR })
   setSidebar(show: boolean) {
     return show;
@@ -187,6 +193,11 @@ export default class Frontend extends VuexModule {
   @Action({ commit: SET_MESSAGE_MODAL })
   setMessageModal(modalConfig: IMessageModal) {
     return modalConfig;
+  }
+
+  @Action({ commit: SET_HOLD_SIDEBAR })
+  setHoldSidebar(show: boolean) {
+    return show;
   }
 
   @Action

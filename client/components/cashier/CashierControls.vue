@@ -2,7 +2,12 @@
   <v-sheet class="primary" height="100%" tile flat>
     <v-card cols="12" v-for="control in controls" :key="control.key" color="transparent" flat>
       <v-card-actions>
-        <v-btn class="control-btn" :color="control.color" @click="control.action">
+        <v-btn
+          class="control-btn"
+          :color="control.color"
+          :disabled="control.disabled"
+          @click="control.action"
+        >
           <v-icon class="mb-1">{{control.icon}}</v-icon>
           <div style="width: 100%; text-transform: capitalize;">
             <div class="font-weight-medium">{{control.title}}</div>
@@ -20,30 +25,32 @@ import CashierMixin from "@/mixins/CashierMixin";
 
 @Component
 export default class CashierControls extends CashierMixin {
-  controls = [
-    {
-      title: "Hold",
-      key: "F2",
-      action: () => console.log("Hello"),
-      color: "warning",
-      icon: "mdi-pause-circle-outline"
-    },
-
-    {
-      title: "Gift Cards",
-      key: "F3",
-      action: this.cancelTransaction,
-      color: "yellow",
-      icon: "mdi-wallet-giftcard"
-    },
-    {
-      title: "Cancel",
-      key: "Esc",
-      action: this.cancelTransaction,
-      color: "error",
-      icon: "mdi-cancel"
-    }
-  ];
+  get controls() {
+    return [
+      {
+        title: "Gift Cards",
+        key: "F3",
+        action: this.cancelTransaction,
+        color: "yellow",
+        icon: "mdi-wallet-giftcard"
+      },
+      {
+        title: "Hold",
+        key: "F2",
+        action: this.holdTransaction,
+        color: "warning",
+        icon: "mdi-pause-circle-outline",
+        disabled: this.cashierStore.orders.length ? false : true
+      },
+      {
+        title: "Cancel",
+        key: "Esc",
+        action: this.cancelTransaction,
+        color: "error",
+        icon: "mdi-cancel"
+      }
+    ];
+  }
 }
 </script>
 

@@ -32,7 +32,7 @@ export default class CashierOrderAction extends CashierMixin {
     return [
       {
         title: "Net Price",
-        value: this.calculations.grand_total
+        value: this.calculations.total_amount
       },
       {
         title: "Taxt",
@@ -40,7 +40,7 @@ export default class CashierOrderAction extends CashierMixin {
       },
       {
         title: "Total Amount",
-        value: this.calculations.grand_total
+        value: this.calculations.total_amount
       },
       {
         title: "Total Quantity",

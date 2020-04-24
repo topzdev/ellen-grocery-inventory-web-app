@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <sidebar />
+    <sidebars />
     <navbar />
     <v-content>
       <nuxt />
@@ -13,7 +13,7 @@
 <script>
 import { Vue, Component } from "vue-property-decorator";
 import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import Sidebars from "./Sidebars";
 import Modals from "./Modals";
 import Snackbars from "./Snackbars";
 import SpeedDial from "./SpeedDial";
@@ -21,7 +21,7 @@ import SpeedDial from "./SpeedDial";
 @Component({
   components: {
     Navbar,
-    Sidebar,
+    Sidebars,
     Modals,
     Snackbars,
     SpeedDial

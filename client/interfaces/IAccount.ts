@@ -7,6 +7,7 @@ interface IAccount {
   email_address?: string;
   role_id?: number;
   password?: string;
+  fullname?: string
 }
 
 export default IAccount;

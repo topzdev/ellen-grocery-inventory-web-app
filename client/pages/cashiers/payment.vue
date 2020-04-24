@@ -85,7 +85,7 @@ export default class CashierPaymentPage extends CashierMixin {
   change: number = 0.0;
 
   checkout() {
-    if (this.amountPaid >= this.calculations.grand_total) {
+    if (this.amountPaid >= this.calculations.total_amount) {
       return this.cashierStore.finishTransaction({
         amount_paid: this.amountPaid
       });
@@ -118,7 +118,7 @@ export default class CashierPaymentPage extends CashierMixin {
   get quickCash() {
     return [
       {
-        amount: this.calculations.grand_total,
+        amount: this.calculations.total_amount,
         title: "Exact",
         color: "primary"
       },
@@ -130,12 +130,12 @@ export default class CashierPaymentPage extends CashierMixin {
   }
 
   get amountTendered() {
-    return "₱ " + numeral(this.calculations.grand_total).format("0,0.00");
+    return "₱ " + numeral(this.calculations.total_amount).format("0,0.00");
   }
 
   get changeAmount() {
     if (!this.amountPaid) return "₱ 0.00";
-    this.change = this.amountPaid - this.calculations.grand_total;
+    this.change = this.amountPaid - this.calculations.total_amount;
     return "₱ " + numeral(this.change).format("0,0.00");
   }
 }

@@ -8,12 +8,19 @@
     :fixed="true"
   >
     <template v-slot:activator>
-      <v-btn v-model="fab" color="primary" dark fab large>
+      <v-btn v-model="fab" color="white primary--text" dark fab large>
         <v-icon v-if="fab">mdi-cog</v-icon>
         <v-icon v-else>mdi-cog-outline</v-icon>
       </v-btn>
     </template>
-    <v-btn v-for="(item, idx) in fabList" :key="idx" fab dark :color="item.color">
+    <v-btn
+      v-for="(item, idx) in fabList"
+      :key="idx"
+      fab
+      dark
+      :color="item.color"
+      @click="item.action"
+    >
       <v-tooltip left>
         <template v-slot:activator="{ on }">
           <v-badge :content="item.content" :value="item.content" color="red">
@@ -28,29 +35,32 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { frontendStore, cashierStore } from "../../store";
 
 @Component
 export default class CashierSpeedDial extends Vue {
   fab = false;
 
-  fabList = [
-    {
-      title: "",
-      icon: "mdi-account-plus-outline",
-      color: "success",
-      tooltip: "Add Account",
-      action: () => console.log("Fab hello"),
-      content: false
-    },
-    {
-      title: "",
-      icon: "mdi-pause-circle-outline",
-      color: "warning",
-      tooltip: "Hold Transactions",
-      action: () => console.log("Fab hello"),
-      content: 2
-    }
-  ];
+  get fabList() {
+    return [
+      {
+        title: "",
+        icon: "mdi-account-plus-outline",
+        color: "success",
+        tooltip: "Add Account",
+        action: () => frontendStore.setCustomerModal(true),
+        content: false
+      },
+      {
+        title: "",
+        icon: "mdi-pause-circle-outline",
+        color: "warning",
+        tooltip: "Hold Transactions",
+        action: () => frontendStore.setHoldSidebar(true),
+        content: cashierStore.hold.length
+      }
+    ];
+  }
 }
 </script>
 

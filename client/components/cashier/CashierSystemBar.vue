@@ -4,10 +4,11 @@
     &nbsp;
     <span>John Doe</span>
     <v-spacer></v-spacer>
-    <span class="overline">Transaction Hold :</span>
-    &nbsp;
-    <span>2</span>
-    &nbsp;
+    <v-card color="transparent" flat @click="openHold">
+      <span class="overline">Transaction Hold :</span>
+      &nbsp;
+      <span>{{holdLength}}</span>
+    </v-card>&nbsp;
     &nbsp;
     <v-divider vertical></v-divider>
     <v-icon class="ml-3 mr-2">mdi-clock</v-icon>
@@ -20,7 +21,15 @@ import { Vue, Component } from "vue-property-decorator";
 import CashierMixin from "@/mixins/CashierMixin";
 
 @Component
-export default class CashierSystemBar extends CashierMixin {}
+export default class CashierSystemBar extends CashierMixin {
+  get holdLength() {
+    return this.cashierStore.hold.length;
+  }
+
+  openHold() {
+    this.frontendStore.setHoldSidebar(true);
+  }
+}
 </script>
 
 <style>

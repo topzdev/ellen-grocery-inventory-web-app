@@ -22,12 +22,13 @@ export default class Cashier extends VuexModule {
     orders: Array<IOrder> = [];
     net_price: number = 0.00;
     tax_total: number = 0.00;
-    grand_total: number = 0.00;
+    total_amount: number = 0.00;
     quantity_total: number = 0;
     transaction_started: string = null;
-    hold: IHoldTransact[]
+    hold: IHoldTransact[] = []
     account: IAccount = {
-        account_id: 1
+        account_id: 1,
+        fullname: "John Doe"
     };
     customer: ICustomer = null;
 
@@ -40,7 +41,7 @@ export default class Cashier extends VuexModule {
         return {
             net_price: this.net_price,
             tax_total: this.tax_total,
-            grand_total: this.grand_total,
+            total_amount: this.total_amount,
             quantity_total: this.quantity_total
         }
     }
@@ -65,7 +66,7 @@ export default class Cashier extends VuexModule {
 
     @Mutation
     private [REMOVE_HOLD](index: number) {
-        this.hold = this.hold.splice(index);
+        this.hold = this.hold.filter((item, idx) => idx != index);
     }
 
     @Mutation
@@ -77,7 +78,7 @@ export default class Cashier extends VuexModule {
     private [CALCULATION]({ netPrice, taxTotal, grandTotal, quantityTotal }: ICalculation) {
         this.net_price = netPrice;
         this.tax_total = taxTotal;
-        this.grand_total = grandTotal
+        this.total_amount = grandTotal
         this.quantity_total = quantityTotal;
     }
 
@@ -85,7 +86,7 @@ export default class Cashier extends VuexModule {
     private [SET_CLEAR]() {
         this.net_price = 0.00;
         this.tax_total = 0.00;
-        this.grand_total = 0.00;
+        this.total_amount = 0.00;
         this.quantity_total = 0;
         this.transaction_started = null;
         this.customer = null;
@@ -177,8 +178,8 @@ export default class Cashier extends VuexModule {
             customer_name: this.customer.fullname,
             started_at: this.transaction_started,
             ended_at: new Date().toISOString(),
-            total_amount: this.grand_total,
-            account_name: this.customer.fullname,
+            total_amount: this.total_amount,
+            account_name: this.account.fullname,
             amount_paid,
             orders: this.orders
         });
@@ -195,8 +196,11 @@ export default class Cashier extends VuexModule {
             orders: this.orders,
             account: this.account,
             customer: this.customer,
+            quantity_count: this.quantity_total,
+            total_amount: this.total_amount,
             transaction_started: this.transaction_started,
-            holded_at: new Date().toISOString()
+            holded_at: new Date().toISOString(),
+
         });
         this.context.commit(SET_CLEAR);
         // @ts-ignore
@@ -208,6 +212,13 @@ export default class Cashier extends VuexModule {
         this.context.commit(RETRIEVE_HOLD, index);
         this.context.commit(REMOVE_HOLD, index);
         this.context.commit(CALCULATION, this.orders);
+        // @ts-ignore
+        $nuxt.$router.push('/cashiers/main');
+    }
+
+    @Action
+    removeHold(index: number) {
+        this.context.commit(REMOVE_HOLD, index);
     }
 
     @Action({ commit: SET_CASHIER_ACCOUNT })
