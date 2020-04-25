@@ -15,7 +15,7 @@ export default class Frontend extends VuexModule {
   showSidebar: boolean = true;
   showSidebarMini: boolean = true;
   showNavbar: boolean = true;
-  showHoldSidebar: boolean = true;
+  showHoldSidebar: boolean = false;
   navbarFlat: boolean = false;
   showSnackbar: ISnackbar = { show: false };
   showDeleteModal: IDeleteModal = { show: false };

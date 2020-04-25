@@ -6,6 +6,7 @@ import customerAPI from './customerAPI';
 import accountAPI from './accountAPI';
 import roleAPI from './roleAPI';
 import transactionAPI from './transactionAPI'
+import statisticAPI from './statisticAPI'
 
 export {
 	productAPI,
@@ -15,5 +16,6 @@ export {
 	customerAPI,
 	accountAPI,
 	roleAPI,
+	statisticAPI,
 	transactionAPI
 };

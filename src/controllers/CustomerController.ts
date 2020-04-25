@@ -10,19 +10,21 @@ class CustomerController extends QueryExtend {
 	}
 
 	public async fetchCustomers(req: Request, res: Response): Promise<any> {
-		const { search, limit, offset } = req.query;
+		const { search, limit, offset, transact_count, last_transact } = req.query;
+		console.log(req.query);
 
 		const query: QueryConfig = {
 			text: `SELECT 
-				customer_id,
-				firstname ||' '|| lastname AS fullname,
-				home_address,
-				email_address
-			FROM "${this.customerTable}" 
+				customer.customer_id,
+				customer.firstname ||' '|| customer.lastname AS fullname,
+				customer.home_address,
+				customer.email_address
+				${transact_count === 'true' ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
+				${last_transact === 'true' ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
+			FROM ${this.customerTable} customer 
 			${this.queryAnalyzer("firstname ||' '|| lastname", search, limit, offset)} `
 		};
 
-		console.log(req.query, query);
 		try {
 			const result = await this.executeQuery(query);
 
@@ -79,7 +81,7 @@ class CustomerController extends QueryExtend {
 
 			const query: QueryConfig = {
 				text: `INSERT INTO "${this.customerTable}" (firstname,lastname,home_address, 
-					email_address, cp_no, tel_no) VALUES ($1,$2,$3,$4,$5,$6) RETURNING customer_id`,
+					email_address, cp_no, tel_no) VALUES ($1,$2,$3,$4,$5,$6) RETURNING customer_id, firstname || ' ' || lastname as fullname`,
 				values: [
 					firstname,
 					lastname,
@@ -94,7 +96,7 @@ class CustomerController extends QueryExtend {
 			return res.json({
 				message: 'Customer Successfully Added',
 				success: true,
-				data: result.rows
+				data: result.rows[0]
 			});
 		} catch (error) {
 			return res.json({

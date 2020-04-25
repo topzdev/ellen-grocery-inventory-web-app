@@ -25,7 +25,9 @@ export default class TransactionController extends QueryExtend {
                 account.firstname || ' ' || account.lastname AS account_name,
                 transact.started_at,
                 transact.ended_at,
-                transact.created_at
+                transact.created_at,
+                transact.customer_id,
+                transact.account_id
                 FROM "${this.transactionTable}" transact
                 INNER JOIN "${this.customerTable}" customer ON customer.customer_id = transact.customer_id 
                 INNER JOIN "${this.accountTable}" account ON account.account_id = transact.account_id
@@ -56,6 +58,9 @@ export default class TransactionController extends QueryExtend {
     }
 
     async fetchTransaction(req: Request, res: Response) {
+
+        const { recent, order, order_by } = req.query;
+
         try {
             const query: QueryConfig = {
                 text: `SELECT 
@@ -66,10 +71,14 @@ export default class TransactionController extends QueryExtend {
                 account.firstname || ' ' || account.lastname AS account_name,
                 transact.started_at,
                 transact.ended_at,
-                transact.created_at
+                transact.created_at,
+                transact.customer_id,
+                transact.account_id
                 FROM "${this.transactionTable}" transact
                 INNER JOIN "${this.customerTable}" customer ON customer.customer_id = transact.customer_id 
                 INNER JOIN "${this.accountTable}" account ON account.account_id = transact.account_id
+                ${recent ? `WHERE transact.ended_at >= NOW() - interval '24 hour'` : ''}
+                ${order_by ? `ORDER BY transact.${order_by} ${order}` : ''}
                 `,
             }
 
@@ -93,9 +102,10 @@ export default class TransactionController extends QueryExtend {
 
     async addTransaction(req: Request, res: Response) {
         const { customer_id, account_id, started_at, ended_at, total_amount, amount_paid, orders }: ITransaction = req.body;
-        try {
 
+        try {
             await this.executeQuery({ text: 'BEGIN' })
+            console.log(req.body);
 
             if (orders.length) {
                 for (const { product_id, quantity } of orders) {
