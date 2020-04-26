@@ -11,6 +11,7 @@ import IAccountModule from "~/store/account";
 import ICustomerModule from "~/store/customer";
 import ICashierModule from '~/store/cashier';
 import ITransactionModule from '~/store/transaction';
+import IStatisticModule from '~/store/statistic';
 
 let productStore: IProductModule;
 let frontendStore: IFrontendModule;
@@ -23,6 +24,7 @@ let accountStore: IAccountModule;
 let customerStore: ICustomerModule;
 let cashierStore: ICashierModule;
 let transactionStore: ITransactionModule;
+let statisticStore: IStatisticModule;
 
 function initialiseStores(store: Store<any>): void {
   productStore = getModule(IProductModule, store);
@@ -36,6 +38,7 @@ function initialiseStores(store: Store<any>): void {
   customerStore = getModule(ICustomerModule, store);
   cashierStore = getModule(ICashierModule, store);
   transactionStore = getModule(ITransactionModule, store);
+  statisticStore = getModule(IStatisticModule, store);
 }
 
 export {
@@ -51,6 +54,7 @@ export {
   customerStore,
   cashierStore,
   transactionStore,
+  statisticStore,
   IProductModule,
   IFrontendModule,
   ISupplierModule,
@@ -61,5 +65,6 @@ export {
   IAccountModule,
   ICustomerModule,
   ICashierModule,
-  ITransactionModule
+  ITransactionModule,
+  IStatisticModule
 };

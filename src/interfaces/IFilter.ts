@@ -1,4 +1,3 @@
-
 interface IFilter {
     search?: string;
     limit?: number | string;
@@ -12,4 +11,4 @@ interface IFilter {
     timespan?: string
 }
 
-export default IFilter;
+export default IFilter

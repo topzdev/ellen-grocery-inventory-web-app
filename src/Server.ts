@@ -3,16 +3,16 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import {
-	productAPI,
-	supplierAPI,
-	categoryAPI,
-	brandAPI,
-	customerAPI,
-	accountAPI,
-	roleAPI,
-	transactionAPI,
-	statisticAPI
-} from './api/index';
+	productRoute,
+	supplierRoute,
+	categoryRoute,
+	brandRoute,
+	customerRoute,
+	accountRoute,
+	roleRoute,
+	transactionRoute,
+	statisticRoute
+} from './routes/index';
 
 class Server {
 	public app: Express;
@@ -32,15 +32,15 @@ class Server {
 			});
 		});
 
-		router.use('/api/product', productAPI);
-		router.use('/api/supplier', supplierAPI);
-		router.use('/api/brand', brandAPI);
-		router.use('/api/category', categoryAPI);
-		router.use('/api/customer', customerAPI);
-		router.use('/api/account', accountAPI);
-		router.use('/api/role', roleAPI);
-		router.use('/api/transaction', transactionAPI)
-		router.use('/api/statistic', statisticAPI)
+		router.use('/api/product', productRoute);
+		router.use('/api/supplier', supplierRoute);
+		router.use('/api/brand', brandRoute);
+		router.use('/api/category', categoryRoute);
+		router.use('/api/customer', customerRoute);
+		router.use('/api/account', accountRoute);
+		router.use('/api/role', roleRoute);
+		router.use('/api/transaction', transactionRoute)
+		router.use('/api/statistic', statisticRoute)
 
 		this.app.use('/', router);
 	}

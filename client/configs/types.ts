@@ -89,6 +89,8 @@ export const DELETE_ROLE = "DELETE_ROLE"
 export const SET_TRANSACTION = "SET_TRANSACTION"
 export const ADD_TRANSACTION = "ADD_TRANSACTION"
 
+// Statistic Mutations
+export const SET_SALES = "SET_SALES"
 
 // Utility Mutations
 export const SET_LOADING = "SET_LOADING"

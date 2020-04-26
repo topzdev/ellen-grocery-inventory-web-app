@@ -2,32 +2,7 @@ import { Response, Request } from 'express';
 import QueryExtend from '../extends/QueryExtend';
 import { QueryConfig } from 'pg';
 
-const timespanCondition = (timespan: string, column: string) => {
-    let condition = 'where ';
 
-    switch (timespan) {
-        case 'today': condition += `${column} >= now()`
-            break;
-        case 'recent': condition += `${column} <= now()`
-            break;
-        case 'last_day': condition += `${column} >= date_trunc('day', now()) - interval '1 day'`
-            break;
-        case 'this_week': condition += `${column} >= date_trunc('week', now())`
-            break;
-        case 'this_month': condition += `${column} >= date_trunc('month', now())`
-            break;
-        case 'last_month': condition += `${column} >= date_trunc('month', now()) - interval '1 month' and ${column} < date_trunc('month', now())`
-            break;
-        case 'this_year': condition += `${column} >= date_trunc('year', now())`
-            break;
-        case 'last_year': condition += `${column} >= date_trunc('year', now()) - interval '1 year' and ${column} < date_trunc('year', now())`
-            break;
-
-        default: condition = ''
-    }
-
-    return condition;
-}
 
 export default class StatisticController extends QueryExtend {
     constructor() {
@@ -44,7 +19,7 @@ export default class StatisticController extends QueryExtend {
                 ${count ? 'count(*)' : `distinct cust.customer_id, cust.firstname || ' ' || cust.lastname as fullname, 
                 (select sum(total_amount) from ${this.transactionTable} where customer_id = cust.customer_id) as spend`}
                 from ${this.customerTable} ${count ? '' : `cust inner join ${this.transactionTable} transact using (customer_id) 
-                ${timespan ? timespanCondition(timespan, 'transact.created_at') : ''}`}
+                ${timespan ? this.timespanCondition(timespan, 'transact.created_at') : ''}`}
                 ${limit ? `limit ${limit}` : ''}`
             }
 
@@ -73,7 +48,7 @@ export default class StatisticController extends QueryExtend {
                 transact.total_amount, transact.amount_paid, transact.created_at`}
                 from ${this.transactionTable}
                 ${timespan ? `transact inner join ${this.customerTable} customer using (customer_id)` : ''}
-                ${timespan ? timespanCondition(timespan, 'transact.created_at') : ''}
+                ${timespan ? this.timespanCondition(timespan, 'transact.created_at') : ''}
                 ${limit ? `limit ${limit}` : ''}
                 `
             }
@@ -95,8 +70,8 @@ export default class StatisticController extends QueryExtend {
 
         try {
             const query: QueryConfig = {
-                text: `select sum(total_amount) from "${this.transactionTable}" 
-                ${timespan ? timespanCondition(timespan, 'created_at') : ''}`
+                text: `select sum(total_amount), count(*) from "${this.transactionTable}" 
+                ${timespan ? this.timespanCondition(timespan, 'created_at') : ''}`
             }
 
             const result = await this.executeQuery(query);
@@ -106,6 +81,27 @@ export default class StatisticController extends QueryExtend {
                 message: 'Successfly Sales Fetch',
                 data: result.rows
             });
+        } catch (error) {
+            console.log('Database error', error.stack);
+        }
+    }
+
+    async getOverallStatistic(req: Request, res: Response) {
+
+        try {
+            await this.executeQuery({ text: 'BEGIN' })
+
+            let this_month_sales = await this.executeQuery({ text: `select sum(total_amount), count(*) from "${this.transactionTable}" ${this.timespanCondition('this_month', 'created_at')}` })
+            let last_month_sales = await this.executeQuery({ text: `select sum(total_amount), count(*) from "${this.transactionTable}" ${this.timespanCondition('last_month', 'created_at')}` })
+            let this_year_sales = await this.executeQuery({ text: `select sum(total_amount), count(*) from "${this.transactionTable}" ${this.timespanCondition('this_year', 'created_at')}` })
+            let last_year_sales = await this.executeQuery({ text: `select sum(total_amount), count(*) from "${this.transactionTable}" ${this.timespanCondition('last_year', 'created_at')}` })
+            let out_of_stock = await this.executeQuery({ text: `select count(*) from ${this.productTable} where quantity = 0` })
+            let critical = await this.executeQuery({ text: `select count(*) from ${this.productTable} where quantity <= quantity_min` })
+            let product_count = await this.executeQuery({ text: `select count(*) from ${this.productTable}` })
+            let transaction_count = await this.executeQuery({ text: `select count(*) from ${this.transactionTable}` })
+            let customer_count = await this.executeQuery({ text: `select count(*) from ${this.customerTable}` })
+
+            await this.executeQuery({ text: 'COMMIT' })
         } catch (error) {
             console.log('Database error', error.stack);
         }

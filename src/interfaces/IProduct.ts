@@ -10,8 +10,8 @@ interface IProduct {
 	brand_id: string;
 	supplier_id: string;
 	category_id: string;
-	image: string | undefined;
-	image_url: string | undefined;
+	image_id?: string;
+	image_url?: string;
 	created_at?: string;
 }
 

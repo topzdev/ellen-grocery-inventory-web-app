@@ -1,10 +1,8 @@
 import express, { Request, Response } from 'express';
 import SupplierController from '../controllers/SupplierController';
-import { validate, rules } from './validations';
 
 const router = express.Router();
 const controller = new SupplierController();
-const { supplierRules } = rules;
 
 /**
  * @route           GET api/supplier

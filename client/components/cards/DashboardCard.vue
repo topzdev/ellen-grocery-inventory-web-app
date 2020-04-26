@@ -5,6 +5,7 @@
       <v-spacer></v-spacer>
       <div class="text-right">
         <v-card-title :class="titleClass">{{ title }}</v-card-title>
+        <v-card-subtitle v-if="subtitle">{{subtitle}}</v-card-subtitle>
       </div>
     </div>
     <v-card-text :class="valueClass" class="lighten-1 text-right white--text">{{ value }}</v-card-text>
@@ -20,6 +21,7 @@ export default class DashboardCard extends Vue {
   @Prop([String, Number]) value: string | number;
   @Prop({ default: "primary" }) color: string;
   @Prop(String) icon: string;
+  @Prop(String) subtitle: string;
   @Prop(Boolean) small: boolean;
 
   get orientation() {
@@ -27,7 +29,7 @@ export default class DashboardCard extends Vue {
   }
 
   get titleClass() {
-    return this.small ? "subtitle-2" : "headline";
+    return this.small ? "subtitle-2" : "title";
   }
 
   get valueClass() {

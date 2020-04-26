@@ -1,163 +1,57 @@
 import { Response, Request } from "express";
-import QueryExtend from "../extends/QueryExtend";
-import ISupplier from "../interfaces/ISupplier";
-import { QueryConfig } from "pg";
+import SupplierServices from "../services/SupplierServices";
 
-class SupplierController extends QueryExtend {
+const supplierServices = new SupplierServices
+
+export default class SupplierController {
 	constructor() {
-		super();
 		console.log("Supplier Controller");
 	}
 
-	public async getSuppliers(req: Request, res: Response): Promise<any> {
-		const { search, limit, offset } = req.query;
-
+	async getSuppliers(req: Request, res: Response) {
 		try {
-			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.supplierTable}" 
-				${search ? `WHERE supplier_name ILIKE '%${search}%'` : ''}`
-			};
-
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: "Supplier Successfuly Fetched",
-				success: true,
-				data: result.rows
-			});
+			const result = await supplierServices.getSuppliers(req.query);
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			console.error(error.stack);
+			return res.status(400).json({ success: false, message: 'Something went wrong' })
 		}
 	}
 
-	public async getSingleSupplier(req: Request, res: Response): Promise<any> {
-		const id = req.params.id;
-
+	async getSingleSupplier(req: Request, res: Response) {
 		try {
-
-			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.supplierTable}" WHERE supplier_id = $1 LIMIT 1`,
-				values: [id]
-			};
-
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: "Supplier Successfully fetched",
-				success: true,
-				data: result.rows[0]
-			});
+			const result = await supplierServices.getSupplier(parseInt(req.params.id))
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			console.error(error.stack);
+			return res.status(400).json({ success: false, message: 'Something went wrong' })
 		}
 	}
 
-	public async addSupplier(req: Request, res: Response): Promise<any> {
-		const {
-			supplier_name,
-			email_address,
-			company_address,
-			cp_no,
-			tel_no,
-			description,
-			fax,
-			website
-		}: ISupplier = req.body;
-
+	async addSupplier(req: Request, res: Response) {
 		try {
-			const query: QueryConfig = {
-				text: `INSERT INTO "${this.supplierTable}"
-				(supplier_name, email_address, company_address, cp_no, tel_no, fax, website, description) 
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING supplier_id`,
-				values: [
-					supplier_name,
-					email_address,
-					company_address,
-					cp_no,
-					tel_no,
-					fax,
-					website,
-					description
-				]
-			};
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: "Supplier Successfully Added",
-				data: result.rows[0],
-				success: true
-			});
+			const result = await supplierServices.createSupplier(req.body);
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			console.error(error.stack);
+			return res.status(400).json({ success: false, message: 'Something went wrong' })
 		}
 	}
 
-	public async updateSupplier(req: Request, res: Response): Promise<any> {
-		const {
-			supplier_name,
-			email_address,
-			company_address,
-			cp_no,
-			tel_no,
-			fax,
-			website,
-			description,
-			supplier_id
-		}: ISupplier = req.body;
-
-		const query: QueryConfig = {
-			text: `UPDATE "${this.supplierTable}" 
-			SET supplier_name=$1, email_address=$2, company_address=$3, cp_no = $4, tel_no = $5, 
-			fax = $6, website = $7, description = $8 WHERE supplier_id = $9`,
-			values: [
-				supplier_name,
-				email_address,
-				company_address,
-				cp_no,
-				tel_no,
-				fax,
-				website,
-				description,
-				supplier_id
-			]
-		};
-
+	async updateSupplier(req: Request, res: Response) {
 		try {
-			const result = await this.executeQuery(query);
-			console.log(req.body);
-			return res.json({
-				message: "Supplier Successfully Updated ",
-				success: true,
-				data: result.rows
-			});
+			const result = await supplierServices.updateSupplier(req.body);
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			console.error(error.stack);
+			return res.status(400).json({ success: false, message: error })
 		}
 
-		return;
 	}
 
-	public async deleteSupplier(req: Request, res: Response): Promise<any> {
-		const id = req.params.id;
-
+	async deleteSupplier(req: Request, res: Response) {
 		try {
-
-			const query: QueryConfig = {
-				text: `DELETE FROM "${this.supplierTable}" WHERE supplier_id = $1`,
-				values: [id]
-			};
-
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: "Supplier Successfully Deleted",
-				success: true,
-				data: result.rows
-			});
+			const result = await supplierServices.deleteSupplier(parseInt(req.params.id))
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			console.error(error.stack);
+			return res.status(400).json({ success: false, message: 'Something went wrong' })
 		}
 	}
 }
 
-export default SupplierController;

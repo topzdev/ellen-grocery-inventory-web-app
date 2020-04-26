@@ -4,14 +4,13 @@ import {
   ISearchModal,
   IMessageModal
 } from "~/interfaces/IFrontEndStore";
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { SET_SIDEBAR, SET_SIDEBAR_MINI, SET_SNACKBAR, SET_DELETE_MODAL, SET_SEARCH_MODAL, SET_BARCODE_MODAL, SET_BRAND_MODAL, SET_CATEGORY_MODAL, SET_SUPPLIER_MODAL, SET_CUSTOMER_MODAL, SET_PRODUCT_VIEW_MODE, SET_PAYMENT_TRAY, SET_ROLE_MODAL, SET_NAVBAR, SET_NAVBAR_FLAT, SET_MESSAGE_MODAL, SET_HOLD_SIDEBAR } from '~/configs/types';
+import { MutationAction, Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 @Module({
   name: "frontend",
   namespaced: true
 })
-export default class Frontend extends VuexModule {
+export default class FrontendModule extends VuexModule {
   showSidebar: boolean = true;
   showSidebarMini: boolean = true;
   showNavbar: boolean = true;
@@ -30,178 +29,128 @@ export default class Frontend extends VuexModule {
   showPaymentTray: boolean = false;
   productViewMode: string = 'Product Table';
 
-  @Mutation
-  private [SET_SIDEBAR](show: boolean): void {
-    this.showSidebar = show;
+  @MutationAction({})
+  setSidebar(show: boolean): any {
+    return {
+      showSidebar: show
+    }
   }
 
-  @Mutation
-  private [SET_SIDEBAR_MINI](show: boolean): void {
-    this.showSidebarMini = show;
+  @MutationAction({})
+  setSidebarMini(show: boolean): any {
+    return {
+      showSidebarMini: show
+    }
   }
 
-  @Mutation
-  private [SET_NAVBAR](show: boolean): void {
-    this.showNavbar = show;
+  @MutationAction({})
+  setNavbar(show: boolean): any {
+    return {
+      showNavbar: show
+    };
   }
 
-  @Mutation
-  private [SET_SNACKBAR](snackbarConfig: ISnackbar): void {
-    this.showSnackbar = snackbarConfig;
+  @MutationAction({})
+  setNavbarFlat(flat: boolean): any {
+    return {
+      navbarFlat: flat
+    };
   }
 
-  @Mutation
-  private [SET_DELETE_MODAL](show: IDeleteModal) {
-    this.showDeleteModal = show;
+  @MutationAction({})
+  setSnackbar(snackbarConfig: ISnackbar): any {
+    return {
+      showSnackbar: snackbarConfig
+    };
   }
 
-  @Mutation
-  private [SET_MESSAGE_MODAL](modalConfig: IMessageModal) {
-    this.showMessageModal = modalConfig;
+  @MutationAction({})
+  setDeleteModal(modalConfig: IDeleteModal): any {
+    return {
+      setDeleteModal: modalConfig
+    };
   }
 
-  @Mutation
-  private [SET_SEARCH_MODAL](state: ISearchModal) {
-    this.showSearchModal = state;
+  @MutationAction({})
+  setSearchModal(modalConfig: ISearchModal): any {
+    return {
+      setSearchModal: modalConfig
+    };
   }
 
-  @Mutation
-  private [SET_BARCODE_MODAL](state: boolean) {
-    this.showBarcodeModal = state;
+
+  @MutationAction({})
+  setBarcodeModal(show: boolean): any {
+    return {
+      showBarcodeModal: show
+    };
   }
 
-  @Mutation
-  private [SET_BRAND_MODAL](state: boolean) {
-    this.showBrandModal = state;
+  @MutationAction({})
+  setBrandModal(show: boolean): any {
+    return {
+      showBrandModal: show
+    };
   }
 
-  @Mutation
-  private [SET_CATEGORY_MODAL](state: boolean) {
-    this.showCategoryModal = state;
+  @MutationAction({})
+  setCategoryModal(show: boolean): any {
+    return {
+      showCategoryModal: show
+    };
   }
 
-  @Mutation
-  private [SET_SUPPLIER_MODAL](state: boolean) {
-    this.showSupplierModal = state;
+  @MutationAction({})
+  setSupplierModal(show: boolean): any {
+    return {
+      showSupplierModal: show
+    };
   }
 
-  @Mutation
-  private [SET_CUSTOMER_MODAL](state: boolean) {
-    this.showCustomerModal = state;
+  @MutationAction({})
+  setCustomerModal(show: boolean): any {
+    return {
+      showCustomerModal: show
+    };
   }
 
-  @Mutation
-  private [SET_ROLE_MODAL](state: boolean) {
-    this.showRoleModal = state;
+  @MutationAction({})
+  setRoleModal(show: boolean): any {
+    return {
+      showRoleModal: show
+    };
   }
 
-  @Mutation
-  private [SET_PAYMENT_TRAY](show: boolean) {
-    this.showPaymentTray = show;
+  @MutationAction({})
+  setProductView(mode: string): any {
+    return {
+      productViewMode: mode
+    };
   }
 
-  @Mutation
-  private [SET_PRODUCT_VIEW_MODE](mode: string) {
-    this.productViewMode = mode;
+  @MutationAction({})
+  setPaymentTray(show: boolean): any {
+    return {
+      showPaymentTray: show
+    };
   }
 
-  @Mutation
-  private [SET_NAVBAR_FLAT](flat: boolean) {
-    this.navbarFlat = flat;
+  @MutationAction({})
+  setMessageModal(modalConfig: IMessageModal): any {
+    return {
+      showMessageModal: modalConfig
+    };
   }
 
-  @Mutation
-  private [SET_HOLD_SIDEBAR](show: boolean) {
-    this.showHoldSidebar = show;
-  }
-
-  @Action({ commit: SET_SIDEBAR })
-  setSidebar(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_SIDEBAR_MINI })
-  setSidebarMini(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_NAVBAR })
-  setNavbar(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_NAVBAR_FLAT })
-  setNavbarFlat(flat: boolean) {
-    return flat;
-  }
-
-  @Action({ commit: SET_SNACKBAR })
-  setSnackbar(snackbarConfig: ISnackbar) {
-    return snackbarConfig;
-  }
-
-  @Action({ commit: SET_DELETE_MODAL })
-  setDeleteModal(modalConfig: IDeleteModal) {
-    return modalConfig;
-  }
-
-  @Action({ commit: SET_SEARCH_MODAL })
-  setSearchModal(modalConfig: ISearchModal) {
-    return modalConfig;
-  }
-
-  @Action({ commit: SET_BARCODE_MODAL })
-  setBarcodeModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_BRAND_MODAL })
-  setBrandModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_CATEGORY_MODAL })
-  setCategoryModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_SUPPLIER_MODAL })
-  setSupplierModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_CUSTOMER_MODAL })
-  setCustomerModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_ROLE_MODAL })
-  setRoleModal(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_PRODUCT_VIEW_MODE })
-  setProductView(mode: string) {
-    return mode;
-  }
-
-  @Action({ commit: SET_PAYMENT_TRAY })
-  setPaymentTray(show: boolean) {
-    return show;
-  }
-
-  @Action({ commit: SET_MESSAGE_MODAL })
-  setMessageModal(modalConfig: IMessageModal) {
-    return modalConfig;
-  }
-
-  @Action({ commit: SET_HOLD_SIDEBAR })
-  setHoldSidebar(show: boolean) {
-    return show;
+  @MutationAction({})
+  setHoldSidebar(show: boolean): any {
+    return {
+      showHoldSidebar: show
+    };
   }
 
   @Action
-  setRedirect(redirect: boolean | string | undefined) {
+  setRedirect(redirect: boolean | string | undefined): any {
     // @ts-ignore;
     if (typeof redirect === 'string') $nuxt.$router.push(redirect)
     // @ts-ignore;
