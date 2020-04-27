@@ -45,11 +45,19 @@ router.put('/', (req: Request, res: Response) => {
 
 /**
  * @route           DELETE api/product
- * @description     delete products
+ * @description     remove products temporarily
  * @access          private
- * @param 			{String} id
  */
-router.delete('/', (req: Request, res: Response) => {
+router.delete('/:id', (req: Request, res: Response) => {
+	controller.removeProduct(req, res);
+});
+
+/**
+ * @route           DELETE api/product
+ * @description     delete products permanently
+ * @access          private
+ */
+router.delete('/permanent/:id', (req: Request, res: Response) => {
 	controller.deleteProduct(req, res);
 });
 

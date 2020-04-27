@@ -11,7 +11,6 @@ class ProductController {
 		try {
 			const barcode = req.params.barcode;
 			const result = await productServices.getProduct(barcode)
-			console.log(result, 'controller')
 			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.status(400).json({ success: false, message: 'Something went wrong' })
@@ -47,10 +46,18 @@ class ProductController {
 		}
 	}
 
+	async removeProduct(req: Request, res: Response): Promise<any> {
+		try {
+			const result = await productServices.removeProduct(parseInt(req.params.id));
+			res.json({ success: true, ...result });
+		} catch (err) {
+			console.log('Database error', err.stack);
+		}
+	}
+
 	async deleteProduct(req: Request, res: Response): Promise<any> {
 		try {
-			const { product_id, image_id } = req.body;
-			const result = await productServices.deleteProduct(product_id, image_id);
+			const result = await productServices.deleteProduct(parseInt(req.params.id));
 			res.json({ success: true, ...result });
 		} catch (err) {
 			console.log('Database error', err.stack);

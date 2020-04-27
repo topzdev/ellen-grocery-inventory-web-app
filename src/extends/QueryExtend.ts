@@ -17,6 +17,39 @@ class QueryExtend {
 		this.pool = new Pool;
 	}
 
+	queryColumns(include: object, table?: string) {
+		let columns = [];
+		for (const key in include) {
+			// @ts-ignore
+			if (include[key] === true) {
+				if (table) columns.push(`${table}.${key}`);
+				else columns.push(key)
+			}
+		}
+		return columns.length ? columns.join(',') : '*'
+	}
+
+	queryfields(columns: object, format: string) {
+		if (format === 'update') {
+			let fields = [];
+			for (const key in columns) {
+				// @ts-ignore
+				fields.push(`${key}='${columns[key]}'`)
+			}
+			return `set ${fields.join(',')}`
+		} else if (format === 'insert') {
+			let values = [];
+			for (const key in columns) {
+				// @ts-ignore
+				values.push(`'${columns[key]}'`)
+			}
+			return `(${Object.keys(columns)}) values (${values.join(',')})`
+		}
+
+		throw Error('Missing some parameters for method queryfields(columns: object, format: string)')
+	}
+
+
 	analyzeCondition(columns: object, condition?: string) {
 		let string = [];
 
@@ -25,7 +58,9 @@ class QueryExtend {
 			string.push(`${key} = '${columns[key]}'`)
 		}
 
-		return string.join(` ${condition} `);
+		if (!string.length) return ''
+
+		return ' where ' + string.join(` ${condition} `);
 	}
 
 	async executeQuery(query: QueryConfig) {
@@ -41,7 +76,7 @@ class QueryExtend {
 		}
 	}
 
-	queryAnalyzer(column: string, { offset, limit, search }: IFilter) {
+	analyzeFilter(column: string, { offset, limit, search }: IFilter) {
 		let query = '';
 		if (search && column) query += `WHERE ${column} ILIKE '%${search}%'`
 		if (limit) {

@@ -22,7 +22,7 @@ class CustomerController extends QueryExtend {
 				${transact_count === 'true' ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
 				${last_transact === 'true' ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
 			FROM ${this.customerTable} customer 
-			${this.queryAnalyzer("firstname ||' '|| lastname", { search, limit, offset })} `
+			${this.analyzeFilter("firstname ||' '|| lastname", { search, limit, offset })} `
 		};
 
 		try {

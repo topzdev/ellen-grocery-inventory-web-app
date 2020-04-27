@@ -10,39 +10,17 @@ export default class ImageModel {
     }
 
     async create(file: UploadedFile | any): Promise<IUploadedImage> {
-        let image: any;
-
-        await cloudinary.v2.uploader.upload(
-            file.tempFilePath,
-            this.setting,
-            (error: any, result: any) => {
-                if (error) return console.error(
-                    'Error on uploading image in cloudinary',
-                    error
-                );
-                console.log('Sucessfully Pushed to Cloudinary', result);
-                image = result;
-            }
-        );
-        return { image_id: image.public_id, image_url: image.secure_url }
+        const result = await cloudinary.v2.uploader.upload(file.tempFilePath, this.setting);
+        return { image_id: result.public_id, image_url: result.secure_url }
     }
 
-    async update(image_id: IProduct['image_id'], newRawImage: UploadedFile | any) {
+    async update(image_id: IUploadedImage['image_id'], newRawImage: UploadedFile | any) {
         await this.delete(image_id);
         return await this.create(newRawImage);
     }
 
-    async delete(image_id: IProduct['image_id']) {
-
-        if (image_id) {
-            await cloudinary.v2.uploader.destroy(image_id!, (error: any, result: Error) => {
-                if (error) return console.error('Error on delete image in cloudinary', error.stack);
-
-                // @ts-ignore
-                if (result.result === "not found") throw Error("Error on delete image")
-                console.log('Successfully Deleted', result)
-            })
-
-        }
+    async delete(image_id: IUploadedImage['image_id']) {
+        const result = await cloudinary.v2.uploader.destroy(image_id)
+        return true;
     }
 }

@@ -52,12 +52,23 @@ router.put('/password', (req: Request, res: Response) => {
 
 /**
  * @route           DELETE api/account
- * @description     delete account
+ * @description     remove account termporary
  * @access          private
  * @param			id
  */
 router.delete('/:id', (req: Request, res: Response) => {
 	controller.deleteAccount(req, res);
 });
+
+/**
+ * @route           DELETE api/account/permanent
+ * @description     delete account permanently
+ * @access          private
+ * @param			id
+ */
+router.delete('/permanent/:id', (req: Request, res: Response) => {
+	controller.deleteAccount(req, res);
+});
+
 
 export default router;

@@ -15,7 +15,7 @@ export default class SupplierModel extends QueryExtend {
     async findMany({ search, limit, offset }: IFilter): Promise<ISupplier[]> {
         const query: QueryConfig = {
             text: `SELECT * FROM ${this.supplierTable}
-            ${this.queryAnalyzer('supplier_name', { search, offset, limit })}`
+            ${this.analyzeFilter('supplier_name', { search, offset, limit })}`
         };
         const result = await this.executeQuery(query);
         return result.rows;

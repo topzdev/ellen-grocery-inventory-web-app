@@ -6,12 +6,11 @@ import { QueryConfig } from "pg";
 
 export default class ProductModel extends QueryExtend {
 
-    async findOne(barcode: string) {
-        const query: QueryConfig = {
-            text: `SELECT * FROM ${this.productTable} WHERE barcode = $1`,
-            values: [barcode]
-        };
 
+    async findOne(columns: object, condition?: string, include?: object): Promise<IProduct> {
+        const query: QueryConfig = {
+            text: `SELECT ${this.queryColumns(include!)} FROM ${this.productTable} ${this.analyzeCondition(columns, condition)}`,
+        };
         const result = await this.executeQuery(query);
         return result.rows[0];
     }
@@ -35,11 +34,11 @@ export default class ProductModel extends QueryExtend {
             brand.brand_name,
             category.category_name,
             supplier.supplier_name
-            FROM "${this.productTable}" product
+            FROM ${this.productTable} product
             INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
             INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
             INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id
-            ${this.queryAnalyzer("product.product_name", { search, limit, offset })}`,
+            ${this.analyzeFilter("product.product_name", { search, limit, offset })}`,
 
         };
 
@@ -47,68 +46,39 @@ export default class ProductModel extends QueryExtend {
         return result.rows
     }
 
-    async create({ barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image_id, image_url }: IProduct) {
+    async create(product: IProduct) {
         const query: QueryConfig = {
-            text: `INSERT INTO "${this.productTable}" 
-            (barcode, product_name, quantity, quantity_max, quantity_min, price, description, 
-            brand_id, supplier_id, category_id, image_id, image_url)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
-            RETURNING product_id`,
-            values: [
-                barcode,
-                product_name,
-                quantity,
-                quantity_max,
-                quantity_min,
-                price,
-                description,
-                brand_id,
-                supplier_id,
-                category_id,
-                image_id,
-                image_url
-            ]
+            text: `INSERT INTO ${this.productTable} ${this.queryfields(product, 'insert')}
+            RETURNING product_id`
         }
-
         const result = await this.executeQuery(query);
-
         return result.rows[0].product_id
     }
 
-    async update(id: IProduct['product_id'], { barcode, product_name, quantity, quantity_max, quantity_min, price, description, brand_id, supplier_id, category_id, image_id, image_url }: IProduct) {
+    async update(id: IProduct['product_id'], product: IProduct) {
         const query: QueryConfig = {
-            text: `UPDATE "${this.productTable}" SET 
-                        barcode=$1, product_name=$2, quantity=$3, quantity_max=$4, quantity_min=$5, price=$6, 
-                        description=$7, brand_id=$8, supplier_id=$9, category_id=$10, image_id=$11, image_url=$12 WHERE product_id=$13`,
-            values: [
-                barcode,
-                product_name,
-                quantity,
-                quantity_max,
-                quantity_min,
-                price,
-                description,
-                brand_id,
-                supplier_id,
-                category_id,
-                image_id,
-                image_url,
-                id
-            ]
+            text: `UPDATE ${this.productTable} ${this.queryfields(product, 'update')} WHERE product_id=$1`,
+            values: [id]
         };
-
         await this.executeQuery(query);
+        return id;
+    }
 
+    async remove(id: IProduct['product_id']) {
+        const query: QueryConfig = {
+            text: `UPDATE ${this.productTable} SET is_deleted = TRUE WHERE product_id = $1`,
+            values: [id]
+        };
+        await this.executeQuery(query);
         return id;
     }
 
     async delete(id: IProduct['product_id']) {
         const query: QueryConfig = {
-            text: `DELETE FROM "${this.productTable}" WHERE product_id = $1`,
+            text: `DELETE FROM ${this.productTable} WHERE product_id = $1`,
             values: [id]
         };
-
+        await this.executeQuery(query);
         return id;
     }
-
 }

@@ -1,56 +1,19 @@
-import QueryExtend from '../extends/QueryExtend';
-import { QueryConfig, Pool } from 'pg';
 import { Request, Response } from 'express';
-import IBrand from '../interfaces/IBrand';
+import BrandServices from '../services/BrandServices';
 
-class BrandController extends QueryExtend {
+const brandServices = new BrandServices;
+
+export default class BrandController {
 	constructor() {
-		super();
 		console.log('Brand Controller');
 	}
 
-	public async getBrands(req: Request, res: Response): Promise<any> {
-		const { search } = req.query;
-
+	public async getBrands(req: Request, res: Response) {
 		try {
-			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.brandTable}" ${search ? `WHERE brand_name ILIKE '%${search}%'` : ''}`
-			};
-			const result = await this.executeQuery(query);
-
-			res.json({
-				message: 'Supplier Successfully Updated ',
-				success: true,
-				data: result.rows
-			});
-
+			const result = await brandServices.getMany(req.query);
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			res.json({
-				success: false,
-				message: 'Something went wrong, Please try again later ',
-				data: error.stack
-			});
-		}
-
-	}
-
-	public async getSingleBrand(req: Request, res: Response): Promise<any> {
-		const id = req.params.id;
-
-		try {
-			const query: QueryConfig = {
-				text: `SELECT * FROM "${this.brandTable}" WHERE brand_id = $1 FETCH FIRST 1 ROW ONLY`,
-				values: [id]
-			};
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Fetched Single Brand Successfully ',
-				success: true,
-				data: result.rows
-			});
-		} catch (error) {
-			return res.json({
+			return res.status(400).json({
 				success: false,
 				message: 'Something went wrong, Please try again later ',
 				data: error.stack
@@ -58,32 +21,12 @@ class BrandController extends QueryExtend {
 		}
 	}
 
-	public async addBrand(req: Request, res: Response): Promise<any> {
-		const { brand_name }: IBrand = req.body;
-
-
+	public async getSingleBrand(req: Request, res: Response) {
 		try {
-			const query: QueryConfig = {
-				text: `INSERT INTO "${this.brandTable}" (brand_name) 
-				SELECT $1 WHERE NOT EXISTS (SELECT 1 FROM "${this.brandTable}" 
-					WHERE brand_name = $2) RETURNING brand_id`,
-				values: [brand_name, brand_name]
-			};
-
-			const result = await this.executeQuery(query);
-
-			if (!result.rowCount) return res.json({
-				success: false,
-				message: 'Brand name is already exist '
-			});
-
-			return res.json({
-				success: true,
-				message: 'Brand Successfully Added ',
-				data: result.rows[0]
-			});
+			const result = await brandServices.getOne(parseInt(req.params.id))
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			return res.json({
+			return res.status(400).json({
 				success: false,
 				message: 'Something went wrong, Please try again later ',
 				data: error.stack
@@ -91,30 +34,12 @@ class BrandController extends QueryExtend {
 		}
 	}
 
-	public async updateBrand(req: Request, res: Response): Promise<any> {
-		const { brand_name, brand_id }: IBrand = req.body;
-
+	public async addBrand(req: Request, res: Response) {
 		try {
-			const query: QueryConfig = {
-				text: `UPDATE "${this.brandTable}" SET brand_name = $1 WHERE brand_id = $2 
-				AND NOT EXISTS(SELECT 1 FROM "${this.brandTable}" WHERE brand_name = $3)`,
-				values: [brand_name, brand_id, brand_name]
-			};
-
-			const result = await this.executeQuery(query);
-
-			if (!result.rowCount) return res.json({
-				message: 'Brand name is already in used ',
-				success: false,
-			});
-
-			return res.json({
-				message: 'Brand Successfully Updated ',
-				success: true,
-				data: result.rows
-			});
+			const result = await brandServices.create(req.body)
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			return res.json({
+			return res.status(400).json({
 				success: false,
 				message: 'Something went wrong, Please try again later ',
 				data: error.stack
@@ -122,24 +47,26 @@ class BrandController extends QueryExtend {
 		}
 	}
 
-	public async deleteBrand(req: Request, res: Response): Promise<any> {
-		const brand_id = req.params.id;
-
-		const query: QueryConfig = {
-			text: `DELETE FROM "${this.brandTable}" WHERE brand_id = $1`,
-			values: [brand_id]
-		};
-
+	public async updateBrand(req: Request, res: Response) {
 		try {
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Brand Successfully Deleted ',
-				success: true,
-				data: result.rows
-			});
+			const result = await brandServices.update(req.body)
+			console.log(result)
+			return res.json({ success: true, ...result });
 		} catch (error) {
-			return res.json({
+			return res.status(400).json({
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
+			});
+		}
+	}
+
+	public async deleteBrand(req: Request, res: Response) {
+		try {
+			const result = await brandServices.delete(parseInt(req.params.id))
+			return res.json({ success: true, ...result });
+		} catch (error) {
+			return res.status(400).json({
 				success: false,
 				message: 'Something went wrong, Please try again later ',
 				data: error.stack
@@ -148,4 +75,3 @@ class BrandController extends QueryExtend {
 	}
 }
 
-export default BrandController;
