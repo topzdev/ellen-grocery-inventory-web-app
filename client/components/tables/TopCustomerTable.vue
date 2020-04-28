@@ -25,9 +25,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in data" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.customer }}</td>
+            <tr v-for="item in list" :key="item.customer_id">
+              <td>{{ item.customer_id }}</td>
+              <td>{{ item.fullname }}</td>
               <td>{{ item.spend }}</td>
             </tr>
           </tbody>
@@ -38,45 +38,47 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { statisticStore } from "../../store";
 
 @Component
 export default class RecentTransactionTable extends Vue {
   @Prop({ default: "300px" }) height: string;
 
-  selected = 1;
+  selected = "today";
 
   options = [
     {
-      value: 1,
-      text: "Overall"
+      value: "today",
+      text: "Today"
     },
     {
-      value: 2,
+      value: "this_year",
       text: "This Year"
     },
     {
-      value: 3,
+      value: "this_month",
       text: "This Month"
     },
     {
-      value: 4,
+      value: "last_month",
       text: "Last Month"
     }
   ];
 
-  data = [
-    {
-      id: 1,
-      customer: "John Doe",
-      spend: "109,000.50"
-    },
-    {
-      id: 2,
-      customer: "Mary Doe",
-      spend: "99,540.50"
-    }
-  ];
+  get list() {
+    return statisticStore.customerListByInterval;
+  }
+
+  @Watch("selected")
+  async fetchCustomer() {
+    await statisticStore.getCustomersByInterval({ interval: this.selected });
+  }
+
+  created() {
+    console.log(this.selected);
+    this.fetchCustomer();
+  }
 }
 </script>
 

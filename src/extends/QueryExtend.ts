@@ -17,7 +17,7 @@ class QueryExtend {
 		this.pool = new Pool;
 	}
 
-	queryColumns(include: object, table?: string) {
+	protected queryColumns(include: object, table?: string) {
 		let columns = [];
 		for (const key in include) {
 			// @ts-ignore
@@ -29,7 +29,7 @@ class QueryExtend {
 		return columns.length ? columns.join(',') : '*'
 	}
 
-	queryfields(columns: object, format: string) {
+	protected queryfields(columns: object, format: string) {
 		if (format === 'update') {
 			let fields = [];
 			for (const key in columns) {
@@ -50,7 +50,7 @@ class QueryExtend {
 	}
 
 
-	analyzeCondition(columns: object, condition?: string) {
+	protected analyzeCondition(columns: object, condition?: string) {
 		let string = [];
 
 		for (const key in columns) {
@@ -63,7 +63,7 @@ class QueryExtend {
 		return ' where ' + string.join(` ${condition} `);
 	}
 
-	async executeQuery(query: QueryConfig) {
+	protected async executeQuery(query: QueryConfig) {
 		const client = new Pool(config.database);
 		try {
 			const result = await client.query(query)
@@ -76,20 +76,27 @@ class QueryExtend {
 		}
 	}
 
-	analyzeFilter(column: string, { offset, limit, search }: IFilter) {
-		let query = '';
-		if (search && column) query += `WHERE ${column} ILIKE '%${search}%'`
+	protected analyzeFilter(column: string, { offset, limit, search, show_deleted }: IFilter) {
+		let query = 'WHERE';
+		if (search) query += ` ${column} ILIKE '%${search}%' `
+
+		if (search && show_deleted) query += ' and '
+
+		if (show_deleted) query += ` is_deleted = ${show_deleted} `
+
 		if (limit) {
-			query += `LIMIT ${limit} `
-			if (offset) query += `OFFSET ${offset}`
+			query += ` LIMIT ${limit} `
+			if (offset) query += ` OFFSET ${offset}`
 		}
+		if (query === 'WHERE') return ``
+		console.log(query)
 		return query;
 	}
 
-	timespanCondition(timespan: string, column: string) {
-		let condition = 'where ';
+	protected intervalCondition(interval: IFilter['interval'], column: string) {
+		let condition = '';
 
-		switch (timespan) {
+		switch (interval) {
 			case 'today': condition += `${column} >= now()`
 				break;
 			case 'recent': condition += `${column} <= now()`
@@ -106,8 +113,6 @@ class QueryExtend {
 				break;
 			case 'last_year': condition += `${column} >= date_trunc('year', now()) - interval '1 year' and ${column} < date_trunc('year', now())`
 				break;
-
-			default: condition = ''
 		}
 
 		return condition;

@@ -9,7 +9,6 @@ export default class AccountController {
 	}
 
 	async fetchAccounts(req: Request, res: Response) {
-
 		try {
 			const result = await accountServices.getMany(req.query)
 			return res.json({ success: true, ...result });

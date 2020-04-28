@@ -10,6 +10,7 @@ interface ITransaction {
     total_amount: string | number
     amount_paid: string | number
     orders: IOrder[]
+    points?: number
 }
 
 export default ITransaction;

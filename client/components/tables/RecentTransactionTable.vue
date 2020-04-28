@@ -23,16 +23,18 @@
               <th class="text-left">Customer</th>
               <th class="text-left">Total Amount</th>
               <th class="text-left">Amount Paid</th>
+              <th class="text-left">Points Earn</th>
               <th class="text-left">Date</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in data" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.customer }}</td>
+            <tr v-for="item in list" :key="item.transact_id">
+              <td>{{ item.transact_id }}</td>
+              <td>{{ item.customer_name }}</td>
               <td>{{ item.total_amount }}</td>
               <td>{{ item.amount_paid }}</td>
-              <td>{{ item.date }}</td>
+              <td>{{ Math.floor(item.amount_paid / 250) }}</td>
+              <td>{{dayjs( item.created_at).format('MMMM DD, YYYY hh:mm:ss') }}</td>
             </tr>
           </tbody>
         </template>
@@ -42,13 +44,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { statisticStore } from "../../store";
+import dayjs from "dayjs";
 
-@Component
+@Component({
+  methods: { dayjs }
+})
 export default class RecentTransactionTable extends Vue {
   @Prop({ default: "300px" }) height: string;
 
-  selected = 1;
+  selected = "today";
+
+  get list() {
+    return statisticStore.transListByInterval;
+  }
 
   get title() {
     return `${
@@ -58,32 +68,32 @@ export default class RecentTransactionTable extends Vue {
 
   options = [
     {
-      value: 1,
+      value: "today",
       text: "Recent"
     },
     {
-      value: 2,
+      value: "last_day",
       text: "Yesterday"
     },
     {
-      value: 3,
+      value: "this_week",
       text: "This Week"
     },
     {
-      value: 4,
+      value: "this_month",
       text: "This Month"
     }
   ];
 
-  data = [
-    {
-      id: 1,
-      customer: "John Doe",
-      total_amount: "9,000.50",
-      amount_paid: "9,020.00",
-      date: "April 25, 2000"
-    }
-  ];
+  @Watch("selected")
+  async fetchTransactions() {
+    await statisticStore.getTransactByInterval({ interval: this.selected });
+  }
+
+  created() {
+    console.log(this.selected);
+    this.fetchTransactions();
+  }
 }
 </script>
 

@@ -3,9 +3,7 @@ import { IFilter, IAccount } from "../interfaces";
 import { QueryConfig } from "pg";
 
 export default class AccountModel extends QueryExtend {
-    private columns = ['account_id', 'firstname', 'lastname', 'middlename', 'username', 'email_address', 'role_id', 'password', 'createad_at', 'is_deleted', 'updated_at']
-
-    async findMany({ search, limit, offset }: IFilter): Promise<IAccount[]> {
+    async findMany({ search, limit, offset, show_deleted }: IFilter): Promise<IAccount[]> {
 
         const query: QueryConfig = {
             text: `SELECT
@@ -14,7 +12,7 @@ export default class AccountModel extends QueryExtend {
 			account.username,
 			role.role_name
 			FROM ${this.accountTable} account INNER JOIN "${this.roleTable}" role ON role.role_id = account.role_id
-			${this.analyzeFilter("account.firstname || ' ' || account.lastname", { search, limit, offset })}`
+			${this.analyzeFilter("account.firstname || ' ' || account.lastname", { search, limit, offset, show_deleted })}`
         };
 
         const result = await this.executeQuery(query);

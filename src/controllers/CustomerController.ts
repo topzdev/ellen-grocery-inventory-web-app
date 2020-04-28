@@ -1,38 +1,17 @@
-import QueryExtend from '../extends/QueryExtend';
-import { QueryConfig } from 'pg';
 import { Response, Request } from 'express';
-import ICustomer from '../interfaces/ICustomer';
+import CustomerServices from '../services/CustomerServices';
 
-class CustomerController extends QueryExtend {
+const customerServices = new CustomerServices
+
+export default class CustomerController {
 	constructor() {
-		super();
 		console.log('Customer Controller');
 	}
 
-	public async fetchCustomers(req: Request, res: Response): Promise<any> {
-		const { search, limit, offset, transact_count, last_transact } = req.query;
-		console.log(req.query);
-
-		const query: QueryConfig = {
-			text: `SELECT 
-				customer.customer_id,
-				customer.firstname ||' '|| customer.lastname AS fullname,
-				customer.home_address,
-				customer.email_address
-				${transact_count === 'true' ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
-				${last_transact === 'true' ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
-			FROM ${this.customerTable} customer 
-			${this.analyzeFilter("firstname ||' '|| lastname", { search, limit, offset })} `
-		};
-
+	async fetchCustomers(req: Request, res: Response): Promise<any> {
 		try {
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Customers Successfully Fetched',
-				success: true,
-				data: result.rows
-			});
+			const result = await customerServices.getMany(req.query);
+			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.json({
 				success: false,
@@ -42,22 +21,10 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async fetchSingleCustomer(req: Request, res: Response): Promise<any> {
-		const id = req.params.id;
-
-		const query: QueryConfig = {
-			text: `SELECT * FROM "${this.customerTable}" WHERE customer_id = $1 FETCH FIRST 1 ROW ONLY`,
-			values: [id]
-		};
-
+	async fetchSingleCustomer(req: Request, res: Response): Promise<any> {
 		try {
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Customer Successfully Fetched',
-				success: true,
-				data: result.rows[0]
-			});
+			const result = await customerServices.getOne(parseInt(req.params.id));
+			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.json({
 				success: false,
@@ -67,37 +34,10 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async addCustomer(req: Request, res: Response): Promise<any> {
-		const {
-			firstname,
-			lastname,
-			email_address,
-			home_address,
-			cp_no,
-			tel_no,
-		}: ICustomer = req.body;
-
+	async addCustomer(req: Request, res: Response): Promise<any> {
 		try {
-
-			const query: QueryConfig = {
-				text: `INSERT INTO "${this.customerTable}" (firstname,lastname,home_address, 
-					email_address, cp_no, tel_no) VALUES ($1,$2,$3,$4,$5,$6) RETURNING customer_id, firstname || ' ' || lastname as fullname`,
-				values: [
-					firstname,
-					lastname,
-					home_address,
-					email_address,
-					cp_no,
-					tel_no,
-				]
-			};
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Customer Successfully Added',
-				success: true,
-				data: result.rows[0]
-			});
+			const result = await customerServices.create(req.body);
+			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.json({
 				success: false,
@@ -107,40 +47,10 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async updateCustomer(req: Request, res: Response): Promise<any> {
-		const {
-			customer_id,
-			firstname,
-			lastname,
-			home_address,
-			email_address,
-			cp_no,
-			tel_no,
-			points,
-		}: ICustomer = req.body;
-
-		const query: QueryConfig = {
-			text: `UPDATE "${this.customerTable}" SET(firstname = $1, lastname = $2, middlename = $3, 
-                 cp_no = $4, tel_no = $5, home_address = $6) WHERE customer_id = $7`,
-			values: [
-				firstname,
-				lastname,
-				email_address,
-				cp_no,
-				tel_no,
-				home_address,
-				customer_id
-			]
-		};
-
+	async updateCustomer(req: Request, res: Response): Promise<any> {
 		try {
-			const result = await this.executeQuery(query);
-
-			return res.json({
-				message: 'Customers Successfully Updated',
-				success: true,
-				data: result.rows
-			});
+			const result = await customerServices.update(req.body);
+			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.json({
 				success: false,
@@ -150,22 +60,23 @@ class CustomerController extends QueryExtend {
 		}
 	}
 
-	public async deleteCustomer(req: Request, res: Response): Promise<any> {
-		const id = req.params.id;
-
-		const query: QueryConfig = {
-			text: `DELETE FROM "${this.customerTable}" WHERE customer_id = $1`,
-			values: [id]
-		};
-
+	async deleteCustomer(req: Request, res: Response): Promise<any> {
 		try {
-			const result = await this.executeQuery(query);
-
+			const result = await customerServices.delete(parseInt(req.params.id));
+			return res.json({ success: true, ...result });
+		} catch (error) {
 			return res.json({
-				message: 'Customers Successfully Deleted',
-				success: true,
-				data: result.rows
+				success: false,
+				message: 'Something went wrong, Please try again later ',
+				data: error.stack
 			});
+		}
+	}
+
+	async removeCustomer(req: Request, res: Response): Promise<any> {
+		try {
+			const result = await customerServices.remove(parseInt(req.params.id));
+			return res.json({ success: true, ...result });
 		} catch (error) {
 			return res.json({
 				success: false,
@@ -175,5 +86,3 @@ class CustomerController extends QueryExtend {
 		}
 	}
 }
-
-export default CustomerController;

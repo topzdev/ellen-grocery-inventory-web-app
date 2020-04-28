@@ -15,7 +15,7 @@ export default class ProductModel extends QueryExtend {
         return result.rows[0];
     }
 
-    async findMany({ search, limit, offset }: IFilter): Promise<IProduct[]> {
+    async findMany({ search, limit, offset, show_deleted }: IFilter): Promise<IProduct[]> {
         const query: QueryConfig = {
             text: `SELECT
             product.product_id,
@@ -38,7 +38,7 @@ export default class ProductModel extends QueryExtend {
             INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
             INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
             INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id
-            ${this.analyzeFilter("product.product_name", { search, limit, offset })}`,
+            ${this.analyzeFilter("product.product_name", { search, limit, offset, show_deleted })}`,
 
         };
 

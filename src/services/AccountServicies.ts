@@ -97,7 +97,7 @@ export default class AccountServices {
         const result = await accountModel.delete(id);
 
         return {
-            message: 'Account Successfully Delete Permanently',
+            message: 'Account Successfully Delete adminly',
         }
     }
 }

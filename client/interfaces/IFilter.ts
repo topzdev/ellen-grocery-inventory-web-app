@@ -1,4 +1,7 @@
 
+type interval = 'today' | 'recent' | 'last_day' | 'this_week' | 'this_month' | 'last_month' | 'this_year' | 'last_year'
+type status = 'critical' | 'out_of_stock'
+
 interface IFilter {
     search?: string;
     limit?: number | string;
@@ -9,7 +12,9 @@ interface IFilter {
     transact_count?: boolean,
     last_transact?: boolean,
     count?: boolean,
-    timespan?: string
+    interval?: string,
+    show_deleted?: boolean,
+    status?: string
 }
 
 export default IFilter;

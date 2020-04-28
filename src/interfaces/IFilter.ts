@@ -8,7 +8,9 @@ interface IFilter {
     transact_count?: boolean,
     last_transact?: boolean,
     count?: boolean,
-    timespan?: string
+    interval?: string,
+    show_deleted?: boolean,
+    status?: string
 }
 
 export default IFilter

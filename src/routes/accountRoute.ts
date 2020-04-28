@@ -66,7 +66,7 @@ router.delete('/:id', (req: Request, res: Response) => {
  * @access          private
  * @param			id
  */
-router.delete('/permanent/:id', (req: Request, res: Response) => {
+router.delete('/admin/:id', (req: Request, res: Response) => {
 	controller.deleteAccount(req, res);
 });
 

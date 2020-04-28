@@ -26,7 +26,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in data" :key="item.id">
+            <tr v-for="item in list" :key="item.id">
               <td>{{ item.product_name }}</td>
               <td>{{ item.barcode }}</td>
               <td>{{ item.quantity }}</td>
@@ -44,13 +44,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { statisticStore } from "../../store";
 
 @Component
 export default class RecentTransactionTable extends Vue {
   @Prop({ default: "300px" }) height: string;
 
-  selected = 1;
+  selected = "out_of_stock";
 
   get title() {
     return `${
@@ -60,26 +61,27 @@ export default class RecentTransactionTable extends Vue {
 
   options = [
     {
-      value: 1,
+      value: "out_of_stock",
       text: "Out of stocks"
     },
     {
-      value: 2,
+      value: "critical",
       text: "Critical"
-    },
-    {
-      value: 3,
-      text: "Overflow"
     }
   ];
 
-  data = [
-    {
-      product_name: "Hansel Choco",
-      barcode: "22323238209832",
-      quantity: "0"
-    }
-  ];
+  get list() {
+    return statisticStore.productListByStatus;
+  }
+
+  @Watch("selected")
+  async fetchProducts() {
+    await statisticStore.getProductsByStatus({ status: this.selected });
+  }
+
+  created() {
+    this.fetchProducts();
+  }
 }
 </script>
 

@@ -17,10 +17,10 @@
           <dashboard-products></dashboard-products>
 
           <v-row>
-            <v-col cols="5">
+            <v-col cols="7">
               <recent-transaction-table></recent-transaction-table>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="5">
               <critical-product-table></critical-product-table>
             </v-col>
             <v-col cols="3">

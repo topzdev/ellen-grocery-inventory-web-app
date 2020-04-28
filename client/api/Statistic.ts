@@ -6,28 +6,38 @@ import filterGenerator from '~/utils/filterGenerator';
 export default class StatisticAPI {
     private url = 'api/statistic'
 
-    /**
-     * @param {IFilter} filter - set of filter for filtering out the data to be return
-     * @param {string} [filter.timespan] - return a data within specific data ['today', 'recent', 'this_week','this_month', 'this_year', 'last_year]
-     * @param {boolean} [filter.count] - return current count of table
-     * @param {number} [filter.limit] - limit the row count to return 
-     */
-    async getCustomer(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/customer${filterGenerator(filter)}`)
+    async getOverall() {
+        const result: IResult = await $axios.$get(`${this.url}/overall`)
         return result;
     }
 
-    async getTransaction(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/transaction${filterGenerator(filter)}`)
+    async getCount() {
+        const result: IResult = await $axios.$get(`${this.url}/count`)
         return result;
     }
 
-    async getSales(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/sales${filterGenerator(filter)}`)
+    async getSales() {
+        const result: IResult = await $axios.$get(`${this.url}/sales`)
         return result;
     }
-    async getProduct(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/product${filterGenerator(filter)}`)
+
+    async getProductStatus() {
+        const result: IResult = await $axios.$get(`${this.url}/product-status`)
+        return result;
+    }
+
+    async getProductListByStatus(filter: IFilter) {
+        const result: IResult = await $axios.$get(`${this.url}/product-list-by-status${filterGenerator(filter)}}`)
+        return result;
+    }
+
+    async getCustomerListByInterval(filter: IFilter) {
+        const result: IResult = await $axios.$get(`${this.url}/customer-list-by-interval${filterGenerator(filter)}}`)
+        return result;
+    }
+
+    async getTransactionListByInterval(filter: IFilter) {
+        const result: IResult = await $axios.$get(`${this.url}/transaction-list-by-interval${filterGenerator(filter)}}`)
         return result;
     }
 }

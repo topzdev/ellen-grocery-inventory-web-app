@@ -61,7 +61,7 @@ export default class ProductServices {
     }
 
     /**
-     * @description 'Deleting product permanently its mean delete information and the image of the product
+     * @description 'Deleting product adminly its mean delete information and the image of the product
      */
     async deleteProduct(product_id: IProduct['product_id']) {
         const product = await productModel.findOne({ product_id }, undefined, { image_id: true });

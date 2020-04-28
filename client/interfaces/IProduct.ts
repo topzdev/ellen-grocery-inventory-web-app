@@ -15,5 +15,5 @@ export default interface IProduct {
   imageFile: File | undefined;
   created_at?: string;
   updated_at?: string;
-  isDeleted: boolean
+  is_deleted: boolean
 }

@@ -57,7 +57,7 @@ router.delete('/:id', (req: Request, res: Response) => {
  * @description     delete products permanently
  * @access          private
  */
-router.delete('/permanent/:id', (req: Request, res: Response) => {
+router.delete('/admin/:id', (req: Request, res: Response) => {
 	controller.deleteProduct(req, res);
 });
 

@@ -47,6 +47,15 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  */
 router.delete('/:id', (req: Request, res: Response) => {
+	controller.removeCustomer(req, res);
+});
+
+/**
+ * @route           DELETE api/customer
+ * @description     delete customer
+ * @access          private
+ */
+router.delete('/admin/:id', (req: Request, res: Response) => {
 	controller.deleteCustomer(req, res);
 });
 
