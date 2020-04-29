@@ -1,45 +1,36 @@
 <template>
-  <v-card :flat="true">
+  <v-card flat>
     <v-card-title>
-      <div width="300px">
-        <v-select v-model="selected" :items="views" hide-details></v-select>
-      </div>
-      <v-spacer />
       <v-text-field
+        style="max-width: 500px"
+        filled
+        rounded
+        dense
         v-model="search"
-        append-icon="mdi-search"
-        label="Search by Product Name, Barcode, Price, Quantity, Supplier"
+        placeholder="Search Product"
         hide-details
       />
+      <v-spacer></v-spacer>
+
+      <v-btn-toggle v-model="selected" color="primary" dense group>
+        <v-btn v-for="item in views" :key="item.value" :value="item.value" text>
+          <v-icon>{{item.icon}}</v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </v-card-title>
-    <product-table v-if="selected === 'Product Table'" />
-    <product-list v-else></product-list>
+    <v-card-text>
+      <product-table v-if="selected === 'table'" />
+      <product-list v-else></product-list>
+    </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import ProductTable from "@/components/product/ProductTable.vue";
-import ProductList from "@/components/product/ProductList.vue";
+import ProductViewMixin from "../../mixins/ProductViewMixin";
 import { frontendStore } from "@/store";
-import ProductMixin from "../../mixins/ProductMixin";
-@Component({
-  components: {
-    ProductTable,
-    ProductList
-  }
-})
-export default class ProductView extends ProductMixin {
-  views = ["Product Table", "Product List"];
 
-  get selected() {
-    return frontendStore.productViewMode;
-  }
-
-  set selected(mode: string) {
-    frontendStore.setProductView(mode);
-  }
-}
+export default class ProductView extends ProductViewMixin {}
 </script>
 
 <style>

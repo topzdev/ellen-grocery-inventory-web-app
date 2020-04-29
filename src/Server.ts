@@ -11,7 +11,8 @@ import {
 	accountRoute,
 	roleRoute,
 	transactionRoute,
-	statisticRoute
+	statisticRoute,
+	settingsRoute
 } from './routes/index';
 
 class Server {
@@ -41,6 +42,7 @@ class Server {
 		router.use('/api/role', roleRoute);
 		router.use('/api/transaction', transactionRoute)
 		router.use('/api/statistic', statisticRoute)
+		router.use('/api/settings', settingsRoute)
 
 		this.app.use('/', router);
 	}

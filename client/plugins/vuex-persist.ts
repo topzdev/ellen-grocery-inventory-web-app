@@ -4,7 +4,7 @@ export default ({ store }: any) => {
     // @ts-ignore;
     window.onNuxtReady(() => {
         new VuexPersistence({
-            /* your options */
+            modules: ['cashier']
         }).plugin(store);
     });
 }

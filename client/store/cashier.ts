@@ -200,7 +200,6 @@ export default class Cashier extends VuexModule {
             total_amount: this.total_amount,
             transaction_started: this.transaction_started,
             holded_at: new Date().toISOString(),
-
         });
         this.context.commit(SET_CLEAR);
         // @ts-ignore

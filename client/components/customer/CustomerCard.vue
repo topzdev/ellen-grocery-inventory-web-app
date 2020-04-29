@@ -35,23 +35,22 @@ export default class CustomerCard extends Vue {
   }
 
   get list() {
+    const { transact_count, points, last_transact } = this.customer;
     return [
       {
         title: "Points",
-        value: "10"
+        value: points
       },
       {
         title: "Transactions",
-        value: this.customer.transact_count
+        value: transact_count
       },
       {
         title: "Last Transaction",
-        value: this.customer.last_transact
-          ? dayjs(this.customer.last_transact).format("MMMM DD, YYYY")
+        value: last_transact
+          ? dayjs(last_transact).format("MMMM DD, YYYY")
           : false,
-        tooltip: dayjs(this.customer.last_transact).format(
-          "MMMM DD, YYYY @ hh:mm:ss"
-        )
+        tooltip: dayjs(last_transact).format("MMMM DD, YYYY @ hh:mm:ss")
       }
     ];
   }

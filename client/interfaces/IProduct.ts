@@ -1,3 +1,5 @@
+import ISupplier from './ISupplier';
+
 export default interface IProduct {
   product_id?: number;
   product_name: string;
@@ -15,5 +17,6 @@ export default interface IProduct {
   imageFile: File | undefined;
   created_at?: string;
   updated_at?: string;
-  is_deleted: boolean
+  supplier_name?: ISupplier['supplier_name']
+  is_deleted?: boolean
 }

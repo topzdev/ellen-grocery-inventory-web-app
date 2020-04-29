@@ -7,16 +7,17 @@ export default class CustomerModel extends QueryExtend {
     async findMany({ search, limit, offset, transact_count, last_transact, show_deleted }: IFilter): Promise<ICustomer[]> {
         const query: QueryConfig = {
             text: `SELECT 
-				customer.customer_id,
-				customer.firstname ||' '|| customer.lastname AS fullname,
-				customer.home_address,
-				customer.email_address
-				${transact_count ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
-				${last_transact ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
-			FROM ${this.customerTable} customer 
-			${this.analyzeFilter("firstname ||' '|| lastname", { search, limit, offset, show_deleted })} `
+            customer.customer_id,
+            customer.firstname ||' '|| customer.lastname AS fullname,
+            customer.home_address,
+            customer.email_address,
+            customer.points
+            ${transact_count ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
+            ${last_transact ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
+			FROM ${this.customerTable} customer ${this.analyzeFilter("firstname ||' '|| lastname", { search, show_deleted })}
+            ${this.orderRows({ order_by: "transact_count", order: 'DESC' })}${this.limitRows({ limit, offset })} `
         };
-
+        console.log(query.text)
         const result = await this.executeQuery(query);
         return result.rows;
     }

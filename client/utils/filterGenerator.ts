@@ -1,9 +1,13 @@
 export default (query: any) => {
-    let string = '?'
-    let objNames = Object.getOwnPropertyNames(query);
+    let filter: string[] = []
 
-    objNames.forEach(item => {
-        if (query[item]) string += item + '=' + query[item] + '&'
-    })
-    return string
+
+    for (const key in query) {
+        console.log(query[key], key)
+        if (query[key] !== '') filter.push(key + '=' + query[key]);
+    }
+
+    console.log(filter.join('&'))
+
+    return filter.length ? '?' + filter.join('&') : ''
 }

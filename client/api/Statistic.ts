@@ -27,17 +27,17 @@ export default class StatisticAPI {
     }
 
     async getProductListByStatus(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/product-list-by-status${filterGenerator(filter)}}`)
+        const result: IResult = await $axios.$get(`${this.url}/product-list-by-status${filterGenerator(filter)}`)
         return result;
     }
 
     async getCustomerListByInterval(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/customer-list-by-interval${filterGenerator(filter)}}`)
+        const result: IResult = await $axios.$get(`${this.url}/customer-list-by-interval${filterGenerator(filter)}`)
         return result;
     }
 
     async getTransactionListByInterval(filter: IFilter) {
-        const result: IResult = await $axios.$get(`${this.url}/transaction-list-by-interval${filterGenerator(filter)}}`)
+        const result: IResult = await $axios.$get(`${this.url}/transaction-list-by-interval${filterGenerator(filter)}`)
         return result;
     }
 }

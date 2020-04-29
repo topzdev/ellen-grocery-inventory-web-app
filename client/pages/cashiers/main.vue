@@ -15,7 +15,7 @@
         <v-col class="d-flex flex-column px-5" style="height: inherit">
           <cashier-header></cashier-header>
           <div style="flex: 1 1 auto">
-            <product-list mode="cashier" />
+            <cashier-product-list />
           </div>
         </v-col>
       </v-row>
@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { Component, Watch } from "vue-property-decorator";
-import ProductList from "@/components/product/ProductList.vue";
+import CashierProductList from "@/components/cashier/CashierProductList.vue";
 import CashierOtherInfo from "@/components/cashier/CashierOtherInfo.vue";
 import CashierOrder from "@/components/cashier/CashierOrder.vue";
 import CashierHeader from "@/components/cashier/CashierHeader.vue";
@@ -39,7 +39,7 @@ import Keypress from "@/components/misc/Keypress.vue";
   components: {
     CashierOrder,
     CashierOtherInfo,
-    ProductList,
+    CashierProductList,
     CashierHeader,
     CashierSystemBar,
     CashierControls,

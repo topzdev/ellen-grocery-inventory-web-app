@@ -1,30 +1,10 @@
-import { ActionTree, MutationTree, Store } from "vuex";
-import { initialiseStores } from "~/utils/store-accessor";
+import { ActionTree, MutationTree } from "vuex";
+import { getPlugins } from '~/utils/plugin-accessor';
 import { IRootState } from "~/interfaces";
-import VuexPersistence from 'vuex-persist'
 import CategoryAPI from '~/api/Category';
 import BrandAPI from '~/api/Brand';
 import SupplierAPI from '~/api/Supplier';
 import RoleAPI from '~/api/Role';
-
-
-function getPlugins() {
-  let plugins = []
-
-  if (process.browser) {
-    const vuexLocal = new VuexPersistence<IRootState>({
-      storage: window.localStorage,
-      modules: ['cashier']
-    })
-
-    plugins.push(vuexLocal.plugin)
-  }
-
-  const initializer = (store: Store<any>) => initialiseStores(store);
-  plugins.push(initializer);
-
-  return plugins;
-}
 
 export const plugins = getPlugins();
 

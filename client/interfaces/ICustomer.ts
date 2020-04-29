@@ -8,7 +8,8 @@ interface ICustomer {
     tel_no?: string,
     fullname?: string,
     transact_count?: string,
-    last_transact?: string
+    last_transact?: string,
+    points?: number
 }
 
 export default ICustomer;

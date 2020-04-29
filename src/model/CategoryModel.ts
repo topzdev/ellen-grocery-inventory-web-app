@@ -15,7 +15,9 @@ export default class CategoryModel extends QueryExtend {
 
     async findMany({ search, limit, offset }: IFilter): Promise<ICategory[]> {
         const query: QueryConfig = {
-            text: `SELECT * FROM ${this.categoryTable} ${this.analyzeFilter('category_name', { search, limit, offset })}`
+            text: `SELECT * FROM ${this.categoryTable} 
+            ${this.analyzeFilter('category_name', { search })}
+            ${this.limitRows({ limit, offset })}`
         };
         const result = await this.executeQuery(query);
         return result.rows

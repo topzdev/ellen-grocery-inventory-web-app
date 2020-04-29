@@ -1,5 +1,5 @@
 
-type interval = 'today' | 'recent' | 'last_day' | 'this_week' | 'this_month' | 'last_month' | 'this_year' | 'last_year'
+type interval = 'this_day' | 'recent' | 'last_day' | 'this_week' | 'this_month' | 'last_month' | 'this_year' | 'last_year'
 type status = 'critical' | 'out_of_stock'
 
 interface IFilter {

@@ -30,7 +30,7 @@ export default class TransactionMode extends QueryExtend {
         return result.rows[0]
     }
 
-    async findMany({ recent, order, order_by }: IFilter): Promise<ITransaction[]> {
+    async findMany({ interval, order, order_by }: IFilter): Promise<ITransaction[]> {
         const query: QueryConfig = {
             text: `SELECT 
             transact.transact_id,
@@ -47,15 +47,17 @@ export default class TransactionMode extends QueryExtend {
             FROM "${this.transactionTable}" transact
             INNER JOIN "${this.customerTable}" customer ON customer.customer_id = transact.customer_id 
             INNER JOIN "${this.accountTable}" account ON account.account_id = transact.account_id
-            ${recent ? 'WHERE ' + this.intervalCondition('this_day', 'transact.ended_at') : ''}
-            ${order_by ? `ORDER BY transact.${order_by} ${order}` : ''}
+            ${interval ? 'WHERE ' + this.intervalCondition(interval, 'transact.ended_at') : ''}
+            ${this.orderRows({ order_by, order }, 'transact')}
             `,
         }
+
+        console.log(query.text)
         const result = await this.executeQuery(query);
         return result.rows
     }
 
-    async create({ customer_id, account_id, started_at, ended_at, total_amount, amount_paid, orders, points }: ITransaction): Promise<ITransaction['transact_id']> {
+    async create({ customer_id, account_id, started_at, ended_at, total_amount, amount_paid, orders }: ITransaction): Promise<ITransaction['transact_id']> {
         try {
             await this.executeQuery({ text: 'BEGIN' })
 
@@ -68,10 +70,10 @@ export default class TransactionMode extends QueryExtend {
                 }
             }
 
-            if (customer_id && points) {
+            if (customer_id) {
                 await this.executeQuery({
-                    text: `UPDATE ${this.customerTable} SET points = points + $1 WHERE customer_id = $2`,
-                    values: [points, customer_id]
+                    text: `UPDATE ${this.customerTable} SET points = points + floor($1 / (select point_divisor from settings_table)) WHERE customer_id = $2`,
+                    values: [total_amount, customer_id]
                 })
             }
 

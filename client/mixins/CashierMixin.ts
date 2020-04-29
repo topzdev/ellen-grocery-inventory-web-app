@@ -81,6 +81,19 @@ export default class CashierMixin extends Vue {
         })
     }
 
+    changeCustomer() {
+        this.frontendStore.setMessageModal({
+            title: 'Change Customer',
+            show: true,
+            message: 'Are you sure to change customer?',
+            mode: 'question',
+            yesFunction: () => {
+                this.cashierStore.setCustomer(null);
+                this.initPage();
+            }
+        })
+    }
+
     holdTransaction() {
         this.frontendStore.setMessageModal({
             title: 'Hold Transaction',

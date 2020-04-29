@@ -54,7 +54,7 @@ import dayjs from "dayjs";
 export default class RecentTransactionTable extends Vue {
   @Prop({ default: "300px" }) height: string;
 
-  selected = "today";
+  selected = "this_day";
 
   get list() {
     return statisticStore.transListByInterval;
@@ -68,7 +68,7 @@ export default class RecentTransactionTable extends Vue {
 
   options = [
     {
-      value: "today",
+      value: "this_day",
       text: "Recent"
     },
     {
@@ -91,7 +91,6 @@ export default class RecentTransactionTable extends Vue {
   }
 
   created() {
-    console.log(this.selected);
     this.fetchTransactions();
   }
 }

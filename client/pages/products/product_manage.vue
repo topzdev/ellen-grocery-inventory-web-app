@@ -120,6 +120,7 @@
 <script lang="ts">
 import { Component, Watch } from "vue-property-decorator";
 import ProductMixin from "@/mixins/ProductMixin";
+import { productStore } from "../../store";
 
 @Component
 export default class Manage extends ProductMixin {
@@ -129,43 +130,7 @@ export default class Manage extends ProductMixin {
   validate(): void {
     // @ts-ignore
     if (this.$refs.manageForm.validate()) {
-      this.productStore.updateProduct(this.product);
-    }
-  }
-
-  // Showing the product search modal when this view is mounted to views
-  mounted() {
-    let show: boolean;
-    if (this.selected) {
-      this.showSearchModal(false);
-      this.product = this.selected;
-    } else {
-      this.showSearchModal(true);
-    }
-  }
-
-  get selected() {
-    let selected = this.processStore.toManageProduct;
-    if (!selected) return null;
-    return JSON.parse(JSON.stringify(selected));
-  }
-
-  // When the view of this page is not rendered in dom it will destroy the modal and current product value
-  destroyed() {
-    this.processStore.setCurrentProduct(undefined);
-    this.showSearchModal(false);
-  }
-
-  showSearchModal(show: boolean) {
-    this.frontendStore.setSearchModal({ show });
-  }
-
-  @Watch("selected")
-  fetchSelected() {
-    console.log(this.selected);
-    if (this.selected) {
-      this.product = this.selected;
-      this.showSearchModal(false);
+      productStore.updateProduct(this.product);
     }
   }
 }

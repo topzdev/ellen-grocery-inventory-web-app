@@ -10,6 +10,7 @@ class QueryExtend {
 	protected readonly accountTable: string = 'account_table';
 	protected readonly roleTable: string = 'role_table';
 	protected readonly transactionTable: string = 'transaction_table';
+	protected readonly settingsTable: string = 'settings_table';
 
 	protected pool: Pool;
 
@@ -76,20 +77,30 @@ class QueryExtend {
 		}
 	}
 
-	protected analyzeFilter(column: string, { offset, limit, search, show_deleted }: IFilter) {
-		let query = 'WHERE';
+	protected analyzeFilter(column: string, { search, show_deleted }: IFilter) {
+		let query = 'where';
 		if (search) query += ` ${column} ILIKE '%${search}%' `
 
 		if (search && show_deleted) query += ' and '
 
 		if (show_deleted) query += ` is_deleted = ${show_deleted} `
 
+		return query !== 'where' ? query : '';
+	}
+
+	protected limitRows({ limit, offset }: IFilter) {
+		let query = '';
 		if (limit) {
-			query += ` LIMIT ${limit} `
-			if (offset) query += ` OFFSET ${offset}`
-		}
-		if (query === 'WHERE') return ``
-		console.log(query)
+			query += ` limit ${limit} `
+			if (offset) query += `offset ${offset}`
+		};
+		return query;
+	}
+
+	protected orderRows({ order, order_by }: IFilter, table?: string) {
+		let query = '';
+		if (order_by) query += ` order by ${table ? `${table}.` : ''}${order_by} ${order} `
+		console.log(query);
 		return query;
 	}
 
@@ -97,9 +108,9 @@ class QueryExtend {
 		let condition = '';
 
 		switch (interval) {
-			case 'today': condition += `${column} >= now()`
-				break;
 			case 'recent': condition += `${column} <= now()`
+				break;
+			case 'this_day': condition += `${column} >= date_trunc('day', now())`
 				break;
 			case 'last_day': condition += `${column} >= date_trunc('day', now()) - interval '1 day'`
 				break;
@@ -107,11 +118,11 @@ class QueryExtend {
 				break;
 			case 'this_month': condition += `${column} >= date_trunc('month', now())`
 				break;
-			case 'last_month': condition += `${column} >= date_trunc('month', now()) - interval '1 month' and ${column} < date_trunc('month', now())`
+			case 'last_month': condition += `${column} >= date_trunc('month', now()) - interval '1 month' and ${column} <date_trunc('month', now())`
 				break;
 			case 'this_year': condition += `${column} >= date_trunc('year', now())`
 				break;
-			case 'last_year': condition += `${column} >= date_trunc('year', now()) - interval '1 year' and ${column} < date_trunc('year', now())`
+			case 'last_year': condition += `${column} >= date_trunc('year', now()) - interval '1 year' and ${column} <date_trunc('year', now())`
 				break;
 		}
 

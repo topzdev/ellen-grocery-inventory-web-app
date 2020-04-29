@@ -87,12 +87,12 @@ export default class Product extends VuexModule {
   }
 
   @Action({ commit: DELETE_PRODUCT, rawError: true })
-  public async deleteProduct(payload: any) {
-    const result = await productAPI.deleteProduct(payload);
+  public async deleteProduct(id: IProduct['product_id']) {
+    const result = await productAPI.deleteProduct(id);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    if (result.success) return payload.id;
+    if (result.success) return id;
   }
 }

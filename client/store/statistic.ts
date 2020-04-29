@@ -2,55 +2,9 @@ import { Module, Action, Mutation, VuexModule } from 'vuex-module-decorators'
 import StatisticAPI from '@/api/Statistic'
 import { IFilter } from '~/interfaces';
 import { STATS_SALES, STATS_COUNT, STATS_PRODUCT, STATS_PRODUCTS_STATUS, STATS_TRANSACT_INTERVAL, STATS_CUSTOMER_INTERVAL } from '~/configs/types';
+import { ISalesReport, IStatsCount, IProductStatus, IProductsByStatus, ICustomersByInterval, ITransactByInterval } from '~/interfaces/IStatistic';
 
 const statisticAPI = new StatisticAPI;
-
-interface ISales {
-    sum: number,
-    count: string
-}
-
-
-interface ISalesReport {
-    this_month?: ISales;
-    last_month?: ISales;
-    this_year?: ISales;
-    last_year?: ISales;
-}
-
-interface IProductStatus {
-    out_of_stock?: any;
-    critical?: any
-}
-
-interface IStatsCount {
-    product?: any,
-    transaction?: any
-    customer?: any
-}
-
-interface ICustomersByInterval {
-    spend: number | string
-    fullname: string,
-    customer_id: number
-}
-
-interface IProductsByStatus {
-    product_name: string,
-    quantity: number,
-    quantity_max: number,
-    quantity_min: number,
-    barcode: string
-}
-
-interface ITransactByInterval {
-    transact_id: number,
-    customer_name: string
-    total_amount: number,
-    amount_paid: number,
-    created_at: string
-    points: number,
-}
 
 @Module({ name: 'statistic', namespaced: true, stateFactory: true })
 export default class statistic extends VuexModule {
@@ -132,6 +86,7 @@ export default class statistic extends VuexModule {
 
     @Action
     async getTransactByInterval({ limit, interval }: IFilter) {
+
         const result = await statisticAPI.getTransactionListByInterval({ limit, interval });
         this.context.commit(STATS_TRANSACT_INTERVAL, result.data);
     }

@@ -132,27 +132,29 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import ProductMixin from "@/mixins/ProductMixin";
+import ProductCRUD from "../../mixins/ProductCRUD";
+import { productStore, frontendStore } from "../../store";
 
 @Component
-export default class add extends ProductMixin {
+export default class add extends Mixins(ProductMixin, ProductCRUD) {
   valid: boolean = false;
   dialog: boolean = true;
 
   validate(): void {
     // @ts-ignore
     if (this.$refs.productForm.validate()) {
-      this.productStore.addProduct(this.product);
+      productStore.addProduct(this.product);
     }
   }
 
   mounted() {
-    this.frontendStore.setBarcodeModal(false);
+    frontendStore.setBarcodeModal(false);
   }
 
   destroyed() {
-    this.frontendStore.setBarcodeModal(false);
+    frontendStore.setBarcodeModal(false);
   }
 }
 </script>

@@ -17,8 +17,8 @@ export default class ProductServices {
         }
     }
 
-    async getProducts({ search, limit, offset }: IFilter) {
-        const result = await productModel.findMany({ search, limit, offset })
+    async getProducts({ search, limit, offset, show_deleted }: IFilter) {
+        const result = await productModel.findMany({ search, limit, offset, show_deleted })
         return {
             message: 'Products Successfully fetched',
             data: result

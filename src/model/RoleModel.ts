@@ -7,7 +7,8 @@ export default class RoleModel extends QueryExtend {
     async findMany({ search, limit, offset }: IFilter): Promise<IRole[]> {
         const query: QueryConfig = {
             text: `SELECT * FROM ${this.roleTable}
-			${this.analyzeFilter('role_name', { search, limit, offset })}`
+            ${this.analyzeFilter('role_name', { search, })}
+            ${this.limitRows({ limit, offset })}`
         };
         const result = await this.executeQuery(query);
         return result.rows;

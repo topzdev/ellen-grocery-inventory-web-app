@@ -7,6 +7,7 @@ import accountRoute from './accountRoute';
 import roleRoute from './roleRoute';
 import transactionRoute from './transactionRoute'
 import statisticRoute from './statisticRoute'
+import settingsRoute from './settingsRoute';
 
 export {
 	productRoute,
@@ -17,5 +18,6 @@ export {
 	accountRoute,
 	roleRoute,
 	statisticRoute,
-	transactionRoute
+	transactionRoute,
+	settingsRoute
 };

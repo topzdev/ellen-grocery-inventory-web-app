@@ -15,7 +15,7 @@ export default class FrontendModule extends VuexModule {
   showSidebarMini: boolean = true;
   showNavbar: boolean = true;
   showHoldSidebar: boolean = false;
-  navbarFlat: boolean = false;
+  navbarFlat: boolean = true;
   showSnackbar: ISnackbar = { show: false };
   showDeleteModal: IDeleteModal = { show: false };
   showSearchModal: ISearchModal = { show: false };
@@ -27,7 +27,7 @@ export default class FrontendModule extends VuexModule {
   showCustomerModal: boolean = false;
   showRoleModal: boolean = false;
   showPaymentTray: boolean = false;
-  productViewMode: string = 'Product Table';
+  productViewMode: string = 'table';
 
   @MutationAction({})
   setSidebar(show: boolean): any {

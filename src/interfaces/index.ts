@@ -9,6 +9,7 @@ import IRole from './IRole'
 import ISupplier from './ISupplier'
 import ITransaction from './ITransaction'
 import IUploadedImage from './IUploadedImage'
+import ISettings from './ISettings'
 
 export {
     IAccount,
@@ -21,5 +22,6 @@ export {
     IRole,
     ISupplier,
     ITransaction,
+    ISettings,
     IUploadedImage,
 }

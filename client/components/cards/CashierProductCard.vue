@@ -1,0 +1,129 @@
+<template>
+  <v-card
+    class="d-flex product-card user-select-disabled"
+    height="100%"
+    :ripple="ripple"
+    @click="createOrder"
+  >
+    <v-badge :content="quantity" :color="color" overlap :value="quantity">
+      <v-row no-gutters>
+        <v-col cols="auto">
+          <v-avatar class="ma-3" size="65px" tile>
+            <v-img :src="setUrlImage" height="100%" draggable="false"></v-img>
+          </v-avatar>
+        </v-col>
+        <v-col class="d-flex flex-column justify-space-between">
+          <v-card-text style="padding-bottom:0 !important" height="100%" class="px-1">
+            <div class="overline" title="category">{{item.category_name}}</div>
+            <p
+              class="subtitle-1 font-weight-bold mb-0"
+              title="product name"
+              style="line-height: 1.2"
+            >{{item.product_name}}</p>
+            <p title="price">
+              ₱ {{item.price}}
+              -
+              <span
+                class="caption mb-0"
+                title="quantity"
+              >({{item.quantity}})</span>
+            </p>
+          </v-card-text>
+          <v-sheet
+            v-if="isOutOfStock"
+            color="error"
+            class="out-of-stocks text-center py-1"
+            dark
+            tile
+          >Out of Stocks</v-sheet>
+        </v-col>
+      </v-row>
+    </v-badge>
+  </v-card>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import ProductMixin from "@/mixins/ProductMixin";
+import IProduct from "../../interfaces/IProduct";
+import { cashierStore, frontendStore } from "~/store";
+
+@Component
+export default class ProductCard extends ProductMixin {
+  @Prop(Object) item!: IProduct;
+
+  color = "primary";
+
+  get setUrlImage() {
+    return this.item.image_url
+      ? this.item.image_url
+      : require("~/assets/img/noimg.jpg");
+  }
+
+  get isOutOfStock() {
+    return this.item.quantity - this.quantity <= 0;
+  }
+
+  get ripple() {
+    return { class: this.color + "--text" };
+  }
+
+  get quantity() {
+    let content = cashierStore.getOrders.filter(
+      item => item.product_id === this.item.product_id
+    );
+    if (content.length) return content[0].quantity;
+    return 0;
+  }
+
+  createOrder(event: any) {
+    let order = {
+      product_id: this.item.product_id,
+      name: this.item.product_name,
+      maxQuantity: this.item.quantity,
+      price: this.item.price,
+      image: this.item.image_url
+    };
+    // when ctrl key and click pushed then -1 to quantity
+    if (event.ctrlKey) {
+      this.color = "error";
+
+      setTimeout(() => {
+        this.color = "primary";
+      }, 300);
+
+      return cashierStore.updateOrder({
+        ...order,
+        quantity: this.quantity - 1
+      });
+    }
+
+    if (!this.isOutOfStock) {
+      /* only click is pushed execute add product */
+      this.color = "primary";
+      cashierStore.addOrder({ ...order, quantity: 1 });
+    }
+  }
+}
+</script>
+
+
+<style scoped>
+.product-card .v-badge {
+  font-size: 16px;
+  display: block !important;
+  width: 100%;
+}
+
+.user-select-disabled {
+  user-select: none;
+}
+
+.out-of-stocks {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 12px;
+}
+</style>

@@ -1,29 +1,13 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import IProduct from "~/interfaces/IProduct";
-import {
-  productStore, IProductModule, frontendStore, IFrontendModule,
-  processStore, IProcessModule, brandStore, IBrandModule, categoryStore,
-  ICategoryModule, supplierStore, ISupplierModule, roleStore, IRoleModule
-} from "@/store";
+import { brandStore, categoryStore, supplierStore, } from "@/store";
 import ProductImageUploader from '@/components/product/ProductImageUploader.vue'
 
 @Component({
   components: { ProductImageUploader }
 })
 export default class ProductMixin extends Vue {
-  productStore: IProductModule;
-  frontendStore: IFrontendModule;
-  processStore: IProcessModule;
-  search = "";
 
-  constructor() {
-    super();
-    this.productStore = productStore;
-    this.frontendStore = frontendStore;
-    this.processStore = processStore
-  }
-
-  // product state
   product: IProduct = {
     product_id: undefined,
     product_name: "",
@@ -36,40 +20,14 @@ export default class ProductMixin extends Vue {
     brand_id: -1,
     supplier_id: -1,
     category_id: -1,
-    image: "",
+    image_id: "",
     image_url: "",
     imageFile: undefined
   };
 
-  // computed property
-
-  get productList() {
-    return this.productStore.products;
-  }
-
-  manageItem(item: IProduct) {
-    this.processStore.setCurrentProduct(item);
-    this.$router.push("products/product_manage");
-  }
-
-  deleteItem(item: IProduct) {
-    // showing the dialog
-    this.frontendStore.setDeleteModal({
-      show: true,
-      name: item.product_name,
-      title: "Product"
-    });
-
-    // Assigning what delete function to be process
-    this.processStore.setCurrentToDelete({
-      deleteFunction: productStore.deleteProduct,
-      id: item.product_id,
-      others: item.image
-    });
-  }
 
   uploadImage(image: any): any {
-    if (!image.target.files.length) return this.product.image = undefined;
+    if (!image.target.files.length) return this.product.image_id = undefined;
 
     let self = this;
     const reader = new FileReader();
@@ -130,10 +88,6 @@ export default class ProductMixin extends Vue {
     category_id: [(v: any) => !!v || "Category is required"]
   };
 
-  @Watch("search")
-  searchProduct() {
-    this.productStore.fetchProducts({ search: this.search })
-  };
 }
 
 

@@ -51,22 +51,17 @@ export default class ProductAPI {
         formData.append('brand_id', product.brand_id.toString())
         formData.append('supplier_id', product.supplier_id.toString())
         formData.append('category_id', product.category_id.toString())
-        formData.append('image', product.image!.toString())
+        formData.append('image', product.image_id!.toString())
         formData.append('image_url', product.image_url!.toString())
         formData.append('file', product.imageFile!)
 
         const result: IResult = await $axios.$put(`${this.url}`, formData, config);
 
         return result;
-
-
     }
 
-    async deleteProduct({ id, others }: any) {
-        const result: IResult = await $axios.$delete(
-            `${this.url}`,
-            { ...config, data: { image: others, product_id: id } }
-        );
+    async deleteProduct(id: IProduct['product_id']) {
+        const result: IResult = await $axios.$delete(`${this.url}/${id}`);
         return result;
     }
 

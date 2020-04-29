@@ -14,16 +14,11 @@
     </v-col>
 
     <v-col>
-      <div class="d-flex align-center">
+      <div class="d-flex">
         <v-spacer></v-spacer>
-        <div class="text-right">
-          <div class="subtitle-1 text-right font-weight-bold" v-text="fullname" />
-          <v-btn
-            text
-            x-small
-            style="text-decoration: underline"
-            @click="changeCustomer()"
-          >Change Customer</v-btn>
+        <div v-if="customer" class="text-right mr-3">
+          <div class="title-1 text-right font-weight-bold" v-text="customer.fullname || ''" />
+          <div>Points: {{customer.points || ''}}</div>
         </div>
       </div>
     </v-col>
@@ -41,16 +36,14 @@ export default class ComponentName extends CashierMixin {
   @Watch("search")
   searchProduct() {
     console.log(this.search);
-    this.productStore.fetchProducts({ search: this.search });
+    this.productStore.fetchProducts({
+      search: this.search,
+      show_deleted: false
+    });
   }
 
-  changeCustomer() {
-    this.cashierStore.setCustomer(null);
-    this.initPage();
-  }
-
-  get fullname() {
-    if (this.cashierStore.customer) return this.cashierStore.customer.fullname;
+  get customer() {
+    return this.cashierStore.customer;
   }
 }
 </script>

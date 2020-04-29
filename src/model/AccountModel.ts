@@ -12,7 +12,8 @@ export default class AccountModel extends QueryExtend {
 			account.username,
 			role.role_name
 			FROM ${this.accountTable} account INNER JOIN "${this.roleTable}" role ON role.role_id = account.role_id
-			${this.analyzeFilter("account.firstname || ' ' || account.lastname", { search, limit, offset, show_deleted })}`
+            ${this.analyzeFilter("account.firstname || ' ' || account.lastname", { search, show_deleted })}
+            ${this.limitRows({ limit, offset })}`
         };
 
         const result = await this.executeQuery(query);

@@ -38,7 +38,8 @@ export default class CashierInitialList extends CashierMixin {
     this.customerStore.fetchCustomers({
       limit: 6,
       transact_count: true,
-      last_transact: true
+      last_transact: true,
+      show_deleted: false
     });
   }
 
@@ -49,7 +50,8 @@ export default class CashierInitialList extends CashierMixin {
       search: this.search,
       limit: 6,
       transact_count: true,
-      last_transact: true
+      last_transact: true,
+      show_deleted: false
     });
   }
 

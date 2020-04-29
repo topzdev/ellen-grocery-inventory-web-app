@@ -9,7 +9,7 @@ export default class ProductModel extends QueryExtend {
 
     async findOne(columns: object, condition?: string, include?: object): Promise<IProduct> {
         const query: QueryConfig = {
-            text: `SELECT ${this.queryColumns(include!)} FROM ${this.productTable} ${this.analyzeCondition(columns, condition)}`,
+            text: `SELECT ${this.queryColumns(include!)} FROM ${this.productTable} ${this.analyzeCondition(columns, condition)} limit 1`,
         };
         const result = await this.executeQuery(query);
         return result.rows[0];
@@ -32,13 +32,15 @@ export default class ProductModel extends QueryExtend {
             product.image_id,
             product.image_url,
             brand.brand_name,
+            product.is_deleted,
             category.category_name,
             supplier.supplier_name
             FROM ${this.productTable} product
             INNER JOIN "${this.brandTable}" brand ON product.brand_id = brand.brand_id 
             INNER JOIN "${this.categoryTable}" category ON product.category_id = category.category_id 
             INNER JOIN "${this.supplierTable}" supplier ON product.supplier_id = supplier.supplier_id
-            ${this.analyzeFilter("product.product_name", { search, limit, offset, show_deleted })}`,
+            ${this.analyzeFilter("product.product_name", { search, show_deleted })}
+            ${this.limitRows({ limit, offset })}`,
 
         };
 

@@ -45,11 +45,11 @@ import { statisticStore } from "../../store";
 export default class RecentTransactionTable extends Vue {
   @Prop({ default: "300px" }) height: string;
 
-  selected = "today";
+  selected = "this_day";
 
   options = [
     {
-      value: "today",
+      value: "this_day",
       text: "Today"
     },
     {

@@ -12,6 +12,7 @@ export default class CustomerAPI {
     }
 
     async fetchCustomers(filter: IFilter) {
+        console.log(this.url + filterGenerator(filter))
         const result: IResult = await $axios.$get(this.url + filterGenerator(filter));
         return result;
     }

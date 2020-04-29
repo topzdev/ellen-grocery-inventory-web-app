@@ -11,7 +11,8 @@ interface ITransaction {
     amount_paid?: string | number,
     customer_name?: string;
     account_name?: string
-    orders?: IOrder[]
+    orders?: IOrder[],
+    points?: number
 }
 
 export default ITransaction;

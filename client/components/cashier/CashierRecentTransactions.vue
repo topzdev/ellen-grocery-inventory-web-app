@@ -25,7 +25,7 @@ import ICustomer from "../../interfaces/ICustomer";
 export default class CashierRecentTransactions extends CashierMixin {
   created() {
     this.transactionStore.fetchTransactions({
-      recent: true,
+      interval: "this_day",
       order_by: "ended_at",
       order: "DESC"
     });

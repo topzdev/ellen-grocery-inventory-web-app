@@ -15,7 +15,9 @@ export default class BrandModel extends QueryExtend {
 
     async findMany({ search, limit, offset }: IFilter): Promise<IBrand[]> {
         const query: QueryConfig = {
-            text: `SELECT * FROM ${this.brandTable} ${this.analyzeFilter('brand_name', { search, limit, offset })}`
+            text: `SELECT * FROM ${this.brandTable}
+             ${this.analyzeFilter('brand_name', { search })}
+             ${this.limitRows({ limit, offset })}`
         };
         const result = await this.executeQuery(query);
         return result.rows;
