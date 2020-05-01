@@ -82,6 +82,14 @@ export default class RecentTransactionTable extends Vue {
     {
       value: "this_month",
       text: "This Month"
+    },
+    {
+      value: "last_month",
+      text: "Last Month"
+    },
+    {
+      value: "this_year",
+      text: "This Year"
     }
   ];
 

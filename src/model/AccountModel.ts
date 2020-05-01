@@ -3,6 +3,17 @@ import { IFilter, IAccount } from "../interfaces";
 import { QueryConfig } from "pg";
 
 export default class AccountModel extends QueryExtend {
+
+    async count({ show_deleted }: IFilter): Promise<string> {
+        const query: QueryConfig = {
+            text: `SELECT count(*)
+            from ${this.accountTable} 
+            ${this.analyzeFilter('', { show_deleted })}`
+        }
+        const result = await this.executeQuery(query);
+        return result.rows[0].count;
+    }
+
     async findMany({ search, limit, offset, show_deleted }: IFilter): Promise<IAccount[]> {
 
         const query: QueryConfig = {
@@ -29,8 +40,10 @@ export default class AccountModel extends QueryExtend {
 			middlename,
 			username, 
 			email_address,
-			role_id
+            role_id,
+            role.role_name
             FROM ${this.accountTable} 
+            inner join ${this.roleTable} role using(role_id)
             ${this.analyzeCondition(columns, condition)} limit 1`,
         };
 
@@ -60,17 +73,20 @@ export default class AccountModel extends QueryExtend {
 
     async remove(id: IAccount['account_id']): Promise<IAccount['account_id']> {
         const query: QueryConfig = {
-            text: `UPDATE "${this.accountTable}" SET is_deleted = TRUE WHERE account_id = $1`,
+            text: `UPDATE ${this.accountTable} SET is_deleted = TRUE WHERE account_id = $1`,
             values: [id]
         };
         const result = await this.executeQuery(query);
         return id;
     }
 
-    async getAccount(id: IAccount['account_id']): Promise<IAccount> {
+    async getAccount(columns: object, condition?: string | undefined): Promise<IAccount> {
         const query: QueryConfig = {
-            text: `SELECT password from "${this.accountTable}" WHERE account_id = $1 LIMIT 1`,
-            values: [id]
+            text: `SELECT 
+            account_id,
+            role_id,
+            password 
+            from ${this.accountTable} ${this.analyzeCondition(columns, condition)} LIMIT 1`,
         }
 
         const result = await this.executeQuery(query);
@@ -79,7 +95,7 @@ export default class AccountModel extends QueryExtend {
 
     async delete(id: IAccount['account_id']): Promise<IAccount['account_id']> {
         const query: QueryConfig = {
-            text: `DELETE FROM "${this.accountTable}" WHERE account_id = $1`,
+            text: `DELETE FROM ${this.accountTable} WHERE account_id = $1`,
             values: [id]
         };
         const result = await this.executeQuery(query);

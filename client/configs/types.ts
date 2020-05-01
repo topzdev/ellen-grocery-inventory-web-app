@@ -100,3 +100,4 @@ export const STATS_TRANSACT_INTERVAL = "STATS_TRANSACT_INTERVAL"
 // Utility Mutations
 export const SET_LOADING = "SET_LOADING"
 export const SET_CURRENT = "SET_CURRENT";
+export const SET_COUNT = "SET_COUNT";

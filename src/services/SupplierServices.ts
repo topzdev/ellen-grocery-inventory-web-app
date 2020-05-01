@@ -23,14 +23,6 @@ export default class SupplierServices {
     }
 
     async createSupplier(supplier: ISupplier) {
-        const { supplier_name } = supplier;
-        const exist = await supplierModel.findOne({ supplier_name });
-
-        if (exist) return {
-            success: false,
-            message: 'Supplier name is already exist'
-        }
-
         const result = await supplierModel.create(supplier);
 
         return {
@@ -40,16 +32,6 @@ export default class SupplierServices {
     }
 
     async updateSupplier(supplier: ISupplier) {
-        const { supplier_name } = supplier;
-        const exist = await supplierModel.findOne({ supplier_name });
-
-        console.log(supplier, 'Services', exist)
-        if (exist) return {
-            success: false,
-            message: 'Supplier name is already exist'
-        }
-
-
         const result = await supplierModel.update(supplier.supplier_id, supplier)
 
         return {

@@ -6,8 +6,7 @@ import { IProduct } from '~/interfaces';
 export default class ProductCRUD extends Vue {
 
     manageItem(item: IProduct) {
-        processStore.setCurrentProduct(item);
-        this.$router.push("products/product_manage");
+        this.$router.push(`products/manage/${item.barcode}`);
     }
 
     deleteItem(item: IProduct) {

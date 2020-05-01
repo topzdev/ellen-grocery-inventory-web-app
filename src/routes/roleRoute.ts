@@ -1,5 +1,6 @@
 import Express, { Request, Response } from 'express';
 import RoleController from '../controllers/RoleController';
+import { checkToken } from '../middleware';
 
 const router = Express.Router();
 const controller = new RoleController();
@@ -9,7 +10,7 @@ const controller = new RoleController();
  * @description     fetch all roles
  * @access          public
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
 	controller.fetchRoles(req, res);
 });
 
@@ -19,7 +20,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          public
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
 	controller.fetchSingleRole(req, res);
 });
 
@@ -28,7 +29,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add role
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
 	controller.addRole(req, res);
 });
 
@@ -37,7 +38,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update role
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
 	controller.updateRole(req, res);
 });
 
@@ -46,7 +47,7 @@ router.put('/', (req: Request, res: Response) => {
  * @description     delete role
  * @access          private
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteRole(req, res);
 });
 

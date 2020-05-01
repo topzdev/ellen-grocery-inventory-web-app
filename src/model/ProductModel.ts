@@ -6,6 +6,15 @@ import { QueryConfig } from "pg";
 
 export default class ProductModel extends QueryExtend {
 
+    async count({ show_deleted }: IFilter) {
+        const query: QueryConfig = {
+            text: `SELECT count(*) from ${this.productTable} ${this.analyzeFilter('', { show_deleted })}`
+        }
+        const result = await this.executeQuery(query);
+        console.log(result);
+        return result.rows[0].count;
+    }
+
 
     async findOne(columns: object, condition?: string, include?: object): Promise<IProduct> {
         const query: QueryConfig = {

@@ -19,9 +19,11 @@ export default class ProductServices {
 
     async getProducts({ search, limit, offset, show_deleted }: IFilter) {
         const result = await productModel.findMany({ search, limit, offset, show_deleted })
+        const count = await productModel.count({ show_deleted });
         return {
             message: 'Products Successfully fetched',
-            data: result
+            data: result,
+            count
         }
     }
 
@@ -34,6 +36,9 @@ export default class ProductServices {
         });
 
         const image = await imageServices.upload(rawImage)
+        console.log({ ...product, ...image });
+
+        if (product.image) delete product.image;
 
         const result = await productModel.create({ ...product, ...image })
 
@@ -52,6 +57,8 @@ export default class ProductServices {
             success: true,
             message: 'Error on uploading images'
         }
+
+        if (product.image) delete product.image;
 
         const result = await productModel.update(product.product_id, { ...product, ...image })
         return {

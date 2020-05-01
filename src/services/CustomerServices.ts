@@ -6,9 +6,11 @@ export default class CustomerServices {
 
     async getMany(filter: IFilter) {
         const result = await customerModel.findMany(filter);
+        const count = await customerModel.count(filter);
         return {
             message: 'Customers Successfully Fetched',
-            data: result
+            data: result,
+            count
         }
     }
 

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import CategoryController from '../controllers/CategoryController';
+import { checkToken } from '../middleware';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const controller = new CategoryController();
  * @access          public
  */
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
     controller.getCategories(req, res);
 });
 
@@ -21,7 +22,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          public
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
     controller.getSingleCategory(req, res);
 });
 
@@ -30,7 +31,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add category
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
     controller.addCategory(req, res);
 });
 
@@ -39,7 +40,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update category
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
     controller.updateCategory(req, res);
 });
 
@@ -49,7 +50,7 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  * @param           id
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
     controller.deleteCategory(req, res);
 });
 

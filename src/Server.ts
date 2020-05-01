@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import {
+	authRoute,
 	productRoute,
 	supplierRoute,
 	categoryRoute,
@@ -33,6 +34,7 @@ class Server {
 			});
 		});
 
+		router.use('/api/auth', authRoute);
 		router.use('/api/product', productRoute);
 		router.use('/api/supplier', supplierRoute);
 		router.use('/api/brand', brandRoute);

@@ -14,6 +14,7 @@ import ISupplier from './ISupplier'
 import ITransaction from './ITransaction'
 import IHoldTransact from './IHoldTransact'
 import { IDeleteConfig } from './IUniversal'
+import IAuthCredentials from './IAuthCredentials'
 import {
     IDeleteModal,
     ISearchModal,
@@ -43,5 +44,6 @@ export {
     ISnackbar,
     IDeleteConfig,
     ICurrentDelete,
-    IHoldTransact
+    IHoldTransact,
+    IAuthCredentials
 };

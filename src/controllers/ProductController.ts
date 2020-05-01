@@ -39,6 +39,7 @@ class ProductController {
 
 	async updateProduct(req: Request, res: Response): Promise<any> {
 		try {
+
 			const result = await productServices.updateProduct(req.body, req.files)
 			res.json({ success: true, ...result });
 		} catch (err) {

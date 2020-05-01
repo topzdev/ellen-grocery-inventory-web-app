@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import SupplierController from '../controllers/SupplierController';
+import { checkToken } from '../middleware';
 
 const router = express.Router();
 const controller = new SupplierController();
@@ -9,7 +10,7 @@ const controller = new SupplierController();
  * @description     fetch suppliers
  * @access          public
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
 	controller.getSuppliers(req, res);
 });
 
@@ -19,7 +20,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          public
  * @param 			{String} id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
 	controller.getSingleSupplier(req, res);
 });
 
@@ -28,7 +29,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add single suppliers
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
 	controller.addSupplier(req, res);
 });
 
@@ -37,7 +38,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update supplier
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
 	controller.updateSupplier(req, res);
 });
 
@@ -47,7 +48,7 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  * @param 			{String} id
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteSupplier(req, res);
 });
 

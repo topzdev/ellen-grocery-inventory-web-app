@@ -25,6 +25,10 @@ export default class ProductList extends Vue {
   get list() {
     return productStore.products;
   }
+
+  created() {
+    productStore.fetchProducts({ show_deleted: false, limit: 10 });
+  }
 }
 </script>
 

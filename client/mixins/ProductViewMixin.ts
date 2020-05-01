@@ -1,7 +1,8 @@
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import ProductTable from "@/components/tables/ProductTable.vue";
 import ProductList from "@/components/product/ProductList.vue";
 import { productStore, frontendStore } from '~/store';
+import PaginationMixin from './PaginationMixin';
 
 @Component({
     components: {
@@ -9,7 +10,8 @@ import { productStore, frontendStore } from '~/store';
         ProductList
     }
 })
-export default class ProductViewMixin extends Vue {
+export default class ProductViewMixin extends PaginationMixin {
+    page = 1;
     search: string = ""
     views = [{
         icon: "mdi-view-headline",
@@ -19,6 +21,7 @@ export default class ProductViewMixin extends Vue {
         value: 'list'
     }];
 
+
     get selected() {
         return frontendStore.productViewMode;
     }
@@ -27,9 +30,22 @@ export default class ProductViewMixin extends Vue {
         frontendStore.setProductView(mode);
     }
 
-    @Watch("search")
+    get count() {
+        return productStore.count
+    }
+
+    get length() {
+        return Math.ceil(this.count / this.parseRow) || 0
+    }
+
     searchProduct() {
-        productStore.fetchProducts({ search: this.search, show_deleted: false });
+        let self = this;
+        productStore.fetchProducts({
+            search: this.search,
+            show_deleted: false,
+            limit: this.row,
+            offset: this.parseRow * (this.page - 1)
+        });
     }
 
     created() {

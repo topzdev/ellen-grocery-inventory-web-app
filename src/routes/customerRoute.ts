@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import CustomerController from '../controllers/CustomerController';
+import { checkToken } from '../middleware';
 
 const router = express.Router();
 const controller = new CustomerController();
@@ -9,7 +10,7 @@ const controller = new CustomerController();
  * @description     fetch all customers
  * @access          public
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
 	controller.fetchCustomers(req, res);
 });
 
@@ -19,7 +20,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          public
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
 	controller.fetchSingleCustomer(req, res);
 });
 
@@ -28,7 +29,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add customer
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
 	controller.addCustomer(req, res);
 });
 
@@ -37,7 +38,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update customer
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
 	controller.updateCustomer(req, res);
 });
 
@@ -46,7 +47,7 @@ router.put('/', (req: Request, res: Response) => {
  * @description     delete customer
  * @access          private
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
 	controller.removeCustomer(req, res);
 });
 
@@ -55,7 +56,7 @@ router.delete('/:id', (req: Request, res: Response) => {
  * @description     delete customer
  * @access          private
  */
-router.delete('/admin/:id', (req: Request, res: Response) => {
+router.delete('/admin/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteCustomer(req, res);
 });
 

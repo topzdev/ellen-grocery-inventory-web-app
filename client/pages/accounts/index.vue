@@ -7,18 +7,20 @@
           <v-card-subtitle v-text="link.subtitle" />
         </v-card>
       </v-col>
-    </v-row>
 
-    <account-table />
+      <v-col cols="8">
+        <account-view></account-view>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import AccountTable from "@/components/account/AccountTable.vue";
+import AccountView from "@/components/account/AccountView.vue";
 @Component({
   components: {
-    AccountTable
+    AccountView
   }
 })
 export default class Index extends Vue {

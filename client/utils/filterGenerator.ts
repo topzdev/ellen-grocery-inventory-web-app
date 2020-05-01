@@ -4,7 +4,7 @@ export default (query: any) => {
 
     for (const key in query) {
         console.log(query[key], key)
-        if (query[key] !== '') filter.push(key + '=' + query[key]);
+        if (query[key] !== '' && query[key] !== undefined) filter.push(key + '=' + query[key]);
     }
 
     console.log(filter.join('&'))

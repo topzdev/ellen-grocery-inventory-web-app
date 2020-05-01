@@ -1,7 +1,7 @@
-import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
+import { Module, VuexModule, Action, Mutation, MutationAction } from "vuex-module-decorators";
 import IProduct from "~/interfaces/IProduct";
 import { frontendStore } from '~/utils/store-accessor';
-import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH } from '~/configs/types';
+import { ADD_NEW_PRODUCT, SET_CURRENT, SET_PRODUCTS, ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SET_SEARCH, SET_COUNT } from '~/configs/types';
 import IFilter from '~/interfaces/IFilter';
 import ProductAPI from '@/api/Product'
 
@@ -13,8 +13,9 @@ const productAPI = new ProductAPI;
 })
 export default class Product extends VuexModule {
   products: Array<IProduct> = [];
-  singleProduct: object = {};
-  public path = "/products";
+  current: IProduct = null;
+  count: number = 0
+  path = "/products";
 
   @Mutation
   public [ADD_NEW_PRODUCT](product: IProduct): void {
@@ -23,12 +24,17 @@ export default class Product extends VuexModule {
 
   @Mutation
   public [SET_CURRENT](product: IProduct): void {
-    this.singleProduct = product;
+    this.current = product;
   }
 
   @Mutation
   public [SET_PRODUCTS](products: Array<IProduct>): void {
     this.products = products;
+  }
+
+  @Mutation
+  public [SET_COUNT](count: number): void {
+    this.count = count;
   }
 
   @Mutation
@@ -67,10 +73,13 @@ export default class Product extends VuexModule {
     return result.data != undefined ? result.data : null;
   }
 
-  @Action({ commit: SET_PRODUCTS, rawError: true })
+  @Action({ rawError: true })
   public async fetchProducts(filter: IFilter) {
     const result = await productAPI.fetchProducts(filter);
-    if (result.success) return result.data;
+    if (result.success) {
+      this.context.commit(SET_PRODUCTS, result.data)
+      this.context.commit(SET_COUNT, result.count)
+    };
   }
 
 
@@ -95,4 +104,5 @@ export default class Product extends VuexModule {
 
     if (result.success) return id;
   }
+
 }

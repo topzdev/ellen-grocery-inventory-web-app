@@ -29,6 +29,13 @@ export default class index extends Vue {
       subtitle: "Categories your prodocut",
       color: "primary",
       action: `/${this.parentPath}/categories`,
+      icon: "mdi-truck"
+    },
+    {
+      title: "Manage Supplier",
+      subtitle: "Create Supplier Information",
+      color: "cyan",
+      action: `/${this.parentPath}/supplier`,
       icon: "ticket-percent"
     },
     {

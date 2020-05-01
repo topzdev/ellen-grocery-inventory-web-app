@@ -9,37 +9,28 @@
         v-model="search"
         placeholder="Search Product"
         hide-details
-        @input="searchProduct"
+        @input="fetchCustomer"
       />
       <v-spacer></v-spacer>
-
       <v-select
         class="mr-4"
         v-model="row"
         :items="rows"
         label="Rows"
         style="max-width: 150px"
-        @input="searchProduct"
+        @input="fetchCustomer"
       ></v-select>
-
-      <v-btn-toggle v-model="selected" color="primary" dense group>
-        <v-btn v-for="item in views" :key="item.value" :value="item.value" text>
-          <v-icon>{{item.icon}}</v-icon>
-        </v-btn>
-      </v-btn-toggle>
     </v-card-title>
     <v-card-text>
-      <product-table height="auto" v-if="selected === 'table'" />
-      <product-list v-else></product-list>
+      <customer-table></customer-table>
     </v-card-text>
-
     <v-card-actions>
       <v-spacer></v-spacer>
       <div>Results {{this.row}} out of {{this.count}}</div>
       <v-pagination
         v-model="page"
         :length="length"
-        @input="searchProduct"
+        @input="fetchCustomer"
         :total-visible="10"
         style="width: auto;"
       ></v-pagination>
@@ -48,11 +39,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import ProductViewMixin from "../../mixins/ProductViewMixin";
-import { frontendStore } from "@/store";
+import { Vue, Component } from "vue-property-decorator";
+import CustomerTable from "@/components/tables/CustomerTable.vue";
+import { customerStore } from "../../store";
+import CustomerViewMixin from "@/mixins/CustomerViewMixin";
 
-export default class ProductView extends ProductViewMixin {}
+@Component
+export default class CustomerView extends CustomerViewMixin {}
 </script>
 
 <style>

@@ -4,7 +4,7 @@ import config from "~/configs/axiosConfig";
 import { IFilter, ISupplier, IResult } from '~/interfaces';
 
 export default class Supplier {
-    private url: string = "/api/supplier/";
+    private url: string = "/api/supplier";
 
     async fetchSuppliers(filter: IFilter) {
         const result: IResult = await $axios.$get(`${this.url}${filterGenerator(filter)}`, config);

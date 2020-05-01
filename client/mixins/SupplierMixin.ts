@@ -38,6 +38,19 @@ export default class SupplierMixin extends Vue {
     this.frontendStore = frontendStore;
   }
 
+
+  deleteSupplier(item: ISupplier) {
+    frontendStore.setMessageModal({
+      title: 'Delete Supplier',
+      show: true,
+      message: `Are you sure to delete this product ${item.supplier_name}?`,
+      mode: 'question',
+      yesFunction: () => {
+        this.supplierStore.deleteSupplier(item.supplier_id)
+      }
+    })
+  }
+
   async setSupplier(item: ISupplier) {
     if (!item) {
       this.clearFields();
@@ -50,8 +63,6 @@ export default class SupplierMixin extends Vue {
       this.isEdit = true;
       this.supplier = JSON.parse(JSON.stringify(this.currentSupplier));
     }
-    // this.$router.push("suppliers/update");
-    // processStore.setCurrentSupplier(supplier);
   }
 
   clearFields() {
@@ -85,19 +96,6 @@ export default class SupplierMixin extends Vue {
 
   searchSupplier(search: string) {
     this.supplierStore.fetchSuppliers({ search })
-  }
-
-  deleteSupplier(supplier: ISupplier) {
-    frontendStore.setDeleteModal({
-      show: true,
-      name: supplier.supplier_name,
-      title: "supplier"
-    });
-
-    processStore.setCurrentToDelete({
-      deleteFunction: supplierStore.deleteSupplier,
-      id: supplier.supplier_id
-    });
   }
 
   closeModal() {

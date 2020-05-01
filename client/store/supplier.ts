@@ -58,13 +58,13 @@ export default class Supplier extends VuexModule {
     return result.data;
   }
 
-  @Action({ commit: SET_CURRENT })
+  @Action
   async fetchSingleSupplier(supplier_id: ISupplier['supplier_id']) {
     const result = await supplierAPI.fetchSingleSupplier(supplier_id);
-    return result.data;
+    if (result.success) this.context.commit(SET_CURRENT, result.data);
   }
 
-  @Action({ commit: ADD_SUPPLIER })
+  @Action
   async addSupplier({ supplier, redirect }: { supplier: ISupplier; redirect: boolean; }) {
 
     this.setLoading(true);
@@ -74,17 +74,17 @@ export default class Supplier extends VuexModule {
     frontendStore.setRedirect(redirect ? this.path : undefined)
     this.setLoading(false);
 
-    if (result.success) return { supplier_id: result.data.supplier_id, ...supplier };
+    if (result.success) this.context.commit(ADD_SUPPLIER, { supplier_id: result.data, ...supplier });
   }
 
-  @Action({ commit: UPDATE_SUPPLIER })
+  @Action
   async updateSupplier(supplier: ISupplier) {
     const result = await supplierAPI.updateSupplier(supplier)
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    if (result.success) return supplier;
+    if (result.success) this.context.commit(UPDATE_SUPPLIER, supplier);
   }
 
   @Action({ commit: DELETE_SUPPLIER })
@@ -94,6 +94,6 @@ export default class Supplier extends VuexModule {
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    if (result.success) return supplier_id;
+    if (result.success) this.context.commit(DELETE_SUPPLIER, supplier_id);
   }
 }

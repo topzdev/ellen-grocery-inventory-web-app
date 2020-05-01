@@ -1,5 +1,6 @@
 import Express, { Request, Response } from 'express';
 import AccountController from '../controllers/AccountController';
+import { checkToken } from '../middleware'
 
 const router = Express.Router();
 const controller = new AccountController();
@@ -7,19 +8,19 @@ const controller = new AccountController();
 /**
  * @route           GET api/account
  * @description     fetch all accounts
- * @access          public
+ * @access          private
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
 	controller.fetchAccounts(req, res);
 });
 
 /**
  * @route           GET api/account
  * @description     fetch singsle account
- * @access          public
+ * @access          private
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
 	controller.fetchSingleAccount(req, res);
 });
 
@@ -28,7 +29,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add account
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
 	controller.addAccount(req, res);
 });
 
@@ -37,7 +38,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update account
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
 	controller.updateAccount(req, res);
 });
 
@@ -46,7 +47,7 @@ router.put('/', (req: Request, res: Response) => {
  * @description     update account password
  * @access          private
  */
-router.put('/password', (req: Request, res: Response) => {
+router.put('/password', checkToken, (req: Request, res: Response) => {
 	controller.updateAccountPassword(req, res);
 });
 
@@ -56,7 +57,7 @@ router.put('/password', (req: Request, res: Response) => {
  * @access          private
  * @param			id
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteAccount(req, res);
 });
 
@@ -66,7 +67,7 @@ router.delete('/:id', (req: Request, res: Response) => {
  * @access          private
  * @param			id
  */
-router.delete('/admin/:id', (req: Request, res: Response) => {
+router.delete('/admin/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteAccount(req, res);
 });
 

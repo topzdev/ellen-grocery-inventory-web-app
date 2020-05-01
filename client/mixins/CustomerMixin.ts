@@ -63,16 +63,15 @@ export default class CustomerMixin extends Vue {
   }
 
   deleteCustomer(item: ICustomer) {
-    this.frontendStore.setDeleteModal({
+    frontendStore.setMessageModal({
+      title: 'Delete Customer',
       show: true,
-      name: this.customer.firstname + " " + this.customer.lastname,
-      title: "Customer"
-    });
-
-    this.processStore.setCurrentToDelete({
-      deleteFunction: this.customerStore.deleteCustomer,
-      id: this.customer.customer_id
-    });
+      message: `Are you sure to delete this product ${item.fullname}?`,
+      mode: 'question',
+      yesFunction: () => {
+        customerStore.deleteCustomer(item.customer_id)
+      }
+    })
   }
 
   async setCustomer(item: ICustomer) {
@@ -87,16 +86,10 @@ export default class CustomerMixin extends Vue {
       this.isEdit = true;
       this.customer = JSON.parse(JSON.stringify(this.currentCustomer));
     }
-    // await this.customerStore.fetchSingleCustomer(item.customer_id!);
-    // this.$router.push("customers/customer_manage");
   }
 
   searchCustomer(search: string) {
-    this.customerStore.fetchCustomers({ search });
-  }
-
-  get customerList() {
-    return this.customerStore.customers;
+    this.customerStore.fetchCustomers({ show_deleted: false, search });
   }
 
   get currentCustomer() {
@@ -119,6 +112,10 @@ export default class CustomerMixin extends Vue {
     return this.frontendStore.showCustomerModal;
   }
 
+  get customerList() {
+    return customerStore.customers;
+  }
+
   set modalState(show: boolean) {
     this.frontendStore.setCustomerModal(show);
   }
@@ -131,4 +128,9 @@ export default class CustomerMixin extends Vue {
   rules: Object = {
     firstname: [(v: any) => !!v || "First Name is required"],
   };
+
+  created() {
+    this.customerStore.fetchCustomers({ show_deleted: false })
+  }
+
 }

@@ -4,6 +4,14 @@ import { QueryConfig } from "pg";
 
 export default class CustomerModel extends QueryExtend {
 
+    async count({ show_deleted }: IFilter): Promise<string> {
+        const query: QueryConfig = {
+            text: `SELECT count(*) from ${this.customerTable} ${this.analyzeFilter('', { show_deleted })}`
+        }
+        const result = await this.executeQuery(query);
+        return result.rows[0].count;
+    }
+
     async findMany({ search, limit, offset, transact_count, last_transact, show_deleted }: IFilter): Promise<ICustomer[]> {
         const query: QueryConfig = {
             text: `SELECT 
@@ -15,7 +23,7 @@ export default class CustomerModel extends QueryExtend {
             ${transact_count ? ',(select count(*) from transaction_table transact WHERE customer_id = customer.customer_id ) AS transact_count' : ''}
             ${last_transact ? ',(select max(ended_at) from transaction_table transact WHERE customer_id = customer.customer_id ) AS last_transact' : ''}
 			FROM ${this.customerTable} customer ${this.analyzeFilter("firstname ||' '|| lastname", { search, show_deleted })}
-            ${this.orderRows({ order_by: "transact_count", order: 'DESC' })}${this.limitRows({ limit, offset })} `
+            ${transact_count ? this.orderRows({ order_by: "transact_count", order: 'DESC' }) : ''}${this.limitRows({ limit, offset })} `
         };
         console.log(query.text)
         const result = await this.executeQuery(query);
@@ -35,6 +43,7 @@ export default class CustomerModel extends QueryExtend {
         const query: QueryConfig = {
             text: `INSERT INTO ${this.customerTable} ${this.queryfields(customer, 'insert')} RETURNING customer_id, firstname || ' ' || lastname as fullname`,
         };
+        console.log(query.text)
 
         const result = await this.executeQuery(query);
         return result.rows[0].customer_id;

@@ -8,12 +8,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in list" :key="item.product_id">
-            <td>{{ item.product_name }}</td>
-            <td>{{ item.barcode }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.supplier_name }}</td>
+          <tr v-for="item in list" :key="item.account_id">
+            <td>{{ item.account_id }}</td>
+            <td>{{ item.fullname }}</td>
+            <td>{{ item.username }}</td>
+            <td>{{ item.role_name }}</td>
             <td>
               <div>
                 <v-icon class="mr-2" @click="manageItem(item)">mdi-pencil</v-icon>
@@ -28,25 +27,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import { productStore } from "~/store";
-import ProductCRUD from "../../mixins/ProductCRUD";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import AccountMixin from "@/mixins/AccountMixin";
+import { accountStore } from "../../store";
 
 @Component
-export default class ProductTable extends ProductCRUD {
+export default class AccountTable extends Vue {
   @Prop({ default: "300px" }) height: string;
-
   headers: Array<Object> = [
-    { text: "Product Name", align: "left" },
-    { text: "Barcode" },
-    { text: "Price" },
-    { text: "Quantity" },
-    { text: "Supplier" },
-    { text: "Actions" }
+    { text: "Account ID", align: "left", value: "account_id" },
+    { text: "Fullname", value: "fullname" },
+    { text: "Username", value: "username" },
+    { text: "Role", value: "role_name" },
+    { text: "Actions", value: "action", sortable: false }
   ];
 
   get list() {
-    return productStore.products;
+    return accountStore.accounts;
   }
 }
 </script>

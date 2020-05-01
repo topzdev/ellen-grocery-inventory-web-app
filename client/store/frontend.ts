@@ -6,6 +6,7 @@ import {
 } from "~/interfaces/IFrontEndStore";
 import { MutationAction, Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
+
 @Module({
   name: "frontend",
   namespaced: true
@@ -15,7 +16,7 @@ export default class FrontendModule extends VuexModule {
   showSidebarMini: boolean = true;
   showNavbar: boolean = true;
   showHoldSidebar: boolean = false;
-  navbarFlat: boolean = true;
+  navbarFlat: boolean = false;
   showSnackbar: ISnackbar = { show: false };
   showDeleteModal: IDeleteModal = { show: false };
   showSearchModal: ISearchModal = { show: false };

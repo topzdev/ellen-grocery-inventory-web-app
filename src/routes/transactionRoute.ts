@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import TransactionController from '../controllers/TransactionController'
+import { checkToken } from '../middleware';
 
 const router = express.Router();
 const controllers = new TransactionController();
@@ -10,7 +11,7 @@ const controllers = new TransactionController();
  * @access          private
  * @param			{String} id as transact_id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
     controllers.fetchSingleTransaction(req, res)
 })
 
@@ -21,7 +22,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @access          private
  * @param			{String} id as transact_id
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
     controllers.fetchTransaction(req, res)
 })
 
@@ -32,7 +33,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          private
  * @param			{String} id as transact_id
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
     controllers.addTransaction(req, res)
 })
 
@@ -43,7 +44,7 @@ router.post('/', (req: Request, res: Response) => {
  * @access          private
  * @param			{String} id as transact_id
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
     controllers.updateTransaction(req, res)
 })
 
@@ -53,7 +54,7 @@ router.put('/', (req: Request, res: Response) => {
  * @access          private
  * @param			{String} id as transact_id
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
     controllers.deleteTransaction(req, res)
 })
 

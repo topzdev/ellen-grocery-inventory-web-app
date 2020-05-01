@@ -5,7 +5,8 @@ import {
   SET_CURRENT_ACCOUNT,
   ADD_ACCOUNT,
   UPDATE_ACCOUNT,
-  DELETE_ACCOUNT
+  DELETE_ACCOUNT,
+  SET_COUNT
 } from "~/configs/types";
 import { IAccount, IFilter, IPasswords } from '~/interfaces';
 import AccountAPI from '~/api/Account'
@@ -20,6 +21,7 @@ export default class Account extends VuexModule {
   path: string = "/accounts";
   accounts: Array<IAccount> = [];
   account: IAccount | null = null;
+  count: number = 0;
 
   @Mutation
   private [SET_ACCOUNTS](accounts: Array<IAccount>) {
@@ -50,17 +52,25 @@ export default class Account extends VuexModule {
     );
   }
 
-  @Action({ commit: SET_CURRENT_ACCOUNT })
+  @Mutation
+  private [SET_COUNT](count: number) {
+    this.count = count;
+  }
+
+  @Action
   async fetchSingleAccount(account_id: IAccount['account_id']) {
     if (account_id === undefined) return;
     const result = await accountAPI.fetchSingleAccount(account_id)
-    if (result.success) return result.data;
+    if (result.success) this.context.commit(SET_CURRENT_ACCOUNT, result.data);
   }
 
-  @Action({ commit: SET_ACCOUNTS })
+  @Action
   async fetchAccounts(filter: IFilter) {
     const result = await accountAPI.fetchAccounts(filter);
-    if (result.success) return result.data;
+    if (result.success) {
+      this.context.commit(SET_ACCOUNTS, result.data);
+      this.context.commit(SET_COUNT, result.count);
+    };
   }
 
   @Action({ rawError: true })
@@ -94,13 +104,13 @@ export default class Account extends VuexModule {
     frontendStore.setRedirect(this.path)
   }
 
-  @Action({ commit: DELETE_ACCOUNT })
+  @Action
   async deleteAccount(account_id: number) {
     const result = await accountAPI.deleteAccount(account_id);
 
     frontendStore.setSnackbar({ message: result.message, success: result.success, show: true });
     frontendStore.setRedirect(this.path)
 
-    return account_id;
+    if (result.success) this.context.commit(DELETE_ACCOUNT, account_id);
   }
 }

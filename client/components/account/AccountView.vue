@@ -9,7 +9,7 @@
         v-model="search"
         placeholder="Search Product"
         hide-details
-        @input="searchProduct"
+        @input="fetchAccounts"
       />
       <v-spacer></v-spacer>
 
@@ -19,27 +19,19 @@
         :items="rows"
         label="Rows"
         style="max-width: 150px"
-        @input="searchProduct"
+        @input="fetchAccounts"
       ></v-select>
-
-      <v-btn-toggle v-model="selected" color="primary" dense group>
-        <v-btn v-for="item in views" :key="item.value" :value="item.value" text>
-          <v-icon>{{item.icon}}</v-icon>
-        </v-btn>
-      </v-btn-toggle>
     </v-card-title>
     <v-card-text>
-      <product-table height="auto" v-if="selected === 'table'" />
-      <product-list v-else></product-list>
+      <account-table></account-table>
     </v-card-text>
-
     <v-card-actions>
       <v-spacer></v-spacer>
       <div>Results {{this.row}} out of {{this.count}}</div>
       <v-pagination
         v-model="page"
         :length="length"
-        @input="searchProduct"
+        @input="fetchAccounts"
         :total-visible="10"
         style="width: auto;"
       ></v-pagination>
@@ -48,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import ProductViewMixin from "../../mixins/ProductViewMixin";
-import { frontendStore } from "@/store";
+import { Vue, Component } from "vue-property-decorator";
+import AccountViewMixin from "@/mixins/AccountViewMixin";
 
-export default class ProductView extends ProductViewMixin {}
+@Component
+export default class AccountView extends AccountViewMixin {}
 </script>
 
 <style>

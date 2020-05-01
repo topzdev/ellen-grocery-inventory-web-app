@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    v-if="$auth.loggedIn"
     v-model="sidebar"
     :mini-variant="sidebarMini"
     :right="right"
@@ -8,12 +9,9 @@
     app
   >
     <v-list-item class="px-2 pt-2" @click="setSidebarMini(!sidebarMini)">
-      <v-list-item-avatar>
-        <img src="https://randomuser.me/api/portraits/men/81.jpg" />
-      </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title class="title">Christopher Lugod</v-list-item-title>
-        <v-list-item-subtitle>Administrator</v-list-item-subtitle>
+        <v-list-item-title class="title">{{$auth.user.firstname+' '+$auth.user.lastname}}</v-list-item-title>
+        <v-list-item-subtitle>{{$auth.user.role_name}}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
     <v-list :nav="true" shaped>
@@ -39,10 +37,9 @@ export default class Sidebar extends Vue {
   right: boolean = false;
   expandOnHover: boolean = true;
   items: Array<Object> = [
-    { title: "Home", icon: "mdi-storefront", to: "/dashboard" },
+    { title: "Homes", icon: "mdi-storefront", to: "/dashboard" },
     { title: "Cashier", icon: "mdi-cash-register", to: "/cashiers" },
     { title: "Product", icon: "mdi-basket-fill", to: "/products" },
-    { title: "Suppliers", icon: "mdi-truck", to: "/suppliers" },
     { title: "Addons", icon: "mdi-decagram", to: "/others" },
     { title: "Customers", icon: "mdi-account", to: "/customers" },
     { title: "Account", icon: "mdi-account-group-outline", to: "/accounts" }

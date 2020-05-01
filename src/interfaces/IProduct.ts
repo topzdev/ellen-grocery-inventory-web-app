@@ -17,6 +17,7 @@ interface IProduct {
 	created_at?: string;
 	updated_at?: string;
 	isDeleted: boolean
+	image: any
 }
 
 export default IProduct;

@@ -1,5 +1,6 @@
 import epxress, { Request, Response } from 'express';
 import BrandController from '../controllers/BrandController';
+import { checkToken } from '../middleware';
 
 const router = epxress.Router();
 
@@ -10,7 +11,7 @@ const controller = new BrandController();
  * @description     fetch all brands
  * @access          public
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', checkToken, (req: Request, res: Response) => {
 	controller.getBrands(req, res);
 });
 
@@ -20,7 +21,7 @@ router.get('/', (req: Request, res: Response) => {
  * @access          public
  * @param			id
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', checkToken, (req: Request, res: Response) => {
 	controller.getSingleBrand(req, res);
 });
 
@@ -29,7 +30,7 @@ router.get('/:id', (req: Request, res: Response) => {
  * @description     add brand
  * @access          private
  */
-router.post('/', (req: Request, res: Response) => {
+router.post('/', checkToken, (req: Request, res: Response) => {
 	controller.addBrand(req, res);
 });
 
@@ -38,7 +39,7 @@ router.post('/', (req: Request, res: Response) => {
  * @description     update brand
  * @access          private
  */
-router.put('/', (req: Request, res: Response) => {
+router.put('/', checkToken, (req: Request, res: Response) => {
 	controller.updateBrand(req, res);
 });
 
@@ -47,7 +48,7 @@ router.put('/', (req: Request, res: Response) => {
  * @description     delete brand
  * @access          private
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', checkToken, (req: Request, res: Response) => {
 	controller.deleteBrand(req, res);
 });
 

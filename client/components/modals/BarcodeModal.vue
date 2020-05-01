@@ -44,7 +44,7 @@ export default class BarcodeDialog extends Vue {
   autofocus: boolean = true;
 
   get searched() {
-    return productStore.singleProduct;
+    return productStore.current;
   }
 
   get showModal() {

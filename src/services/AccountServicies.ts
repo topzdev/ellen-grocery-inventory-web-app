@@ -17,9 +17,11 @@ export default class AccountServices {
 
     async getMany(filter: IFilter) {
         const result = await accountModel.findMany(filter);
+        const count = await accountModel.count(filter);
         return {
             message: 'Accounts Successfully Fetched',
-            data: result
+            data: result,
+            count
         }
     }
 
@@ -58,7 +60,7 @@ export default class AccountServices {
     }
 
     async updatePassword({ account_id, current_password, new_password }: IPassword) {
-        const account = await accountModel.getAccount(account_id);
+        const account = await accountModel.getAccount({ account_id });
 
         if (!account) return {
             message: 'Account not found',

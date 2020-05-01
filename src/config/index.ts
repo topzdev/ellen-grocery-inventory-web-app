@@ -2,7 +2,14 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-export default {
+interface IConfig {
+    port: any,
+    database: any,
+    cloudinary: any,
+    jwtSecret: any
+}
+
+const config: IConfig = {
     port: process.env.PORT,
     database: {
         user: process.env.PGUSER,
@@ -16,5 +23,8 @@ export default {
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_API_SECRET,
         folder_name: process.env.CLOUDINARY_FOLDER_NAME
-    }
+    },
+    jwtSecret: process.env.JWT_SECRET
 }
+
+export default config;

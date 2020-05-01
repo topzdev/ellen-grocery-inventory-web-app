@@ -21,7 +21,13 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/numeral", "@types/node", "@nuxt/types", "@nuxtjs/axios"]
+    "types": [
+      "@types/numeral",
+      "@types/node",
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@types/nuxtjs__auth"
+    ]
   },
   "exclude": ["node_modules"]
 }

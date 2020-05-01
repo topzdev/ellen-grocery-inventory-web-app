@@ -6,7 +6,7 @@ export default class SupplierModel extends QueryExtend {
     async findOne(column: object, condition?: string) {
 
         const query: QueryConfig = {
-            text: `SELECT * FROM ${this.supplierTable} WHERE ${this.analyzeCondition(column, condition)} LIMIT 1`,
+            text: `SELECT * FROM ${this.supplierTable} ${this.analyzeCondition(column, condition)} LIMIT 1`,
         };
         const result = await this.executeQuery(query);
         return result.rows[0];

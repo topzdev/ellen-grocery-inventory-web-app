@@ -29,10 +29,9 @@ export default class ProductAPI {
         formData.append('brand_id', product.brand_id.toString())
         formData.append('supplier_id', product.supplier_id.toString())
         formData.append('category_id', product.category_id.toString())
-        formData.append('file', product.imageFile!)
+        if (product.imageFile) formData.append('image', product.imageFile!)
 
         const result: IResult = await $axios.$post(`${this.url}`, formData, config);
-
         return result;
     }
 
@@ -51,12 +50,9 @@ export default class ProductAPI {
         formData.append('brand_id', product.brand_id.toString())
         formData.append('supplier_id', product.supplier_id.toString())
         formData.append('category_id', product.category_id.toString())
-        formData.append('image', product.image_id!.toString())
-        formData.append('image_url', product.image_url!.toString())
-        formData.append('file', product.imageFile!)
+        if (product.imageFile) formData.append('image', product.imageFile!)
 
         const result: IResult = await $axios.$put(`${this.url}`, formData, config);
-
         return result;
     }
 

@@ -37,13 +37,13 @@
 </template>
 
 <script>
-import { Component } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import CustomerMixin from "@/mixins/CustomerMixin";
-import CustomerTable from "@/components/customer/CustomerTable.vue";
 import CustomerForm from "@/components/forms/CustomerForm.vue";
 import OtherList from "@/components/list/OtherList.vue";
+import CustomerViewMixin from "../../mixins/CustomerViewMixin";
 @Component({
-  components: { CustomerTable, CustomerForm, OtherList }
+  components: { CustomerForm, OtherList }
 })
 export default class AddCustomer extends CustomerMixin {}
 </script>

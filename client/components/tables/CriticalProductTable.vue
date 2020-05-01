@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-card-title class="px-0">
+    <v-card-title>
       <div>{{title}}</div>
       <v-spacer></v-spacer>
       <div class="body-2" style="width: 150px">
@@ -14,32 +14,34 @@
         ></v-select>
       </div>
     </v-card-title>
-    <v-card>
-      <v-simple-table fixed-header :height="height">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Product Name</th>
-              <th class="text-left">Barcode</th>
-              <th class="text-left">Qty</th>
-              <th class="text-left">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in list" :key="item.id">
-              <td>{{ item.product_name }}</td>
-              <td>{{ item.barcode }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </v-card>
+    <v-card-text>
+      <v-card>
+        <v-simple-table fixed-header :height="height">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Product Name</th>
+                <th class="text-left">Barcode</th>
+                <th class="text-left">Qty</th>
+                <th class="text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in list" :key="item.id">
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.barcode }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                  <v-btn icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card>
+    </v-card-text>
   </v-card>
 </template>
 

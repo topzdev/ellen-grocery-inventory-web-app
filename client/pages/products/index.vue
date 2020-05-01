@@ -9,15 +9,23 @@
       </v-col>
     </v-row>
 
-    <product-view></product-view>
+    <v-row>
+      <v-col cols="12">
+        <product-view></product-view>
+      </v-col>
+      <v-col cols="6">
+        <critical-product-table height="auto"></critical-product-table>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import ProductView from "@/components/product/ProductView.vue";
+import CriticalProductTable from "@/components/tables/CriticalProductTable.vue";
 @Component({
-  components: { ProductView }
+  components: { ProductView, CriticalProductTable }
 })
 export default class Index extends Vue {
   parentPath: string = "products";
@@ -26,13 +34,13 @@ export default class Index extends Vue {
       title: "Add Product",
       subtitle: "Add New Product",
       color: "blue darken-1",
-      to: `/${this.parentPath}/product_add`
+      to: `/${this.parentPath}/add`
     },
     {
       title: "Manage Product",
       subtitle: "Update or Remove Existing Product Information",
       color: "orange darken-1",
-      to: `/${this.parentPath}/product_manage`
+      to: `/${this.parentPath}/manage`
     },
     {
       title: "Manage Stocks",

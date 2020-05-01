@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$auth.loggedIn">
     <v-app-bar color="primary" :hidden="!navbar" dark :app="navbar" :flat="flat">
       <v-app-bar-nav-icon @click="setSidebar" />
       <v-toolbar-title v-text="title" />

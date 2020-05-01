@@ -120,7 +120,7 @@
 <script lang="ts">
 import { Component, Watch } from "vue-property-decorator";
 import ProductMixin from "@/mixins/ProductMixin";
-import { productStore } from "../../store";
+import { productStore } from "@/store";
 
 @Component
 export default class Manage extends ProductMixin {
@@ -132,6 +132,12 @@ export default class Manage extends ProductMixin {
     if (this.$refs.manageForm.validate()) {
       productStore.updateProduct(this.product);
     }
+  }
+
+  async created() {
+    const barcode = this.$route.params.barcode;
+    await productStore.fetchSingleProduct(barcode);
+    this.product = productStore.current;
   }
 }
 </script>

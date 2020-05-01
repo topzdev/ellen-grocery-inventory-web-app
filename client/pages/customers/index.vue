@@ -8,15 +8,27 @@
         </v-card>
       </v-col>
     </v-row>
-    <customer-table></customer-table>
+    <v-row>
+      <v-col cols="12">
+        <customer-view></customer-view>
+      </v-col>
+      <v-col cols="8">
+        <v-card flat>
+          <v-card-text>
+            <recent-transaction-table></recent-transaction-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import CustomerTable from "@/components/customer/CustomerTable.vue";
+import CustomerView from "@/components/customer/CustomerView.vue";
+import RecentTransactionTable from "@/components/tables/RecentTransactionTable.vue";
 @Component({
-  components: { CustomerTable }
+  components: { CustomerView, RecentTransactionTable }
 })
 export default class index extends Vue {
   parentPath: string = "customers";
@@ -25,7 +37,7 @@ export default class index extends Vue {
       title: "Manage Customer",
       subtitle: "Add New and Edit Customer",
       color: "primary",
-      action: `/${this.parentPath}/customer`,
+      action: `/${this.parentPath}/manage`,
       icon: "ticket-percent"
     }
   ];
