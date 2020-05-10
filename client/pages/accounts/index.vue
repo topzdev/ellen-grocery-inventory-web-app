@@ -19,6 +19,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import AccountView from "@/components/account/AccountView.vue";
 @Component({
+  middleware: ["auth"],
   components: {
     AccountView
   }

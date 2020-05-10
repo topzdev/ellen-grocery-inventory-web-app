@@ -28,6 +28,7 @@ import CashierRecentTransactions from "@/components/cashier/CashierRecentTransac
 import CashierCustomerList from "@/components/cashier/CashierCustomerList.vue";
 
 @Component({
+  middleware: ["auth"],
   components: { CashierRecentTransactions, CashierCustomerList }
 })
 export default class CashierInitital extends CashierMixin {

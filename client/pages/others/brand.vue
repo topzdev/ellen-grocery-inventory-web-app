@@ -41,6 +41,7 @@ import OtherList from "@/components/list/OtherList.vue";
 import BrandForm from "@/components/forms/BrandForm.vue";
 
 @Component({
+  middleware: ["auth"],
   components: { OtherList, BrandForm }
 })
 export default class BrandPage extends BrandMixin {}

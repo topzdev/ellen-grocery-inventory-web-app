@@ -36,6 +36,7 @@ import CashierMixin from "@/mixins/CashierMixin";
 import Keypress from "@/components/misc/Keypress.vue";
 
 @Component({
+  middleware: ["auth"],
   components: {
     CashierOrder,
     CashierOtherInfo,

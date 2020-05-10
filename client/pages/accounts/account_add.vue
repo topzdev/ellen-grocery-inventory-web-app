@@ -44,6 +44,7 @@ import OtherList from "@/components/list/OtherList.vue";
 import AccountPasswordForm from "@/components/account/AccountPasswordForm.vue";
 import AccountForm from "@/components/forms/AccountForm.vue";
 @Component({
+  middleware: ["auth"],
   components: { OtherList, AccountPasswordForm, AccountForm }
 })
 export default class add extends AccountMixin {

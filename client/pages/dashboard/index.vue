@@ -42,6 +42,7 @@ import CriticalProductTable from "@/components/tables/CriticalProductTable.vue";
 import TopCustomerTable from "@/components/tables/TopCustomerTable.vue";
 
 @Component({
+  middleware: ["auth"],
   components: {
     DashboardSales,
     DashboardProducts,

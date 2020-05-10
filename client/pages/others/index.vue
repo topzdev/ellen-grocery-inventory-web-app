@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-@Component
+@Component({ middleware: ["auth"] })
 export default class index extends Vue {
   parentPath: string = "others";
   actionLink: Array<Object> = [

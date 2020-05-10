@@ -45,6 +45,7 @@ import OtherList from "@/components/list/OtherList.vue";
 import SupplierForm from "@/components/forms/SupplierForm.vue";
 
 @Component({
+  middleware: ["auth"],
   components: { OtherList, SupplierForm }
 })
 export default class Supplier extends SupplierMixin {}

@@ -25,6 +25,7 @@ import { Vue, Component } from "vue-property-decorator";
 import ProductView from "@/components/product/ProductView.vue";
 import CriticalProductTable from "@/components/tables/CriticalProductTable.vue";
 @Component({
+  middleware: ["auth"],
   components: { ProductView, CriticalProductTable }
 })
 export default class Index extends Vue {

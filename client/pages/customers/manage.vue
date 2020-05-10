@@ -43,6 +43,7 @@ import CustomerForm from "@/components/forms/CustomerForm.vue";
 import OtherList from "@/components/list/OtherList.vue";
 import CustomerViewMixin from "../../mixins/CustomerViewMixin";
 @Component({
+  middleware: ["auth"],
   components: { CustomerForm, OtherList }
 })
 export default class AddCustomer extends CustomerMixin {}

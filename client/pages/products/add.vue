@@ -137,7 +137,9 @@ import ProductMixin from "@/mixins/ProductMixin";
 import ProductCRUD from "../../mixins/ProductCRUD";
 import { productStore, frontendStore } from "../../store";
 
-@Component
+@Component({
+  middleware: ["auth"]
+})
 export default class add extends Mixins(ProductMixin, ProductCRUD) {
   valid: boolean = false;
   dialog: boolean = true;

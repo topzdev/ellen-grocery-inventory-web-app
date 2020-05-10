@@ -15,20 +15,23 @@ export default class AuthServices {
     async login({ username, password }: IAuthCredentials) {
 
         const user = await model.getAccount({ username, email_address: username }, 'or');
-        console.log(user);
         if (!user) return {
             success: false,
             message: 'Account username is not exist'
         }
 
+        console.log(await bycrypt.compare(password, user.password))
+
         const verifyPassword = await bycrypt.compare(password, user.password);
 
-        if (verifyPassword) return {
+        if (!verifyPassword) return {
             success: false,
             message: 'Password not match'
         }
 
         const token = jwt.sign({ account_id: user.account_id, role_id: user.role_id }, config.jwtSecret, { expiresIn: '12hr' })
+
+        console.log(token)
 
         return {
             token,
@@ -46,7 +49,6 @@ export default class AuthServices {
             auth: false,
             message: 'Account username is not exist'
         }
-        console.log(user);
         return user
     }
 

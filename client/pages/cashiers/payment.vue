@@ -78,6 +78,7 @@ import CashierMixin from "../../mixins/CashierMixin";
 import numeral from "numeral";
 
 @Component({
+  middleware: ["auth"],
   components: { CashierOrder }
 })
 export default class CashierPaymentPage extends CashierMixin {

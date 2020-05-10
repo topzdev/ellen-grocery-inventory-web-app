@@ -10,7 +10,7 @@ router.post('/login', (req: Request, res: Response) => {
 })
 
 router.post('/logout', (req: Request, res: Response) => {
-    res.locals.user = null;
+    controller.logout(req, res)
 })
 
 router.get('/user', checkToken, (req: Request, res: Response) => {

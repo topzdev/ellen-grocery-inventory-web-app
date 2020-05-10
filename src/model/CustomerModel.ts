@@ -25,7 +25,6 @@ export default class CustomerModel extends QueryExtend {
 			FROM ${this.customerTable} customer ${this.analyzeFilter("firstname ||' '|| lastname", { search, show_deleted })}
             ${transact_count ? this.orderRows({ order_by: "transact_count", order: 'DESC' }) : ''}${this.limitRows({ limit, offset })} `
         };
-        console.log(query.text)
         const result = await this.executeQuery(query);
         return result.rows;
     }
@@ -43,7 +42,6 @@ export default class CustomerModel extends QueryExtend {
         const query: QueryConfig = {
             text: `INSERT INTO ${this.customerTable} ${this.queryfields(customer, 'insert')} RETURNING customer_id, firstname || ' ' || lastname as fullname`,
         };
-        console.log(query.text)
 
         const result = await this.executeQuery(query);
         return result.rows[0].customer_id;

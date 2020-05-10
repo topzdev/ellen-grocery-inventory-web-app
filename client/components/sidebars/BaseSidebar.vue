@@ -8,11 +8,8 @@
     dark
     app
   >
-    <v-list-item class="px-2 pt-2" @click="setSidebarMini(!sidebarMini)">
-      <v-list-item-content>
-        <v-list-item-title class="title">{{$auth.user.firstname+' '+$auth.user.lastname}}</v-list-item-title>
-        <v-list-item-subtitle>{{$auth.user.role_name}}</v-list-item-subtitle>
-      </v-list-item-content>
+    <v-list-item class="px-2 pt-2">
+      <v-app-bar-nav-icon @click="setSidebarMini(true)" />
     </v-list-item>
     <v-list :nav="true" shaped>
       <v-list-item v-for="item in items" :key="item.title" :nuxt="true" :to="item.to">
@@ -36,15 +33,61 @@ export default class Sidebar extends Vue {
   drawer: boolean = true;
   right: boolean = false;
   expandOnHover: boolean = true;
-  items: Array<Object> = [
-    { title: "Homes", icon: "mdi-storefront", to: "/dashboard" },
-    { title: "Cashier", icon: "mdi-cash-register", to: "/cashiers" },
-    { title: "Product", icon: "mdi-basket-fill", to: "/products" },
-    { title: "Addons", icon: "mdi-decagram", to: "/others" },
-    { title: "Customers", icon: "mdi-account", to: "/customers" },
-    { title: "Account", icon: "mdi-account-group-outline", to: "/accounts" }
-  ];
+  get items() {
+    let route = [];
 
+    const dashboard = {
+        title: "Homes",
+        icon: "mdi-storefront",
+        to: "/dashboard"
+      },
+      cashier = {
+        title: "Cashier",
+        icon: "mdi-cash-register",
+        to: "/cashiers"
+      },
+      product = {
+        title: "Product",
+        icon: "mdi-basket-fill",
+        to: "/products"
+      },
+      customer = {
+        title: "Customers",
+        icon: "mdi-account",
+        to: "/customers"
+      },
+      account = {
+        title: "Account",
+        icon: "mdi-account-group-outline",
+        to: "/accounts"
+      },
+      addons = { title: "Addons", icon: "mdi-decagram", to: "/others" };
+
+    const {
+      user: { role_name },
+      loggedIn
+    } = this.$auth;
+
+    console.log(role_name, loggedIn);
+
+    if (loggedIn) {
+      switch (role_name.toLowerCase()) {
+        case "administrator":
+          route.push(dashboard, account);
+          break;
+
+        case "inventory":
+          route.push(product, addons);
+          break;
+
+        case "cashier":
+          route.push(cashier);
+          break;
+      }
+    }
+
+    return route;
+  }
   get sidebar() {
     return frontendStore.showSidebar;
   }

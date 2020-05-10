@@ -100,7 +100,6 @@ class QueryExtend {
 	protected orderRows({ order, order_by }: IFilter, table?: string) {
 		let query = '';
 		if (order_by) query += ` order by ${table ? `${table}.` : ''}${order_by} ${order} `
-		console.log(query);
 		return query;
 	}
 

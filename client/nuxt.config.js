@@ -90,6 +90,13 @@ export default {
   },
 
   auth: {
+    plugins: ["~/plugins/auth"],
+    redirect: {
+      login: "/",
+      logout: "/",
+      callback: "/",
+      home: "/dashboard"
+    },
     strategies: {
       local: {
         endpoints: {

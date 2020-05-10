@@ -9,7 +9,6 @@
         <v-text-field v-model="credential.password" type="password" flat outlined label="Password"></v-text-field>
         <v-btn x-large block light color="primary" @click="userLogin">Login</v-btn>
       </v-card-text>
-      <div v-if="$auth.loggedIn">${{$auth.user}}</div>
     </v-card>
   </v-card>
 </template>
@@ -17,21 +16,47 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { IAuthCredentials } from "../interfaces";
+import { frontendStore } from "../store";
 @Component
 export default class Index extends Vue {
   credential: IAuthCredentials = {
-    username: "johndoe",
+    username: "topz",
     password: "dev123"
   };
 
   async userLogin() {
     try {
-      let response = await this.$auth.loginWith("local", {
+      const result = await this.$auth.loginWith("local", {
         data: this.credential
       });
-      console.log(response, this.$auth.loggedIn);
+      this.$router.push("/dashboard");
+
+      console.log(result);
+
+      // @ts-ignore;
+      const { message } = result.data;
+      // @ts-ignore;
+      if (result.data.success) {
+        const { firstname, lastname } = this.$auth.user;
+        frontendStore.setSnackbar({
+          success: true,
+          show: true,
+          message: `Welcome! ${firstname} ${lastname}`
+        });
+      } else {
+        frontendStore.setSnackbar({
+          show: true,
+          message,
+          success: false
+        });
+      }
     } catch (error) {
-      console.log(error);
+      this.$router.push("/");
+      frontendStore.setSnackbar({
+        show: true,
+        message: "Wrong credentials!",
+        success: false
+      });
     }
   }
 }

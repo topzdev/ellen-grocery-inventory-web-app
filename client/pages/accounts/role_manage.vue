@@ -41,6 +41,7 @@ import OtherList from "@/components/list/OtherList.vue";
 import RoleForm from "@/components/forms/RoleForm.vue";
 
 @Component({
+  middleware: ["auth"],
   components: { OtherList, RoleForm }
 })
 export default class Role extends RoleMixin {}

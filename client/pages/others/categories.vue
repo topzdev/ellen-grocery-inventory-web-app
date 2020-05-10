@@ -39,6 +39,6 @@ import CategoryMixin from "@/mixins/CategoryMixin";
 import OtherList from "@/components/list/OtherList.vue";
 import CategoryForm from "@/components/forms/CategoryForm.vue";
 
-@Component({ components: { OtherList, CategoryForm } })
+@Component({ middleware: ["auth"], components: { OtherList, CategoryForm } })
 export default class brand extends CategoryMixin {}
 </script>

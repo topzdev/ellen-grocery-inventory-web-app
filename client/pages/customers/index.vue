@@ -28,6 +28,7 @@ import { Vue, Component } from "vue-property-decorator";
 import CustomerView from "@/components/customer/CustomerView.vue";
 import RecentTransactionTable from "@/components/tables/RecentTransactionTable.vue";
 @Component({
+  middleware: ["auth"],
   components: { CustomerView, RecentTransactionTable }
 })
 export default class index extends Vue {

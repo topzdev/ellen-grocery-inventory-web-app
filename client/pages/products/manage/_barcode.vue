@@ -122,7 +122,9 @@ import { Component, Watch } from "vue-property-decorator";
 import ProductMixin from "@/mixins/ProductMixin";
 import { productStore } from "@/store";
 
-@Component
+@Component({
+  middleware: ["auth"]
+})
 export default class Manage extends ProductMixin {
   valid: boolean = false;
   dialog: boolean = true;
